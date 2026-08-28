@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import ClinicIcon from "@/components/ui/ClinicIcon";
 
 const links = [
   ["Home", "#home"],
@@ -13,6 +12,14 @@ const links = [
   ["Contact Us", "#contact"],
 ] as const;
 
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+      {open ? <><path d="M6 6l12 12"/><path d="M18 6 6 18"/></> : <><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></>}
+    </svg>
+  );
+}
+
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -23,7 +30,6 @@ export default function MobileNav() {
   useEffect(() => {
     if (!open) {
       document.body.style.overflow = "";
-      menuButtonRef.current?.focus();
       return;
     }
 
@@ -44,6 +50,10 @@ export default function MobileNav() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) menuButtonRef.current?.focus();
+  }, [open]);
+
   return (
     <>
       <button
@@ -55,32 +65,14 @@ export default function MobileNav() {
         aria-controls="mobile-navigation"
         onClick={() => setOpen((value) => !value)}
       >
-        <ClinicIcon name={open ? "close" : "menu"} size={24} />
+        <MenuIcon open={open} />
       </button>
 
-      {open && (
-        <button
-          className="mobile-nav-backdrop"
-          type="button"
-          aria-label="Close navigation menu"
-          onClick={closeMenu}
-        />
-      )}
+      {open && <button className="mobile-nav-backdrop" type="button" aria-label="Close navigation menu" onClick={closeMenu} />}
 
-      <nav
-        id="mobile-navigation"
-        className={`mobile-navigation${open ? " is-open" : ""}`}
-        aria-label="Mobile navigation"
-        aria-hidden={!open}
-      >
+      <nav id="mobile-navigation" className={`mobile-navigation${open ? " is-open" : ""}`} aria-label="Mobile navigation" aria-hidden={!open}>
         {links.map(([label, href], index) => (
-          <a
-            key={href}
-            ref={index === 0 ? firstLinkRef : undefined}
-            href={href}
-            tabIndex={open ? 0 : -1}
-            onClick={closeMenu}
-          >
+          <a key={href} ref={index === 0 ? firstLinkRef : undefined} href={href} tabIndex={open ? 0 : -1} onClick={closeMenu}>
             {label}
           </a>
         ))}
