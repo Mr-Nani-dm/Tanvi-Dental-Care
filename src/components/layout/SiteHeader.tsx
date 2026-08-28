@@ -1,10 +1,10 @@
-import { site } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 
 export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <a className="brand" href="/" aria-label={site.name}>
+        <a className="brand" href="/" aria-label={siteConfig.name}>
           <span className="brand-name">Tanvi Dental Care</span>
           <span className="brand-subtitle">&amp; Implant Centre</span>
         </a>
