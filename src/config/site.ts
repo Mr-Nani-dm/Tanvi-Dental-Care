@@ -22,13 +22,12 @@ export const doctors = [
 ] as const;
 
 /**
- * Contact values stay null until the business verification layer supplies
- * current values. This prevents accidental publication of stale or guessed data.
+ * Verified business contact values used across the website.
  */
 export const verifiedContact = {
-  phone: null as string | null,
-  whatsapp: null as string | null,
+  phone: "9160288388",
+  whatsapp: "9160288388",
   email: null as string | null,
-  address: null as string | null,
-  hours: null as string | null,
-};
+  address: "Mangalagiri, Andhra Pradesh",
+  hours: "9:00 AM - 9:00 PM (IST)",
+} as const;
