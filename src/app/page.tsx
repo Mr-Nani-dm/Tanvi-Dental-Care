@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import MobileNav from "@/components/MobileNav";
 
 const PHONE = "9160288388";
 const PHONE_HREF = "tel:+919160288388";
@@ -41,12 +42,12 @@ function Button({ href, children, variant = "primary", icon }: { href: string; c
 export default function HomePage() {
   return (
     <main>
-      <div className="topbar"><div className="container topbar-inner"><div className="topbar-left"><span><Icon name="clock" size={15}/>Open Daily: {HOURS}</span><i/><span><Icon name="pin" size={15}/>Mangalagiri, Andhra Pradesh</span></div><div className="socials"><span>Follow Us:</span><a href="#" aria-label="Facebook"><Icon name="facebook" size={15}/></a><a href="#" aria-label="Instagram"><Icon name="instagram" size={15}/></a><a href="#" aria-label="Google"><Icon name="google" size={15}/></a></div></div></div>
+      <div className="topbar"><div className="container topbar-inner"><div className="topbar-left"><span><Icon name="clock" size={15}/>Open Daily: {HOURS}</span><i/><span><Icon name="pin" size={15}/>Mangalagiri, Andhra Pradesh</span></div><div className="socials"><span>Follow Us:</span><a href="#contact" aria-label="Facebook"><Icon name="facebook" size={15}/></a><a href="#contact" aria-label="Instagram"><Icon name="instagram" size={15}/></a><a href="#contact" aria-label="Google"><Icon name="google" size={15}/></a></div></div></div>
 
       <header className="site-header"><div className="container header-inner">
-        <a href="#home" className="brand" aria-label="Tanvi Dental Care & Implant Centre"><img src="/images/tanvi-logo-web.png" alt="Tanvi Dental Care & Implant Centre logo" width="70" height="64"/><span className="brand-copy"><strong>TANVI</strong><small>DENTAL CARE &amp;<br/>IMPLANT CENTRE</small></span></a>
+        <a href="#home" className="brand" aria-label="Tanvi Dental Care & Implant Centre"><img src="/images/tanvi-logo-web.png" alt="Tanvi Dental Care & Implant Centre logo" width="64" height="64"/><span className="brand-copy"><strong>TANVI</strong><small>DENTAL CARE &amp;<br/>IMPLANT CENTRE</small></span></a>
         <nav className="desktop-nav" aria-label="Primary navigation"><a className="active" href="#home">Home</a><a href="#about">About Us</a><a href="#doctors">Our Doctors</a><a href="#services">Treatments <Icon name="chevron" size={14}/></a><a href="#guide">Patient Guide</a><a href="#contact">Contact Us</a></nav>
-        <div className="header-actions"><a className="header-phone" href={PHONE_HREF}><Icon name="phone" size={19}/><span><strong>{PHONE}</strong><small>Call Us</small></span></a><a className="header-whatsapp" href={WHATSAPP_HREF}><Icon name="whatsapp" size={19}/><span>WhatsApp Us</span></a></div><button className="mobile-menu" type="button" aria-label="Open menu">☰</button>
+        <div className="header-actions"><a className="header-phone" href={PHONE_HREF}><Icon name="phone" size={19}/><span><strong>{PHONE}</strong><small>Call Us</small></span></a><a className="header-whatsapp" href={WHATSAPP_HREF}><Icon name="whatsapp" size={19}/><span>WhatsApp Us</span></a></div><MobileNav />
       </div></header>
 
       <section className="hero" id="home">
@@ -54,7 +55,7 @@ export default function HomePage() {
           <div className="hero-benefits"><div className="benefit"><span className="benefit-icon"><Icon name="tooth" size={22}/></span><div><strong>Advanced<br/>Technology</strong><small>Modern equipment for<br/>precise treatment</small></div></div><div className="benefit"><span className="benefit-icon"><Icon name="shield" size={22}/></span><div><strong>Safe &amp;<br/>Hygienic Care</strong><small>Strict sterilization &amp;<br/>hygiene protocols</small></div></div><div className="benefit"><span className="benefit-icon"><Icon name="users" size={22}/></span><div><strong>Patient First<br/>Approach</strong><small>Personalized care<br/>for every smile</small></div></div></div>
           <div className="hero-actions"><Button href={PHONE_HREF} icon="phone">Call Now: {PHONE}</Button><Button href={WHATSAPP_HREF} variant="secondary" icon="whatsapp">Chat on WhatsApp</Button></div>
         </div><div className="hero-doctor-space" aria-hidden="true"/></div>
-        <div className="hero-image-layer"><picture><img src="/images/tanvi-doctors-web.jpg" alt="Dr. Naga Swathi Pokala and Dr. Prathap Naidu" width="664" height="451" fetchPriority="high" decoding="async"/></picture></div>
+        <div className="hero-image-layer"><picture><img src="/images/tanvi-doctors-web.jpg" alt="Dr. Naga Swathi Pokala and Dr. Prathap Naidu" width="664" height="451" fetchPriority="high" decoding="async" sizes="(max-width: 980px) 100vw, 54vw"/></picture></div>
       </section>
 
       <section className="quick-info container" aria-label="Clinic information"><div><span className="info-icon"><Icon name="pin"/></span><div><strong>Location</strong><p>Mangalagiri, Andhra Pradesh<br/>Also serving Vijayawada &amp; Guntur</p></div></div><div><span className="info-icon"><Icon name="clock"/></span><div><strong>Hours</strong><p>{HOURS}<br/>Open all days</p></div></div><div><a href={PHONE_HREF} className="info-link"><span className="info-icon"><Icon name="phone"/></span><div><strong>Call Us</strong><p>{PHONE}<br/>We're here to help</p></div></a></div><div><a href={WHATSAPP_HREF} className="info-link"><span className="info-icon whatsapp"><Icon name="whatsapp"/></span><div><strong>WhatsApp</strong><p>Chat with us for quick<br/>appointments &amp; queries</p></div></a></div></section>
