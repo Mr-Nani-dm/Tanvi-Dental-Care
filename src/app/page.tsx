@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
 
-const PHONE = "84999 89116";
-const PHONE_HREF = "tel:+918499989116";
-const WHATSAPP_HREF = "https://wa.me/918499989116?text=Hello%20Tanvi%20Dental%20Care%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.";
+const PHONE = "9160288388";
+const PHONE_HREF = "tel:+919160288388";
+const WHATSAPP_HREF = "https://wa.me/919160288388?text=Hello%20Tanvi%20Dental%20Care%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.";
+const HOURS = "9:00 AM - 9:00 PM (IST)";
 
 function Icon({ name, size = 20 }: { name: string; size?: number }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
@@ -40,7 +41,7 @@ function Button({ href, children, variant = "primary", icon }: { href: string; c
 export default function HomePage() {
   return (
     <main>
-      <div className="topbar"><div className="container topbar-inner"><div className="topbar-left"><span><Icon name="clock" size={15}/>Open Daily: 8:00 AM - 9:00 PM (IST)</span><i/><span><Icon name="pin" size={15}/>Mangalagiri, Andhra Pradesh</span></div><div className="socials"><span>Follow Us:</span><a href="#" aria-label="Facebook"><Icon name="facebook" size={15}/></a><a href="#" aria-label="Instagram"><Icon name="instagram" size={15}/></a><a href="#" aria-label="Google"><Icon name="google" size={15}/></a></div></div></div>
+      <div className="topbar"><div className="container topbar-inner"><div className="topbar-left"><span><Icon name="clock" size={15}/>Open Daily: {HOURS}</span><i/><span><Icon name="pin" size={15}/>Mangalagiri, Andhra Pradesh</span></div><div className="socials"><span>Follow Us:</span><a href="#" aria-label="Facebook"><Icon name="facebook" size={15}/></a><a href="#" aria-label="Instagram"><Icon name="instagram" size={15}/></a><a href="#" aria-label="Google"><Icon name="google" size={15}/></a></div></div></div>
 
       <header className="site-header"><div className="container header-inner">
         <a href="#home" className="brand" aria-label="Tanvi Dental Care & Implant Centre"><img src="/images/tanvi-logo-web.png" alt="Tanvi Dental Care & Implant Centre logo" width="70" height="64"/><span className="brand-copy"><strong>TANVI</strong><small>DENTAL CARE &amp;<br/>IMPLANT CENTRE</small></span></a>
@@ -56,7 +57,7 @@ export default function HomePage() {
         <div className="hero-image-layer"><picture><img src="/images/tanvi-doctors-web.jpg" alt="Dr. Naga Swathi Pokala and Dr. Prathap Naidu" width="664" height="451" fetchPriority="high" decoding="async"/></picture></div>
       </section>
 
-      <section className="quick-info container" aria-label="Clinic information"><div><span className="info-icon"><Icon name="pin"/></span><div><strong>Location</strong><p>Mangalagiri, Andhra Pradesh<br/>Also serving Vijayawada &amp; Guntur</p></div></div><div><span className="info-icon"><Icon name="clock"/></span><div><strong>Hours</strong><p>8:00 AM - 9:00 PM (IST)<br/>Open all days</p></div></div><div><a href={PHONE_HREF} className="info-link"><span className="info-icon"><Icon name="phone"/></span><div><strong>Call Us</strong><p>{PHONE}<br/>We're here to help</p></div></a></div><div><a href={WHATSAPP_HREF} className="info-link"><span className="info-icon whatsapp"><Icon name="whatsapp"/></span><div><strong>WhatsApp</strong><p>Chat with us for quick<br/>appointments &amp; queries</p></div></a></div></section>
+      <section className="quick-info container" aria-label="Clinic information"><div><span className="info-icon"><Icon name="pin"/></span><div><strong>Location</strong><p>Mangalagiri, Andhra Pradesh<br/>Also serving Vijayawada &amp; Guntur</p></div></div><div><span className="info-icon"><Icon name="clock"/></span><div><strong>Hours</strong><p>{HOURS}<br/>Open all days</p></div></div><div><a href={PHONE_HREF} className="info-link"><span className="info-icon"><Icon name="phone"/></span><div><strong>Call Us</strong><p>{PHONE}<br/>We're here to help</p></div></a></div><div><a href={WHATSAPP_HREF} className="info-link"><span className="info-icon whatsapp"><Icon name="whatsapp"/></span><div><strong>WhatsApp</strong><p>Chat with us for quick<br/>appointments &amp; queries</p></div></a></div></section>
 
       <section className="services container" id="services"><div className="section-heading"><span className="section-mark"><Icon name="sparkle" size={14}/></span><h2>Our Dental Services</h2><p>Comprehensive care for you and your family</p></div><div className="service-grid">{services.map(([title,text,icon])=><article className="service-item" key={title}><span className="service-icon"><Icon name={icon} size={31}/></span><h3>{title}</h3><p>{text}</p></article>)}</div><a className="view-all" href="#contact">View All Treatments <Icon name="arrow" size={15}/></a></section>
 
