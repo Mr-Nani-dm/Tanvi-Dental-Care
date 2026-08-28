@@ -3,62 +3,72 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { site } from "@/lib/site";
 
 const journey = [
-  ["01", "Understand", "Clear educational information can help patients make sense of a concern without diagnosing it."],
-  ["02", "Build trust", "Verified specialist information and genuine clinic evidence should make the next step easier to evaluate."],
-  ["03", "Consider", "Patients can explore relevant treatment information and prepare questions for a professional."],
-  ["04", "Consult", "When contact details are verified, Phone / WhatsApp can provide a direct path to consultation."],
-];
+  ["01", "Understand", "Clear information helps you make sense of a concern without a website trying to diagnose you."],
+  ["02", "Build trust", "Meet the specialists and understand what information is verified before you decide what to do next."],
+  ["03", "Consider", "Explore relevant information, think through your questions and consider whether professional evaluation is appropriate."],
+  ["04", "Consult", "When clinic contact details are confirmed, a direct Phone / WhatsApp path can make the next step simple."],
+] as const;
 
 export default function HomePage() {
   return (
     <>
       <section className="hero">
+        <div className="hero-orbit" aria-hidden="true" />
         <div className="container hero-grid">
-          <div>
-            <p className="eyebrow">Dental care in {site.primaryMarket}</p>
-            <h1>A calmer way to understand your dental next step.</h1>
-            <p className="lede">Patient-focused information, specialist context and a clear path toward professional consultation — without pretending a website can diagnose you.</p>
+          <div className="hero-copy">
+            <div className="eyebrow-row"><span className="eyebrow-dot" /> <p className="eyebrow">Dental care · Mangalagiri</p></div>
+            <h1>Care you can understand. <em>People you can trust.</em></h1>
+            <p className="lede">A calmer digital starting point for understanding dental concerns, meeting the specialists and preparing for a professional conversation.</p>
             <div className="actions">
-              <a className="button button-primary" href="#contact">Explore your next step</a>
-              <a className="button button-secondary" href="#doctors">Meet the specialists</a>
+              <a className="button button-primary" href="#doctors"><span>Meet our specialists</span><span aria-hidden="true">↗</span></a>
+              <a className="button button-quiet" href="#approach">How we help patients <span aria-hidden="true">↓</span></a>
             </div>
+            <div className="hero-note"><span aria-hidden="true">✦</span><span>Educational, patient-first information — not a diagnosis.</span></div>
           </div>
-          <aside className="trust-panel" aria-labelledby="hero-trust-title">
-            <p className="eyebrow">Verified specialist information</p>
-            <h2 id="hero-trust-title">Meet the clinical team</h2>
-            {site.doctors.map((doctor) => <div key={doctor.name} className="card" style={{ marginTop: "1rem" }}><h3>{doctor.name}</h3><p className="doctor-credentials">{doctor.qualifications}</p><p>{doctor.specialty}</p></div>)}
+          <aside className="hero-clinical" aria-label="Verified clinical team">
+            <div className="clinical-label"><span>CLINICAL TEAM</span><span className="label-line" /></div>
+            <div className="clinical-intro">Specialist care, <strong>plainly presented.</strong></div>
+            {site.doctors.map((doctor, index) => (
+              <div className="doctor-mini" key={doctor.name}>
+                <div className="doctor-number">0{index + 1}</div>
+                <div><h2>{doctor.name}</h2><p>{doctor.qualifications} · {doctor.specialty}</p></div>
+                <span className="arrow" aria-hidden="true">↗</span>
+              </div>
+            ))}
+            <div className="verified-line"><span className="check" aria-hidden="true">✓</span> Business-provided information</div>
           </aside>
         </div>
       </section>
 
-      <section id="approach" className="section">
+      <section className="signal-strip" aria-label="Tanvi approach">
+        <div className="container signal-inner"><span>LOCAL RELEVANCE</span><i /> <span>SPECIALIST TRUST</span><i /> <span>PATIENT CLARITY</span><i /> <span>HUMAN CONVERSATION</span></div>
+      </section>
+
+      <section id="approach" className="section approach-section">
         <div className="container">
-          <SectionHeading eyebrow="The patient journey" title="From uncertainty to a more informed conversation." description="The website should help patients understand their concern, evaluate trustworthy information, consider relevant options and reach the clinic when they are ready." />
-          <div className="cards">
-            {journey.map(([number, title, text]) => <article className="card" key={number}><p className="eyebrow">{number}</p><h3>{title}</h3><p>{text}</p></article>)}
+          <SectionHeading eyebrow="A better starting point" title="Less uncertainty. More clarity." description="Dental decisions can feel complicated. The experience is designed to answer genuine patient questions first, then make the next step easier to understand." />
+          <div className="journey-list">
+            {journey.map(([number, title, text]) => <article className="journey-item" key={number}><span className="journey-number">{number}</span><h3>{title}</h3><p>{text}</p><span className="journey-mark" aria-hidden="true">+</span></article>)}
           </div>
         </div>
       </section>
 
-      <section id="doctors" className="section section-subtle">
+      <section id="doctors" className="section team-section">
         <div className="container">
-          <SectionHeading eyebrow="Clinical team" title="Specialist information, presented plainly." description="Only business-provided professional information currently approved for use is shown. Additional credentials require verification." />
+          <div className="section-topline"><SectionHeading eyebrow="The specialists" title="Know who you are speaking with." description="Professional information currently approved by the business, without adding unverified credentials or claims." /><span className="section-index">02 / 04</span></div>
           <div className="doctor-grid">{site.doctors.map((doctor) => <DoctorCard key={doctor.name} doctor={doctor} />)}</div>
         </div>
       </section>
 
-      <section id="location" className="section">
-        <div className="container">
-          <SectionHeading eyebrow="Local relevance" title="Rooted in Mangalagiri." description="Mangalagiri is the primary market, with Vijayawada and Guntur identified as secondary markets. Exact clinic address, directions and service-area details remain locked until business verification." />
-          <div className="cards"><article className="card"><h3>Primary</h3><p>Mangalagiri</p></article><article className="card"><h3>Secondary</h3><p>Vijayawada · Guntur</p></article></div>
+      <section id="location" className="section location-section">
+        <div className="container location-grid">
+          <div><div className="eyebrow-row"><span className="eyebrow-dot" /><p className="eyebrow">Where we serve</p></div><h2>Rooted in <em>Mangalagiri.</em></h2><p className="location-copy">Mangalagiri is the primary market, with Vijayawada and Guntur identified as secondary markets. Exact clinic address and directions will be added only after business verification.</p></div>
+          <div className="market-list"><div><span>01</span><strong>Mangalagiri</strong><small>Primary market</small></div><div><span>02</span><strong>Vijayawada</strong><small>Secondary market</small></div><div><span>03</span><strong>Guntur</strong><small>Secondary market</small></div></div>
         </div>
       </section>
 
-      <section id="contact" className="section section-subtle">
-        <div className="container">
-          <SectionHeading eyebrow="Consultation" title="Have questions? The next step is a professional conversation." description="Phone and WhatsApp pathways will be enabled once the clinic confirms the relevant contact details. No contact information is fabricated here." />
-          <div className="actions"><span className="button button-secondary" aria-disabled="true">Phone — verification required</span><span className="button button-secondary" aria-disabled="true">WhatsApp — verification required</span></div>
-        </div>
+      <section id="contact" className="contact-section">
+        <div className="container contact-inner"><div><p className="eyebrow">Ready when you are</p><h2>Have questions?<br /><em>Start a conversation.</em></h2></div><div><p>Phone and WhatsApp will become direct consultation pathways once the clinic confirms the relevant contact details.</p><div className="actions"><span className="button button-primary is-disabled" aria-disabled="true">Phone · verification required</span><span className="button button-outline is-disabled" aria-disabled="true">WhatsApp · verification required</span></div></div></div>
       </section>
     </>
   );
