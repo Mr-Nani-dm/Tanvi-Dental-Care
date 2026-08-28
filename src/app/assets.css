@@ -1,2 +1,8 @@
-/* Asset-specific styles are intentionally kept empty.
-   Homepage layout and image treatment live in globals.css. */
+/* Brand asset override: use the polished white-background 3D dental mark. */
+.brand{position:relative}
+.brand img{width:0!important;height:0!important;opacity:0!important;flex:0 0 0!important}
+.brand::before{content:"";display:block;width:70px;height:64px;flex:0 0 70px;background:url("/images/tanvi-logo-3d.svg") center/contain no-repeat}
+.footer-brand img{width:0!important;height:0!important;opacity:0!important;flex:0 0 0!important}
+.footer-brand::before{content:"";display:block;width:52px;height:46px;flex:0 0 52px;background:url("/images/tanvi-logo-3d.svg") center/contain no-repeat}
+@media(max-width:1180px) and (min-width:981px){.brand::before{width:62px;height:58px;flex-basis:62px}}
+@media(max-width:640px){.brand::before{width:46px;height:50px;flex-basis:46px}.footer-brand::before{width:46px;height:42px;flex-basis:46px}}
