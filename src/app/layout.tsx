@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./assets.css";
 import "./clinic.css";
+import "./content-pages.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tanvi-dental-care.vercel.app";
 
@@ -17,8 +18,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   openGraph: {
     title: "Tanvi Dental Care & Implant Centre | Mangalagiri",
-    description:
-      "Tanvi Dental Care & Implant Centre in Mangalagiri, Andhra Pradesh.",
+    description: "Tanvi Dental Care & Implant Centre in Mangalagiri, Andhra Pradesh.",
     type: "website",
     url: siteUrl,
     siteName: "Tanvi Dental Care & Implant Centre",
@@ -47,14 +47,12 @@ const localBusinessSchema = {
     postalCode: "522503",
     addressCountry: "IN",
   },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      opens: "09:00",
-      closes: "21:00",
-    },
-  ],
+  openingHoursSpecification: [{
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    opens: "09:00",
+    closes: "21:00",
+  }],
   sameAs: ["https://www.instagram.com/tanvidental/"],
 };
 
