@@ -1,0 +1,107 @@
+/* Responsive audit hardening: one authoritative breakpoint layer for the production UI. */
+
+@media (max-width: 1100px) {
+  .desktop-nav,
+  .header-actions { display:none; }
+  .header-inner { display:flex; min-height:76px; height:76px; gap:12px; }
+  .brand { flex:1 1 auto; }
+  .mobile-menu { display:block; flex:0 0 44px; width:44px; height:44px; padding:0; }
+
+  .hero { height:auto; min-height:0; display:flex; flex-direction:column; }
+  .hero-inner { display:block; height:auto; order:1; }
+  .hero-copy { padding:clamp(36px,5vw,52px) 0 30px; }
+  .hero-image-layer { position:relative; inset:auto; order:2; width:100%; height:auto; display:block; }
+  .hero-image-layer picture { display:block; width:100%; height:auto; }
+  .hero-image-layer img { width:100%; height:auto; max-width:100%; object-fit:contain; object-position:center; }
+
+  .quick-info { height:auto; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .quick-info>div:nth-child(2) { border-right:0; }
+  .quick-info>div:nth-child(-n+2) { border-bottom:1px solid #d7e1de; }
+  .service-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .about-inner,.contact-inner { gap:40px; }
+}
+
+@media (max-width: 900px) {
+  .container { width:min(var(--max),calc(100% - 32px)); }
+  .hero h1 { font-size:clamp(44px,8vw,58px); letter-spacing:-2px; }
+  .hero-benefits { gap:16px; }
+  .service-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .about-inner,.contact-inner,.guide-inner,.reviews-inner,.faq-layout { grid-template-columns:1fr; gap:30px; }
+  .about-section h2,.guide-section h2,.contact-section h2 { font-size:clamp(34px,6vw,44px); }
+  .journey { flex-wrap:wrap; }
+  .contact-actions { justify-content:flex-start; flex-wrap:wrap; }
+  .doctor-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .floating-actions { right:16px; bottom:calc(16px + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 680px) {
+  .topbar { min-height:38px; }
+  .topbar-left { gap:8px; flex-wrap:wrap; padding:7px 0; }
+  .brand img { width:48px !important; height:48px !important; flex-basis:48px !important; }
+  .brand-copy strong { font-size:24px; }
+  .brand-copy small { font-size:8.5px; }
+  .header-inner { min-height:70px; height:70px; }
+  .mobile-menu { width:44px; height:44px; }
+
+  .hero-copy { padding:34px 0 28px; }
+  .hero h1 { font-size:clamp(42px,11.5vw,50px); line-height:.99; }
+  .hero-lead { font-size:15px; margin:15px 0 22px; }
+  .hero-benefits { display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:20px; }
+  .benefit small { font-size:12px; }
+  .hero-actions { display:grid; grid-template-columns:1fr; gap:10px; }
+  .hero-actions .btn { width:100%; min-height:48px; }
+  .medical-note { font-size:10px; }
+
+  .quick-info { grid-template-columns:1fr; border-radius:15px; }
+  .quick-info>div { border-right:0 !important; border-bottom:1px solid #d7e1de; }
+  .quick-info>div:last-child { border-bottom:0; }
+  .quick-info p { font-size:12px; }
+
+  .services { padding:42px 0 54px; }
+  .service-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+  .service-item { min-height:132px; padding:12px 9px; }
+  .service-item p { font-size:11px; }
+
+  .about-section,.doctors-section,.contact-section { padding:56px 0; }
+  .about-inner,.contact-inner { display:grid; grid-template-columns:1fr; }
+  .doctor-grid { grid-template-columns:1fr; gap:16px; }
+  .doctor-card-photo { grid-template-columns:1fr; }
+  .doctor-photo-wrap { aspect-ratio:4/3; max-height:none; }
+  .doctor-details { padding:20px; }
+  .doctor-details h3 { font-size:23px; }
+
+  .treatment-catalogue,.reviews-section,.faq-section { padding:56px 0; }
+  .catalogue-grid { grid-template-columns:1fr; }
+  .guide-section { padding:58px 0; }
+  .journey { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:24px; }
+  .journey span { font-size:12px; }
+  .reviews-inner h2,.faq-intro h2 { font-size:clamp(32px,8vw,38px); }
+  .rating-card { max-width:none; }
+  .map-card,.map-card iframe { height:280px; min-height:280px; }
+
+  .btn { min-height:48px; padding-inline:18px; }
+  .contact-actions .btn { flex:1 1 150px; }
+  .floating-actions a { width:50px; height:50px; }
+}
+
+@media (max-width: 390px) {
+  .container { width:calc(100% - 28px); }
+  .hero h1 { font-size:40px; letter-spacing:-1.5px; }
+  .eyebrow { font-size:15px; }
+  .hero-lead { font-size:14px; }
+  .service-grid { grid-template-columns:1fr; }
+  .service-item { min-height:112px; }
+  .journey { grid-template-columns:1fr; }
+  .floating-actions { right:12px; }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .hero-copy { padding-top:28px; padding-bottom:24px; }
+  .hero h1 { font-size:clamp(38px,7vw,52px); }
+  .hero-benefits { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+  .hero-actions { margin-top:8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-actions a,.btn,.service-item,.doctor-card-photo,.doctor-photo-wrap img { transition:none !important; }
+}
