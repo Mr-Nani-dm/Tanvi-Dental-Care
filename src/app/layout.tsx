@@ -14,7 +14,6 @@ export const metadata: Metadata = {
     template: "%s | Tanvi Dental Care",
   },
   description: "Tanvi Dental Care & Implant Centre in Mangalagiri, Andhra Pradesh. Dental implants, root canal care, restorative, cosmetic and preventive dental treatment information.",
-  alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {
     title: "Tanvi Dental Care & Implant Centre | Mangalagiri",
