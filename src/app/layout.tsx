@@ -4,6 +4,7 @@ import "./assets.css";
 import "./clinic.css";
 import "./content-pages.css";
 import "./audit-polish.css";
+import "./hero-image-fix.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tanvi-dental-care.vercel.app";
 
@@ -21,13 +22,13 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: "Tanvi Dental Care & Implant Centre",
-    images: [{ url: "/images/tanvi-doctors-hero.jpg", width: 1100, height: 700, alt: "Tanvi Dental Care doctors" }],
+    images: [{ url: "/images/tanvi-doctors-web.jpg", width: 700, height: 467, alt: "Tanvi Dental Care doctors" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Tanvi Dental Care & Implant Centre | Mangalagiri",
     description: "Dental care and implant centre in Mangalagiri, Andhra Pradesh.",
-    images: ["/images/tanvi-doctors-hero.jpg"],
+    images: ["/images/tanvi-doctors-web.jpg"],
   },
   icons: { icon: "/images/tanvi-logo-web.png" },
 };
