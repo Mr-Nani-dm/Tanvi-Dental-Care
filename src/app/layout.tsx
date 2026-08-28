@@ -3,6 +3,7 @@ import "./globals.css";
 import "./assets.css";
 import "./clinic.css";
 import "./content-pages.css";
+import "./audit-polish.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tanvi-dental-care.vercel.app";
 
@@ -12,8 +13,7 @@ export const metadata: Metadata = {
     default: "Tanvi Dental Care & Implant Centre | Mangalagiri",
     template: "%s | Tanvi Dental Care",
   },
-  description:
-    "Tanvi Dental Care & Implant Centre in Mangalagiri, Andhra Pradesh. Dental implants, root canal care, restorative, cosmetic and preventive dental treatment information.",
+  description: "Tanvi Dental Care & Implant Centre in Mangalagiri, Andhra Pradesh. Dental implants, root canal care, restorative, cosmetic and preventive dental treatment information.",
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {
