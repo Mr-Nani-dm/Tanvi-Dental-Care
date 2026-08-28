@@ -56,7 +56,7 @@ export default function HomePage() {
             <div className="hero-actions"><Button href={PHONE_HREF} icon="phone">Call Now: {PHONE}</Button><Button href={WHATSAPP_HREF} variant="secondary" icon="whatsapp">Chat on WhatsApp</Button></div><p className="disclaimer"><Icon name="shield" size={13} />Educational information - not a diagnosis.</p>
           </div><div className="hero-doctor-space" aria-hidden="true" />
         </div>
-        <div className="hero-image-layer"><img src="/images/tanvi-doctors-hero.jpg" alt="Dr. Naga Swathi Pokala and Dr. Prathap Naidu" /></div>
+        <div className="hero-image-layer"><img src="/images/tanvi-doctors-hero.jpg" alt="Dr. Naga Swathi Pokala and Dr. Prathap Naidu" width="664" height="451" fetchPriority="high" decoding="async" /></div>
       </section>
 
       <section className="quick-info container" aria-label="Clinic information"><div><span className="info-icon"><Icon name="pin" /></span><div><strong>Location</strong><p>Mangalagiri, Andhra Pradesh<br />Also serving Vijayawada &amp; Guntur</p></div></div><div><span className="info-icon"><Icon name="clock" /></span><div><strong>Hours</strong><p>8:00 AM - 9:00 PM (IST)<br />Open all days</p></div></div><div><a href={PHONE_HREF} className="info-link"><span className="info-icon"><Icon name="phone" /></span><div><strong>Call Us</strong><p>{PHONE}<br />We're here to help</p></div></a></div><div><a href={WHATSAPP_HREF} className="info-link"><span className="info-icon whatsapp"><Icon name="whatsapp" /></span><div><strong>WhatsApp</strong><p>Chat with us for quick<br />appointments &amp; queries</p></div></a></div></section>
