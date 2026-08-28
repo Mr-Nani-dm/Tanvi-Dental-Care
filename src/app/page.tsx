@@ -7,7 +7,18 @@ const WHATSAPP_HREF = "https://wa.me/919160288388?text=Hello%20Tanvi%20Dental%20
 const HOURS = "9:00 AM - 9:00 PM (IST)";
 
 function Icon({ name, size = 20 }: { name: string; size?: number }) {
-  const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
+  const common = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+
   const paths: Record<string, ReactNode> = {
     clock: <><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></>,
     pin: <><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></>,
@@ -21,18 +32,26 @@ function Icon({ name, size = 20 }: { name: string; size?: number }) {
     shield: <><path d="M12 3 19 6v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></>,
     users: <><path d="M16 20v-1.5a4.5 4.5 0 0 0-4.5-4.5h-3A4.5 4.5 0 0 0 4 18.5V20"/><circle cx="10" cy="7.5" r="3.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 6.8M18 14.2a4.5 4.5 0 0 1 2 3.8V20"/></>,
     tooth: <path d="M8.1 5.1c1.4-.9 2.2.2 3.9.2s2.5-1.1 3.9-.2c2.2 1.4 2.5 4.4 1.8 6.5-.7 2.2-1.7 3.2-2.1 5.9-.2 1.4-.7 3-1.9 3s-1.5-1.3-2-3.5c-.2-.9-.5-1.7-1.1-1.7s-.9.8-1.1 1.7c-.5 2.2-.8 3.5-2 3.5-1.2 0-1.7-1.6-1.9-3-.4-2.7-1.4-3.7-2.1-5.9-.7-2.1-.4-5.1 1.8-6.5Z"/>,
-    sparkle: <><path d="m12 3 1.2 5.8L19 10l-5.8 1.2L12 17l-1.2-5.8L5 10l5.8-1.2L12 3Z"/><path d="m19 16 .6 2.4L22 19l-2.4.6L19 22l-.6-2.4L16 19l2.4-.6L19 16Z"/></>,
+    implant: <><path d="M8.2 3.8c1.4-.8 2.1.2 3.8.2s2.4-1 3.8-.2c2 1.2 2.4 3.9 1.8 6-.5 1.9-1.5 3.1-2 5.4-.3 1.4-.7 3-1.8 3-1.2 0-1.4-1.6-1.8-3.2-.2-.9-.5-1.6-1-1.6s-.8.7-1 1.6c-.4 1.6-.7 3.2-1.8 3.2-1.1 0-1.5-1.6-1.8-3-.5-2.3-1.5-3.5-2-5.4-.6-2.1-.2-4.8 1.8-6Z"/><path d="M12 17v4M9.5 19.2h5M9.5 21h5"/></>,
+    root: <><path d="M7 4.5c1.5-1 2.5.1 5 .1s3.5-1.1 5-.1c2.4 1.5 2.4 5.1 1.1 7.3-1 1.7-2 2.8-2.2 5.1-.1 1.2-.5 2.6-1.5 2.6-1.2 0-1.5-1.4-2-3.2-.2-.8-.4-1.3-.4-1.3s-.2.5-.4 1.3c-.5 1.8-.8 3.2-2 3.2-1 0-1.4-1.4-1.5-2.6-.2-2.3-1.2-3.4-2.2-5.1C4.6 9.6 4.6 6 7 4.5Z"/><path d="M12 3v4M9.5 5h5"/></>,
+    cosmetic: <><path d="M8.2 5.1c1.4-.9 2.2.2 3.8.2s2.4-1.1 3.8-.2c2.1 1.3 2.4 4.1 1.8 6.2-.6 2-1.5 3-2 5.6-.2 1.2-.6 2.6-1.7 2.6s-1.5-1.4-1.9-3.3c-.2-.9-.4-1.5-1-1.5s-.8.6-1 1.5c-.4 1.9-.8 3.3-1.9 3.3s-1.5-1.4-1.7-2.6c-.5-2.6-1.4-3.6-2-5.6-.6-2.1-.3-4.9 1.8-6.2Z"/><path d="m19 3 .7 2.3L22 6l-2.3.7L19 9l-.7-2.3L16 6l2.3-.7L19 3Z"/></>,
+    wisdom: <><path d="M7.5 5.2c1.5-1 2.6.1 4.5.1s3-1.1 4.5-.1c2.3 1.6 2.3 4.9 1.2 7-1 1.9-2.2 3.1-2.3 5.6-.1 1.3-.5 2.7-1.7 2.7-1.2 0-1.5-1.5-1.7-3.1-.2 1.6-.5 3.1-1.7 3.1-1.2 0-1.6-1.4-1.7-2.7-.1-2.5-1.3-3.7-2.3-5.6-1.1-2.1-1.1-5.4 1.2-7Z"/><path d="M12 8v5M9.5 10.5h5"/></>,
+    cleaning: <><path d="M6 4h7.5c2.8 0 4.5 2.1 4.5 4.6 0 2.2-1.3 3.9-3.2 4.6L13 14.3V19H9v-5.2l-2.2-1.1C5.2 12 4 10.5 4 8.7 4 6.2 4.8 4 6 4Z"/><path d="m18 3 .5 1.8L20.3 5l-1.8.5L18 7l-.5-1.5L16 5l1.5-.5L18 3ZM20 9l.4 1.4 1.4.4-1.4.4L20 13l-.4-1.8-1.4-.4 1.4-.4L20 9Z"/></>,
+    crown: <path d="m4 7 4 4 4-7 4 7 4-4-1.5 11H5.5L4 7Zm2 11h12"/>,
+    check: <path d="m5 12 4 4L19 6"/>,
+    info: <><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7.2h.01"/></>,
   };
+
   return <svg {...common}>{paths[name] ?? paths.tooth}</svg>;
 }
 
 const services = [
-  ["Dental Implants", "Permanent solutions for missing teeth", "tooth"],
-  ["Root Canal Treatment", "Pain-free treatment to save your natural tooth", "tooth"],
-  ["Cosmetic Dentistry", "Enhance your smile with advanced cosmetic care", "sparkle"],
-  ["Wisdom Tooth Management", "Safe removal with expert care", "tooth"],
-  ["Teeth Cleaning & Scaling", "Preventive care for healthy gums & teeth", "tooth"],
-  ["Crowns & Bridges", "Restore function & aesthetics with custom crowns", "tooth"],
+  ["Dental Implants", "Permanent solutions for missing teeth", "implant"],
+  ["Root Canal Treatment", "Pain-free treatment to save your natural tooth", "root"],
+  ["Cosmetic Dentistry", "Enhance your smile with advanced cosmetic care", "cosmetic"],
+  ["Wisdom Tooth Management", "Safe removal with expert care", "wisdom"],
+  ["Teeth Cleaning & Scaling", "Preventive care for healthy gums & teeth", "cleaning"],
+  ["Crowns & Bridges", "Restore function & aesthetics with custom crowns", "crown"],
 ] as const;
 
 function Button({ href, children, variant = "primary", icon }: { href: string; children: ReactNode; variant?: "primary" | "secondary"; icon?: string }) {
@@ -42,30 +61,101 @@ function Button({ href, children, variant = "primary", icon }: { href: string; c
 export default function HomePage() {
   return (
     <main>
-      <div className="topbar"><div className="container topbar-inner"><div className="topbar-left"><span><Icon name="clock" size={15}/>Open Daily: {HOURS}</span><i/><span><Icon name="pin" size={15}/>Mangalagiri, Andhra Pradesh</span></div><div className="socials"><span>Follow Us:</span><a href="#contact" aria-label="Facebook"><Icon name="facebook" size={15}/></a><a href="#contact" aria-label="Instagram"><Icon name="instagram" size={15}/></a><a href="#contact" aria-label="Google"><Icon name="google" size={15}/></a></div></div></div>
+      <div className="topbar">
+        <div className="container topbar-inner">
+          <div className="topbar-left">
+            <span><Icon name="clock" size={15}/>Open Daily: {HOURS}</span><i/><span><Icon name="pin" size={15}/>Mangalagiri, Andhra Pradesh</span>
+          </div>
+          <div className="socials" aria-label="Social links">
+            <span>Follow Us:</span>
+            <a href="#contact" aria-label="Facebook"><Icon name="facebook" size={15}/></a>
+            <a href="#contact" aria-label="Instagram"><Icon name="instagram" size={15}/></a>
+            <a href="#contact" aria-label="Google"><Icon name="google" size={15}/></a>
+          </div>
+        </div>
+      </div>
 
-      <header className="site-header"><div className="container header-inner">
-        <a href="#home" className="brand" aria-label="Tanvi Dental Care & Implant Centre"><img src="/images/tanvi-logo-web.png" alt="Tanvi Dental Care & Implant Centre logo" width="64" height="64"/><span className="brand-copy"><strong>TANVI</strong><small>DENTAL CARE &amp;<br/>IMPLANT CENTRE</small></span></a>
-        <nav className="desktop-nav" aria-label="Primary navigation"><a className="active" href="#home">Home</a><a href="#about">About Us</a><a href="#doctors">Our Doctors</a><a href="#services">Treatments <Icon name="chevron" size={14}/></a><a href="#guide">Patient Guide</a><a href="#contact">Contact Us</a></nav>
-        <div className="header-actions"><a className="header-phone" href={PHONE_HREF}><Icon name="phone" size={19}/><span><strong>{PHONE}</strong><small>Call Us</small></span></a><a className="header-whatsapp" href={WHATSAPP_HREF}><Icon name="whatsapp" size={19}/><span>WhatsApp Us</span></a></div><MobileNav />
-      </div></header>
+      <header className="site-header">
+        <div className="container header-inner">
+          <a href="#home" className="brand" aria-label="Tanvi Dental Care & Implant Centre">
+            <img src="/images/tanvi-logo-web.png" alt="" width="64" height="64" fetchPriority="high"/>
+            <span className="brand-copy"><strong>TANVI</strong><small>DENTAL CARE &amp;<br/>IMPLANT CENTRE</small></span>
+          </a>
+          <nav className="desktop-nav" aria-label="Primary navigation">
+            <a className="active" href="#home">Home</a><a href="#about">About Us</a><a href="#doctors">Our Doctors</a><a href="#services">Treatments <Icon name="chevron" size={14}/></a><a href="#guide">Patient Guide</a><a href="#contact">Contact Us</a>
+          </nav>
+          <div className="header-actions">
+            <a className="header-phone" href={PHONE_HREF} aria-label={`Call Tanvi Dental Care at ${PHONE}`}><Icon name="phone" size={19}/><span><strong>{PHONE}</strong><small>Call Us</small></span></a>
+            <a className="header-whatsapp" href={WHATSAPP_HREF} aria-label="Chat with Tanvi Dental Care on WhatsApp"><Icon name="whatsapp" size={19}/><span>WhatsApp Us</span></a>
+          </div>
+          <MobileNav />
+        </div>
+      </header>
 
-      <section className="hero" id="home">
-        <div className="container hero-inner"><div className="hero-copy"><p className="eyebrow">Compassionate Care. Advanced Dentistry.</p><h1>Healthy Smiles,<br/><em>Confident Lives.</em></h1><p className="hero-lead">Expert dental care in a comfortable environment.<br/>Your smile is our priority.</p>
-          <div className="hero-benefits"><div className="benefit"><span className="benefit-icon"><Icon name="tooth" size={22}/></span><div><strong>Advanced<br/>Technology</strong><small>Modern equipment for<br/>precise treatment</small></div></div><div className="benefit"><span className="benefit-icon"><Icon name="shield" size={22}/></span><div><strong>Safe &amp;<br/>Hygienic Care</strong><small>Strict sterilization &amp;<br/>hygiene protocols</small></div></div><div className="benefit"><span className="benefit-icon"><Icon name="users" size={22}/></span><div><strong>Patient First<br/>Approach</strong><small>Personalized care<br/>for every smile</small></div></div></div>
-          <div className="hero-actions"><Button href={PHONE_HREF} icon="phone">Call Now: {PHONE}</Button><Button href={WHATSAPP_HREF} variant="secondary" icon="whatsapp">Chat on WhatsApp</Button></div>
-        </div><div className="hero-doctor-space" aria-hidden="true"/></div>
-        <div className="hero-image-layer"><picture><img src="/images/tanvi-doctors-hero.jpg" alt="Dr. Naga Swathi Pokala and Dr. Prathap Naidu" width="1328" height="902" fetchPriority="high" decoding="async" sizes="(max-width: 980px) 100vw, 54vw"/></picture></div>
+      <section className="hero" id="home" aria-labelledby="hero-title">
+        <div className="container hero-inner">
+          <div className="hero-copy">
+            <p className="eyebrow">Compassionate Care. Advanced Dentistry.</p>
+            <h1 id="hero-title">Healthy Smiles,<br/><em>Confident Lives.</em></h1>
+            <p className="hero-lead">Expert dental care in a comfortable environment.<br/>Your smile is our priority.</p>
+            <div className="hero-benefits">
+              <div className="benefit"><span className="benefit-icon"><Icon name="tooth" size={22}/></span><div><strong>Advanced<br/>Technology</strong><small>Modern equipment for<br/>precise treatment</small></div></div>
+              <div className="benefit"><span className="benefit-icon"><Icon name="shield" size={22}/></span><div><strong>Safe &amp;<br/>Hygienic Care</strong><small>Strict sterilization &amp;<br/>hygiene protocols</small></div></div>
+              <div className="benefit"><span className="benefit-icon"><Icon name="users" size={22}/></span><div><strong>Patient First<br/>Approach</strong><small>Personalized care<br/>for every smile</small></div></div>
+            </div>
+            <div className="hero-actions"><Button href={PHONE_HREF} icon="phone">Call Now: {PHONE}</Button><Button href={WHATSAPP_HREF} variant="secondary" icon="whatsapp">Chat on WhatsApp</Button></div>
+            <p className="medical-note"><Icon name="info" size={13}/>Educational information — not a diagnosis.</p>
+          </div>
+          <div className="hero-doctor-space" aria-hidden="true"/>
+        </div>
+        <div className="hero-image-layer">
+          <picture><img src="/images/tanvi-doctors-hero.jpg" alt="Dr. Naga Swathi Pokala and Dr. Prathap Naidu" width="1328" height="902" fetchPriority="high" decoding="async" sizes="(max-width: 1080px) 100vw, 54vw"/></picture>
+        </div>
       </section>
 
-      <section className="quick-info container" aria-label="Clinic information"><div><span className="info-icon"><Icon name="pin"/></span><div><strong>Location</strong><p>Mangalagiri, Andhra Pradesh<br/>Also serving Vijayawada &amp; Guntur</p></div></div><div><span className="info-icon"><Icon name="clock"/></span><div><strong>Hours</strong><p>{HOURS}<br/>Open all days</p></div></div><div><a href={PHONE_HREF} className="info-link"><span className="info-icon"><Icon name="phone"/></span><div><strong>Call Us</strong><p>{PHONE}<br/>We're here to help</p></div></a></div><div><a href={WHATSAPP_HREF} className="info-link"><span className="info-icon whatsapp"><Icon name="whatsapp"/></span><div><strong>WhatsApp</strong><p>Chat with us for quick<br/>appointments &amp; queries</p></div></a></div></section>
+      <section className="quick-info container" aria-label="Clinic information">
+        <div><span className="info-icon"><Icon name="pin"/></span><div><strong>Location</strong><p>Mangalagiri, Andhra Pradesh<br/>Also serving Vijayawada &amp; Guntur</p></div></div>
+        <div><span className="info-icon"><Icon name="clock"/></span><div><strong>Hours</strong><p>{HOURS}<br/>Open all days</p></div></div>
+        <div><a href={PHONE_HREF} className="info-link"><span className="info-icon"><Icon name="phone"/></span><div><strong>Call Us</strong><p>{PHONE}<br/>We're here to help</p></div></a></div>
+        <div><a href={WHATSAPP_HREF} className="info-link"><span className="info-icon whatsapp"><Icon name="whatsapp"/></span><div><strong>WhatsApp</strong><p>Chat with us for quick<br/>appointments &amp; queries</p></div></a></div>
+      </section>
 
-      <section className="services container" id="services"><div className="section-heading"><span className="section-mark"><Icon name="sparkle" size={14}/></span><h2>Our Dental Services</h2><p>Comprehensive care for you and your family</p></div><div className="service-grid">{services.map(([title,text,icon])=><article className="service-item" key={title}><span className="service-icon"><Icon name={icon} size={31}/></span><h3>{title}</h3><p>{text}</p></article>)}</div><a className="view-all" href="#contact">View All Treatments <Icon name="arrow" size={15}/></a></section>
+      <section className="services container" id="services" aria-labelledby="services-title">
+        <div className="section-heading"><span className="section-mark"><Icon name="sparkle" size={14}/></span><h2 id="services-title">Our Dental Services</h2><p>Comprehensive care for you and your family</p></div>
+        <div className="service-grid">{services.map(([title,text,icon])=><article className="service-item" key={title}><span className="service-icon"><Icon name={icon} size={31}/></span><h3>{title}</h3><p>{text}</p></article>)}</div>
+        <a className="view-all" href="#contact">View All Treatments <Icon name="arrow" size={15}/></a>
+      </section>
 
-      <section className="about-section" id="about"><div className="container about-inner"><div><p className="eyebrow">A clinic built around your comfort</p><h2>Clear guidance. Thoughtful care. A calmer dental experience.</h2></div><p>Explore your concerns, meet the specialists and take the next appropriate step with information designed for patients - not medical jargon.</p></div></section>
-      <section className="guide-section" id="guide"><div className="container"><p className="eyebrow">Patient Guide</p><h2>Understand first. Ask questions. Then decide.</h2><div className="journey"><span>Patient concern</span><b>→</b><span>Understanding</span><b>→</b><span>Trust</span><b>→</b><span>Questions</span><b>→</b><span>Consultation</span></div></div></section>
-      <section className="contact-section" id="contact"><div className="container contact-inner"><div><p className="eyebrow">Take the next step</p><h2>Have a dental question?</h2><p>Call or WhatsApp the clinic to ask a question or enquire about a consultation.</p></div><div className="contact-actions"><Button href={PHONE_HREF} icon="phone">Call {PHONE}</Button><Button href={WHATSAPP_HREF} variant="secondary" icon="whatsapp">WhatsApp the Clinic</Button></div></div></section>
-      <footer className="footer"><div className="container footer-inner"><div className="footer-brand"><img src="/images/tanvi-logo-web.png" alt="" width="52" height="46"/><span><strong>TANVI</strong><small>DENTAL CARE &amp;<br/>IMPLANT CENTRE</small></span></div><p>Tanvi Dental Care &amp; Implant Centre - Mangalagiri, Andhra Pradesh</p></div></footer>
+      <section className="about-section" id="about" aria-labelledby="about-title">
+        <div className="container about-inner">
+          <div><p className="eyebrow">A clinic built around your comfort</p><h2 id="about-title">Clear guidance. Thoughtful care. A calmer dental experience.</h2></div>
+          <p>Explore your concerns, meet the specialists and take the next appropriate step with information designed for patients — not medical jargon.</p>
+        </div>
+      </section>
+
+      <section className="doctors-section" id="doctors" aria-labelledby="doctors-title">
+        <div className="container">
+          <div className="section-heading doctors-heading"><span className="section-mark"><Icon name="users" size={16}/></span><h2 id="doctors-title">Meet Our Doctors</h2><p>Specialist-led care with a patient-first approach</p></div>
+          <div className="doctor-grid">
+            <article className="doctor-card"><div className="doctor-initial">PN</div><div><h3>Dr. Prathap Naidu</h3><p>BDS, MDS</p><strong>Endodontist</strong></div></article>
+            <article className="doctor-card"><div className="doctor-initial">NS</div><div><h3>Dr. Naga Swathi Pokala</h3><p>BDS, MDS</p><strong>Oral &amp; Maxillofacial Surgeon</strong></div></article>
+          </div>
+          <p className="section-disclaimer"><Icon name="check" size={14}/>Doctor credentials shown here are limited to information currently provided for this website.</p>
+        </div>
+      </section>
+
+      <section className="guide-section" id="guide" aria-labelledby="guide-title">
+        <div className="container"><p className="eyebrow">Patient Guide</p><h2 id="guide-title">Understand first. Ask questions. Then decide.</h2><div className="journey"><span>Patient concern</span><b>→</b><span>Understanding</span><b>→</b><span>Trust</span><b>→</b><span>Questions</span><b>→</b><span>Consultation</span></div></div>
+      </section>
+
+      <section className="contact-section" id="contact" aria-labelledby="contact-title">
+        <div className="container contact-inner"><div><p className="eyebrow">Take the next step</p><h2 id="contact-title">Have a dental question?</h2><p>Call or WhatsApp the clinic to ask a question or enquire about a consultation.</p></div><div className="contact-actions"><Button href={PHONE_HREF} icon="phone">Call {PHONE}</Button><Button href={WHATSAPP_HREF} variant="secondary" icon="whatsapp">WhatsApp the Clinic</Button></div></div>
+      </section>
+
+      <footer className="footer">
+        <div className="container footer-inner"><div className="footer-brand"><img src="/images/tanvi-logo-web.png" alt="" width="52" height="46"/><span><strong>TANVI</strong><small>DENTAL CARE &amp;<br/>IMPLANT CENTRE</small></span></div><p>Tanvi Dental Care &amp; Implant Centre · Mangalagiri, Andhra Pradesh · {PHONE}</p></div>
+      </footer>
+
       <div className="floating-actions" aria-label="Quick contact"><a href={PHONE_HREF} aria-label="Call Tanvi Dental Care"><Icon name="phone" size={21}/></a><a href={WHATSAPP_HREF} aria-label="WhatsApp Tanvi Dental Care"><Icon name="whatsapp" size={23}/></a></div>
     </main>
   );
