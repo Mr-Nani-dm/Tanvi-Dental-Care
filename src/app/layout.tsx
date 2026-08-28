@@ -5,6 +5,7 @@ import "./clinic.css";
 import "./content-pages.css";
 import "./audit-polish.css";
 import "./hero-image-fix.css";
+import "./responsive-audit.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tanvi-dental-care.vercel.app";
 
@@ -49,7 +50,7 @@ const localBusinessSchema = {
   },
   openingHoursSpecification: [{
     "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     opens: "09:00",
     closes: "21:00",
   }],
