@@ -22,13 +22,13 @@ export const doctors = [
 ] as const;
 
 /**
- * Intentionally empty until business verification supplies the values.
- * Never replace these with guesses or directory-derived information.
+ * Contact values stay null until the business verification layer supplies
+ * current values. This prevents accidental publication of stale or guessed data.
  */
 export const verifiedContact = {
-  phone: null,
-  whatsapp: null,
-  email: null,
-  address: null,
-  hours: null,
-} as const;
+  phone: null as string | null,
+  whatsapp: null as string | null,
+  email: null as string | null,
+  address: null as string | null,
+  hours: null as string | null,
+};
