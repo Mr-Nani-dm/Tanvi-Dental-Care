@@ -17,11 +17,6 @@ export function clinicSchema() {
     },
     url: "https://tanvi-dental-care.vercel.app/",
     openingHours: "Mo-Su 09:00-21:00",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: clinic.googleRating,
-      reviewCount: clinic.googleReviewCount,
-    },
   };
 }
 
