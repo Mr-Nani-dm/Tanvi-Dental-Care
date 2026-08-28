@@ -1,47 +1,5 @@
-export const site = {
-  name: "Tanvi Dental Care & Implant Centre",
-  primaryMarket: "Mangalagiri",
-  secondaryMarkets: ["Vijayawada", "Guntur"],
-  contact: {
-    phone: "8499989116",
-    whatsapp: "918499989116",
-    hours: "8:00 AM–9:00 PM IST",
-    address: "Upstairs, Apollo Pharmacy, opposite Axis Bank, near Old Bus Stand, Mangalagiri, Andhra Pradesh 522503",
-  },
-  doctors: [
-    {
-      name: "Dr. Naga Swathi Pokala",
-      qualifications: "BDS, MDS",
-      specialty: "Oral & Maxillofacial Surgeon",
-    },
-    {
-      name: "Dr. Prathap Naidu",
-      qualifications: "BDS, MDS",
-      specialty: "Endodontist",
-    },
-  ],
-  serviceCategories: [
-    "Dental implants",
-    "Root canal treatment",
-    "Wisdom tooth removal",
-    "Braces",
-    "Clear aligners",
-    "Crowns",
-    "Bridges",
-    "Teeth cleaning / scaling",
-    "Teeth whitening",
-    "Cosmetic dentistry",
-    "Gum treatment",
-    "Pediatric dentistry",
-    "Dentures",
-    "Oral & maxillofacial surgery",
-    "Emergency dental care",
-    "Full-mouth rehabilitation",
-    "Smile design",
-  ],
-  verification: {
-    contact: "BUSINESS-PROVIDED — CONFIRM BEFORE PUBLICATION",
-    services: "BUSINESS-PROVIDED CANDIDATE LIST — CONFIRM BEFORE PUBLICATION",
-    reviewCount: "200+ was business-provided; exact meaning/current count requires verification",
-  },
-} as const;
+/**
+ * Backwards-compatible export for older components.
+ * Business truth is maintained in src/config/site.ts.
+ */
+export { doctors, siteConfig, verifiedContact } from "@/config/site";
