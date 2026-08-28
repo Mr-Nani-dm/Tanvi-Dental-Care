@@ -2,6 +2,12 @@ export const site = {
   name: "Tanvi Dental Care & Implant Centre",
   primaryMarket: "Mangalagiri",
   secondaryMarkets: ["Vijayawada", "Guntur"],
+  contact: {
+    phone: "8499989116",
+    whatsapp: "918499989116",
+    hours: "8:00 AM–9:00 PM IST",
+    address: "Upstairs, Apollo Pharmacy, opposite Axis Bank, near Old Bus Stand, Mangalagiri, Andhra Pradesh 522503",
+  },
   doctors: [
     {
       name: "Dr. Naga Swathi Pokala",
@@ -14,10 +20,28 @@ export const site = {
       specialty: "Endodontist",
     },
   ],
+  serviceCategories: [
+    "Dental implants",
+    "Root canal treatment",
+    "Wisdom tooth removal",
+    "Braces",
+    "Clear aligners",
+    "Crowns",
+    "Bridges",
+    "Teeth cleaning / scaling",
+    "Teeth whitening",
+    "Cosmetic dentistry",
+    "Gum treatment",
+    "Pediatric dentistry",
+    "Dentures",
+    "Oral & maxillofacial surgery",
+    "Emergency dental care",
+    "Full-mouth rehabilitation",
+    "Smile design",
+  ],
+  verification: {
+    contact: "BUSINESS-PROVIDED — CONFIRM BEFORE PUBLICATION",
+    services: "BUSINESS-PROVIDED CANDIDATE LIST — CONFIRM BEFORE PUBLICATION",
+    reviewCount: "200+ was business-provided; exact meaning/current count requires verification",
+  },
 } as const;
-
-/**
- * Business facts intentionally kept in one boundary.
- * Do not add phone, WhatsApp, address, hours, pricing, services,
- * facilities, reviews or other claims until verified by the business.
- */
