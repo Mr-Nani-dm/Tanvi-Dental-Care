@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 };
 
 const doctors = [
-  { name: "Dr. Naga Swathi Pokala", qualification: "BDS, MDS", specialty: "Oral & Maxillofacial Surgeon", image: "/images/doctors/naga-swathi.jpeg", alt: "Dr. Naga Swathi Pokala" },
-  { name: "Dr. Prathap Naidu", qualification: "BDS, MDS", specialty: "Endodontist", image: "/images/doctors/pratap-naidu.jpeg", alt: "Dr. Prathap Naidu" },
+  { name: "Dr. Naga Swathi Pokala", qualification: "BDS, MDS", specialty: "Oral & Maxillofacial Surgeon", image: "/images/doctors/naga-swathi.webp", alt: "Dr. Naga Swathi Pokala" },
+  { name: "Dr. Prathap Naidu", qualification: "BDS, MDS", specialty: "Endodontist", image: "/images/doctors/pratap-naidu.webp", alt: "Dr. Prathap Naidu" },
 ] as const;
 
 export default function DoctorsPage() {
