@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - feature/blog-admin-cms
+      - main
 
 jobs:
   build:
