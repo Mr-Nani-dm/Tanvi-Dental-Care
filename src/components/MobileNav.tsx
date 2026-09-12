@@ -8,6 +8,7 @@ const links = [
   ["Our Doctors", "/doctors"],
   ["Treatments", "/treatments"],
   ["Dental Blog", "/blog"],
+  ["Patient Guide", "/#guide"],
   ["FAQs", "/#faq"],
   ["Contact Us", "/#contact"],
 ] as const;
@@ -25,7 +26,10 @@ export default function MobileNav() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
-  const closeMenu = () => setOpen(false);
+  const closeMenu = (returnFocus = false) => {
+    setOpen(false);
+    if (returnFocus) requestAnimationFrame(() => menuButtonRef.current?.focus());
+  };
 
   useEffect(() => {
     if (!open) {
@@ -39,7 +43,7 @@ export default function MobileNav() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        closeMenu();
+        closeMenu(true);
       }
     };
 
@@ -50,32 +54,14 @@ export default function MobileNav() {
     };
   }, [open]);
 
-  useEffect(() => {
-    if (!open) menuButtonRef.current?.focus();
-  }, [open]);
-
   return (
     <>
-      <button
-        ref={menuButtonRef}
-        className="mobile-menu"
-        type="button"
-        aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-        aria-expanded={open}
-        aria-controls="mobile-navigation"
-        onClick={() => setOpen((value) => !value)}
-      >
+      <button ref={menuButtonRef} className="mobile-menu" type="button" aria-label={open ? "Close navigation menu" : "Open navigation menu"} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen((value) => !value)}>
         <MenuIcon open={open} />
       </button>
-
-      {open && <button className="mobile-nav-backdrop" type="button" aria-label="Close navigation menu" onClick={closeMenu} />}
-
+      {open && <button className="mobile-nav-backdrop" type="button" aria-label="Close navigation menu" onClick={() => closeMenu(true)} />}
       <nav id="mobile-navigation" className={`mobile-navigation${open ? " is-open" : ""}`} aria-label="Mobile navigation" aria-hidden={!open}>
-        {links.map(([label, href], index) => (
-          <a key={href} ref={index === 0 ? firstLinkRef : undefined} href={href} tabIndex={open ? 0 : -1} onClick={closeMenu}>
-            {label}
-          </a>
-        ))}
+        {links.map(([label, href], index) => <a key={href} ref={index === 0 ? firstLinkRef : undefined} href={href} tabIndex={open ? 0 : -1} onClick={() => closeMenu(false)}>{label}</a>)}
       </nav>
     </>
   );

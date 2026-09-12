@@ -31,9 +31,9 @@ export function SiteHeader() {
             <Link href="/#about">About Us</Link>
             <Link href="/doctors">Our Doctors</Link>
             <Link href="/treatments">Treatments</Link>
-            <Link href="/blog">Dental Blog</Link>
+            <Link href="/blog">Blog</Link>
+            <Link href="/#guide">Patient Guide</Link>
             <Link href="/#faq">FAQs</Link>
-            <Link href="/#contact">Contact Us</Link>
           </nav>
           <div className="header-actions">
             <a className="header-phone" href={clinic.phoneHref}><ClinicIcon name="phone" size={19}/><span><strong>{clinic.phone}</strong><small>Call Us</small></span></a>

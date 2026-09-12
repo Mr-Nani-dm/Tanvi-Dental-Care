@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { BlogPost, BlogStatus } from "@/content/blog";
 import { treatments } from "@/config/clinic";
 import { BLOG_ADMIN_COOKIE, adminConfigReady, verifyAdminSession } from "@/lib/adminAuth";
+import { publishBlockers } from "@/lib/blogPublishGate";
 import { estimateReadTime, slugify } from "@/lib/blogSeo";
 import { readRepoJson, writeRepoFile } from "@/lib/githubContent";
 
@@ -85,6 +86,13 @@ export async function POST(request: NextRequest) {
     const existingIndex = posts.findIndex((post) => post.slug === originalSlug);
     const existing = existingIndex >= 0 ? posts[existingIndex] : undefined;
     const normalized = normalizePost(payload.post, payload.action, existing);
+
+    if (payload.action === "publish") {
+      const blockers = publishBlockers(normalized);
+      if (blockers.length) {
+        return NextResponse.json({ error: `Publishing blocked: ${blockers.join(" ")}`, blockers }, { status: 422 });
+      }
+    }
 
     const duplicate = posts.find((post, index) => post.slug === normalized.slug && index !== existingIndex);
     if (duplicate) return NextResponse.json({ error: "Another blog post already uses this URL slug." }, { status: 409 });

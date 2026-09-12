@@ -9,6 +9,7 @@ import "./responsive-audit.css";
 import "./blog.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tanvi-dental-care.vercel.app";
+const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=Tanvi%20Dental%20Care%20%26%20Implant%20Centre%2C%20Mangalagiri%2C%20Andhra%20Pradesh&query_place_id=ChIJzRZdD-rxNToRhByJSASPSpw";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     template: "%s | Tanvi Dental Care",
   },
   description: "Tanvi Dental Care & Implant Centre in Mangalagiri, Andhra Pradesh. Dental implants, root canal care, restorative, cosmetic and preventive dental treatment information.",
+  alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {
     title: "Tanvi Dental Care & Implant Centre | Mangalagiri",
@@ -40,7 +42,9 @@ const localBusinessSchema = {
   "@type": "Dentist",
   name: "Tanvi Dental Care & Implant Centre",
   url: siteUrl,
+  image: `${siteUrl}/images/tanvi-doctor-realfinal.png`,
   telephone: "+91-9160288388",
+  hasMap: googleMapsUrl,
   address: {
     "@type": "PostalAddress",
     streetAddress: "Upstairs, Apollo Pharmacy, opposite Axis Bank, near Old Bus Stand",
