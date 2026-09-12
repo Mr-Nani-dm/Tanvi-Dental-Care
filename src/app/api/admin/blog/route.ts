@@ -10,6 +10,11 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const DATA_PATH = "src/content/blog-data.json";
+const PRIVATE_HEADERS = { "Cache-Control": "no-store, max-age=0" };
+
+function privateJson(body: unknown, status = 200) {
+  return NextResponse.json(body, { status, headers: PRIVATE_HEADERS });
+}
 
 function authorized(request: NextRequest) {
   return verifyAdminSession(request.cookies.get(BLOG_ADMIN_COOKIE)?.value);
@@ -59,27 +64,27 @@ function normalizePost(input: Partial<BlogPost>, action: "draft" | "publish", ex
 
 export async function GET(request: NextRequest) {
   if (!adminConfigReady()) {
-    return NextResponse.json({ error: "Blog admin is not configured.", setupRequired: true }, { status: 503 });
+    return privateJson({ error: "Blog admin is not configured.", setupRequired: true }, 503);
   }
-  if (!authorized(request)) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  if (!authorized(request)) return privateJson({ error: "Sign in required." }, 401);
 
   try {
     const { value } = await readRepoJson<BlogPost[]>(DATA_PATH);
-    return NextResponse.json({ posts: value.sort((a, b) => (b.updatedAt || b.publishedAt || "").localeCompare(a.updatedAt || a.publishedAt || "")) });
+    return privateJson({ posts: value.sort((a, b) => (b.updatedAt || b.publishedAt || "").localeCompare(a.updatedAt || a.publishedAt || "")) });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to load posts." }, { status: 500 });
+    return privateJson({ error: error instanceof Error ? error.message : "Unable to load posts." }, 500);
   }
 }
 
 export async function POST(request: NextRequest) {
   if (!adminConfigReady()) {
-    return NextResponse.json({ error: "Blog admin is not configured.", setupRequired: true }, { status: 503 });
+    return privateJson({ error: "Blog admin is not configured.", setupRequired: true }, 503);
   }
-  if (!authorized(request)) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  if (!authorized(request)) return privateJson({ error: "Sign in required." }, 401);
 
   try {
     const payload = await request.json() as { post?: Partial<BlogPost>; originalSlug?: string; action?: "draft" | "publish" };
-    if (!payload.post || !payload.action) return NextResponse.json({ error: "Invalid post payload." }, { status: 400 });
+    if (!payload.post || !payload.action) return privateJson({ error: "Invalid post payload." }, 400);
 
     const { value: posts, sha } = await readRepoJson<BlogPost[]>(DATA_PATH);
     const originalSlug = slugify(payload.originalSlug || payload.post.slug || "");
@@ -90,12 +95,12 @@ export async function POST(request: NextRequest) {
     if (payload.action === "publish") {
       const blockers = publishBlockers(normalized);
       if (blockers.length) {
-        return NextResponse.json({ error: `Publishing blocked: ${blockers.join(" ")}`, blockers }, { status: 422 });
+        return privateJson({ error: `Publishing blocked: ${blockers.join(" ")}`, blockers }, 422);
       }
     }
 
     const duplicate = posts.find((post, index) => post.slug === normalized.slug && index !== existingIndex);
-    if (duplicate) return NextResponse.json({ error: "Another blog post already uses this URL slug." }, { status: 409 });
+    if (duplicate) return privateJson({ error: "Another blog post already uses this URL slug." }, 409);
 
     if (existingIndex >= 0) posts[existingIndex] = normalized;
     else posts.unshift(normalized);
@@ -107,13 +112,13 @@ export async function POST(request: NextRequest) {
       message: `${payload.action === "publish" ? "Publish" : "Save draft"}: ${normalized.title}`,
     });
 
-    return NextResponse.json({
+    return privateJson({
       ok: true,
       post: normalized,
       commitSha: result.commit?.sha,
       deploymentExpected: true,
     });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to save blog post." }, { status: 500 });
+    return privateJson({ error: error instanceof Error ? error.message : "Unable to save blog post." }, 500);
   }
 }
