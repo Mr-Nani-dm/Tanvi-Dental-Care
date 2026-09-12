@@ -6,6 +6,7 @@ import "./content-pages.css";
 import "./audit-polish.css";
 import "./hero-image-fix.css";
 import "./responsive-audit.css";
+import "./blog.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tanvi-dental-care.vercel.app";
 
