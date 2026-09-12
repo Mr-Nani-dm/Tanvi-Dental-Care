@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 
 const links = [
-  ["Home", "#home"],
-  ["About Us", "#about"],
-  ["Our Doctors", "#doctors"],
-  ["Treatments", "#services"],
-  ["Patient Guide", "#guide"],
-  ["FAQs", "#faq"],
-  ["Contact Us", "#contact"],
+  ["Home", "/"],
+  ["About Us", "/#about"],
+  ["Our Doctors", "/doctors"],
+  ["Treatments", "/treatments"],
+  ["Dental Blog", "/blog"],
+  ["FAQs", "/#faq"],
+  ["Contact Us", "/#contact"],
 ] as const;
 
 function MenuIcon({ open }: { open: boolean }) {
