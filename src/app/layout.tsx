@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: "Tanvi Dental Care & Implant Centre",
-    images: [{ url: "/images/tanvi-doctors-web.jpg", width: 700, height: 467, alt: "Tanvi Dental Care doctors" }],
+    images: [{ url: "/images/tanvi-doctor-realfinal.png", width: 700, height: 467, alt: "Tanvi Dental Care doctors" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Tanvi Dental Care & Implant Centre | Mangalagiri",
     description: "Dental care and implant centre in Mangalagiri, Andhra Pradesh.",
-    images: ["/images/tanvi-doctors-web.jpg"],
+    images: ["/images/tanvi-doctor-realfinal.png"],
   },
   icons: { icon: "/images/tanvi-logo-web.png" },
 };
