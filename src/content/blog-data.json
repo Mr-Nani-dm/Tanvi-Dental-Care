@@ -6,7 +6,7 @@
     "category": "Dental Health",
     "status": "draft",
     "publishedAt": "2026-09-12",
-    "updatedAt": "2026-09-12",
+    "updatedAt": "2026-09-13",
     "readTime": "2 min read",
     "treatmentSlug": "dental-implants",
     "featuredImage": "/images/blog/painless-dentistry-best-dental-clinic-mangalagiri-1789225053582.webp",
@@ -14,6 +14,18 @@
     "seoTitle": "Root Canal Treatment: What Patients Should Know",
     "metaDescription": "🦷 Tired of putting off the dentist because you're worried about pain? You're not alone!\n\nAt Tanvi Dental Care & Implant Centre in Mangalagiri, we are changing the way you experien",
     "primaryTopic": "",
+    "seoExceptions": [
+      {
+        "id": "seo-exception-1789322198849",
+        "phrase": "best dental care",
+        "rules": [
+          "topic-title",
+          "topic-intro"
+        ],
+        "reason": "best dental care",
+        "createdAt": "2026-09-13"
+      }
+    ],
     "author": "Tanvi Dental Care Editorial Team",
     "reviewedBy": "",
     "reviewedAt": "",
