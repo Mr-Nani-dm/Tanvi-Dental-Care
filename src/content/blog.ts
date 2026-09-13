@@ -1,6 +1,15 @@
 import data from "./blog-data.json";
 
 export type BlogStatus = "draft" | "published";
+export type SeoExceptionRule = "topic-title" | "topic-intro";
+
+export type SeoValidationException = {
+  id: string;
+  phrase: string;
+  rules: SeoExceptionRule[];
+  reason: string;
+  createdAt: string;
+};
 
 export type BlogPost = {
   slug: string;
@@ -17,6 +26,7 @@ export type BlogPost = {
   seoTitle?: string;
   metaDescription: string;
   primaryTopic?: string;
+  seoExceptions?: SeoValidationException[];
   author: string;
   reviewedBy?: string;
   reviewedAt?: string;

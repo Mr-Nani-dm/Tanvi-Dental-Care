@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { BlogPost, BlogStatus } from "@/content/blog";
+import type { BlogPost, BlogStatus, SeoExceptionRule, SeoValidationException } from "@/content/blog";
 import { treatments } from "@/config/clinic";
 import { BLOG_ADMIN_COOKIE, adminConfigReady, verifyAdminSession } from "@/lib/adminAuth";
 import { publishBlockers } from "@/lib/blogPublishGate";
@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 const DATA_PATH = "src/content/blog-data.json";
 const PRIVATE_HEADERS = { "Cache-Control": "no-store, max-age=0" };
+const SEO_EXCEPTION_RULES = new Set<SeoExceptionRule>(["topic-title", "topic-intro"]);
 
 function privateJson(body: unknown, status = 200) {
   return NextResponse.json(body, { status, headers: PRIVATE_HEADERS });
@@ -22,6 +23,31 @@ function authorized(request: NextRequest) {
 
 function cleanText(value: unknown, max = 5000) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+function normalizeSeoExceptions(value: unknown, today: string): SeoValidationException[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .slice(0, 20)
+    .map((item, index) => {
+      if (!item || typeof item !== "object") return null;
+      const candidate = item as Partial<SeoValidationException>;
+      const phrase = cleanText(candidate.phrase, 100);
+      const reason = cleanText(candidate.reason, 240);
+      const rules = Array.isArray(candidate.rules)
+        ? candidate.rules.filter((rule): rule is SeoExceptionRule => SEO_EXCEPTION_RULES.has(rule as SeoExceptionRule))
+        : [];
+      if (!phrase || !reason || !rules.length) return null;
+      const incomingId = slugify(cleanText(candidate.id, 90));
+      return {
+        id: incomingId || `seo-exception-${index + 1}-${slugify(phrase).slice(0, 36)}`,
+        phrase,
+        rules: Array.from(new Set(rules)),
+        reason,
+        createdAt: /^\d{4}-\d{2}-\d{2}$/.test(cleanText(candidate.createdAt, 10)) ? cleanText(candidate.createdAt, 10) : today,
+      } satisfies SeoValidationException;
+    })
+    .filter((item): item is SeoValidationException => Boolean(item));
 }
 
 function normalizePost(input: Partial<BlogPost>, action: "draft" | "publish", existing?: BlogPost): BlogPost {
@@ -54,6 +80,7 @@ function normalizePost(input: Partial<BlogPost>, action: "draft" | "publish", ex
     seoTitle: cleanText(input.seoTitle, 80) || title,
     metaDescription,
     primaryTopic: cleanText(input.primaryTopic, 100),
+    seoExceptions: normalizeSeoExceptions(input.seoExceptions, today),
     author: cleanText(input.author, 100) || "Tanvi Dental Care Editorial Team",
     reviewedBy: cleanText(input.reviewedBy, 100),
     reviewedAt: cleanText(input.reviewedAt, 10),
