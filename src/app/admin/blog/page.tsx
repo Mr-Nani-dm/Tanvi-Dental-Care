@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { BlogPost } from "@/content/blog";
+import type { BlogPost, SeoExceptionRule } from "@/content/blog";
 import { treatments } from "@/config/clinic";
 import { seoChecks, seoScore, slugify } from "@/lib/blogSeo";
 import styles from "./BlogAdmin.module.css";
@@ -9,6 +9,7 @@ import styles from "./BlogAdmin.module.css";
 type Screen = "loading" | "login" | "ready" | "setup";
 type Filter = "all" | "published" | "draft";
 type EditorTab = "write" | "preview";
+type ExceptionScope = "both" | SeoExceptionRule;
 
 const categories = ["Dental Health", "Treatments", "Prevention", "Oral Surgery", "Dental Implants", "Patient Guide"];
 
@@ -25,6 +26,7 @@ function emptyPost(): BlogPost {
     seoTitle: "",
     metaDescription: "",
     primaryTopic: "",
+    seoExceptions: [],
     author: "Tanvi Dental Care Editorial Team",
     reviewedBy: "",
     reviewedAt: "",
@@ -88,6 +90,9 @@ export default function BlogAdminPage() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [notice, setNotice] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [exceptionPhrase, setExceptionPhrase] = useState("");
+  const [exceptionReason, setExceptionReason] = useState("");
+  const [exceptionScope, setExceptionScope] = useState<ExceptionScope>("both");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const loadPosts = async () => {
@@ -127,6 +132,12 @@ export default function BlogAdminPage() {
     setScreen("login");
   };
 
+  const resetExceptionForm = () => {
+    setExceptionPhrase("");
+    setExceptionReason("");
+    setExceptionScope("both");
+  };
+
   const startNew = () => {
     const post = emptyPost();
     setSelected(post);
@@ -134,14 +145,20 @@ export default function BlogAdminPage() {
     setSlugTouched(false);
     setEditorTab("write");
     setNotice(null);
+    resetExceptionForm();
   };
 
   const choosePost = (post: BlogPost) => {
-    setSelected({ ...post, tags: [...post.tags] });
+    setSelected({
+      ...post,
+      tags: [...post.tags],
+      seoExceptions: (post.seoExceptions || []).map((exception) => ({ ...exception, rules: [...exception.rules] })),
+    });
     setOriginalSlug(post.slug);
     setSlugTouched(true);
     setEditorTab("write");
     setNotice(null);
+    resetExceptionForm();
   };
 
   const update = <K extends keyof BlogPost>(key: K, value: BlogPost[K]) => {
@@ -167,6 +184,43 @@ export default function BlogAdminPage() {
       textarea.focus();
       textarea.setSelectionRange(start + before.length, start + before.length + chosen.length);
     });
+  };
+
+  const addSeoException = () => {
+    if (!selected) return;
+    const phrase = exceptionPhrase.trim();
+    const reason = exceptionReason.trim();
+    if (!phrase || !reason) {
+      setNotice({ type: "error", text: "Add both an exception phrase and an editorial reason." });
+      return;
+    }
+    const rules: SeoExceptionRule[] = exceptionScope === "both" ? ["topic-title", "topic-intro"] : [exceptionScope];
+    const duplicate = (selected.seoExceptions || []).some((exception) =>
+      exception.phrase.toLowerCase() === phrase.toLowerCase() &&
+      rules.every((rule) => exception.rules.includes(rule))
+    );
+    if (duplicate) {
+      setNotice({ type: "error", text: "That SEO exception already exists for the selected scope." });
+      return;
+    }
+    update("seoExceptions", [
+      ...(selected.seoExceptions || []),
+      {
+        id: `seo-exception-${Date.now()}`,
+        phrase,
+        rules,
+        reason,
+        createdAt: new Date().toISOString().slice(0, 10),
+      },
+    ]);
+    resetExceptionForm();
+    setNotice({ type: "success", text: "SEO exception added. Save the draft or publish to persist it." });
+  };
+
+  const removeSeoException = (id: string) => {
+    if (!selected) return;
+    update("seoExceptions", (selected.seoExceptions || []).filter((exception) => exception.id !== id));
+    setNotice({ type: "success", text: "SEO exception removed. Save the draft or publish to persist it." });
   };
 
   const upload = async (file: File, inline = false) => {
@@ -228,6 +282,7 @@ export default function BlogAdminPage() {
   const filteredPosts = useMemo(() => posts.filter((post) => filter === "all" || post.status === filter), [posts, filter]);
   const checks = selected ? seoChecks(selected) : [];
   const score = selected ? seoScore(selected) : 0;
+  const exceptionCount = selected?.seoExceptions?.length || 0;
 
   if (screen === "loading") {
     return <main className={styles.page}><div className={styles.authShell}><div className={styles.loginCard}><h1>Tanvi Blog Manager</h1><p>Loading your content workspace…</p></div></div></main>;
@@ -273,9 +328,18 @@ export default function BlogAdminPage() {
               </div>
 
               <div className={styles.sideStack}>
-                <div className={styles.sideCard}><div className={styles.cardHeader}><div><h2>SEO Readiness</h2><p>Automatic publishing checks</p></div></div><div className={styles.cardBody}><div className={styles.score}><strong>{score}</strong><span>/ 100</span></div><div className={styles.progress}><div className={styles.progressFill} style={{ width: `${score}%` }} /></div><div className={styles.checkList}>{checks.map((check) => <div className={styles.check} key={check.label}><span className={`${styles.checkIcon} ${check.passed ? styles.checkPass : styles.checkFail}`}>{check.passed ? "✓" : "!"}</span><div><strong>{check.label}</strong><small>{check.guidance}</small></div></div>)}</div></div></div>
+                <div className={styles.sideCard}><div className={styles.cardHeader}><div><h2>SEO Readiness</h2><p>Automatic publishing checks</p></div></div><div className={styles.cardBody}><div className={styles.score}><strong>{score}</strong><span>/ 100</span></div>{exceptionCount > 0 && <div className={styles.medicalNote}><strong>{exceptionCount} editorial SEO exception{exceptionCount === 1 ? "" : "s"} active.</strong> Exceptions do not inflate the raw SEO score and never override medical or trust blockers.</div>}<div className={styles.progress}><div className={styles.progressFill} style={{ width: `${score}%` }} /></div><div className={styles.checkList}>{checks.map((check) => <div className={styles.check} key={check.id}><span className={`${styles.checkIcon} ${check.status === "passed" ? styles.checkPass : styles.checkFail}`}>{check.status === "passed" ? "✓" : check.status === "exempt" ? "E" : "!"}</span><div><strong>{check.label}</strong><small>{check.guidance}</small></div></div>)}</div></div></div>
 
                 <div className={styles.sideCard}><div className={styles.cardHeader}><div><h2>Search & Sharing</h2><p>Editable SEO fields</p></div></div><div className={styles.cardBody}><div className={styles.field}><label>SEO title</label><input value={selected.seoTitle || ""} onChange={(event) => update("seoTitle", event.target.value)} /></div><div className={styles.field}><label>Meta description *</label><textarea rows={4} value={selected.metaDescription} onChange={(event) => update("metaDescription", event.target.value)} /></div><div className={styles.field}><label>Primary search topic</label><input value={selected.primaryTopic || ""} onChange={(event) => update("primaryTopic", event.target.value)} placeholder="root canal treatment" /></div><div className={styles.field}><label>Tags</label><input value={selected.tags.join(", ")} onChange={(event) => update("tags", event.target.value.split(",").map((tag) => tag.trim()).filter(Boolean))} placeholder="root canal, tooth pain" /></div><div className={styles.googlePreview}><small>tanvidental… › blog › {selected.slug || "article"}</small><h4>{selected.seoTitle || selected.title || "SEO title preview"}</h4><p>{selected.metaDescription || "Add a clear meta description for the search result preview."}</p></div></div></div>
+
+                <div className={styles.sideCard}><div className={styles.cardHeader}><div><h2>SEO Validation Exceptions</h2><p>Controlled editorial overrides</p></div></div><div className={styles.cardBody}>
+                  <div className={styles.medicalNote}><strong>Protected rules stay locked:</strong> medical claims, unsupported guarantees, diagnosis certainty, reviewer integrity and other trust checks cannot be bypassed here.</div>
+                  <div className={styles.field}><label>Exception word or phrase</label><input value={exceptionPhrase} onChange={(event) => setExceptionPhrase(event.target.value)} placeholder="Exact-match phrase to exempt" /><div className={styles.hint}>Use this only when the primary topic exact match would make the title or opening sound unnatural.</div></div>
+                  <div className={styles.field}><label>Applies to</label><select value={exceptionScope} onChange={(event) => setExceptionScope(event.target.value as ExceptionScope)}><option value="both">Search title + opening paragraph</option><option value="topic-title">Search title exact match</option><option value="topic-intro">Opening paragraph exact match</option></select></div>
+                  <div className={styles.field}><label>Editorial reason</label><textarea rows={3} value={exceptionReason} onChange={(event) => setExceptionReason(event.target.value)} placeholder="Why this exact-match requirement is intentionally excluded" /></div>
+                  <button className={styles.secondaryButton} type="button" onClick={addSeoException}>+ Add SEO Exception</button>
+                  {(selected.seoExceptions || []).length > 0 && <div className={styles.checkList}>{(selected.seoExceptions || []).map((exception) => <div className={styles.medicalNote} key={exception.id}><strong>“{exception.phrase}”</strong><br /><span>{exception.rules.includes("topic-title") ? "Title" : ""}{exception.rules.includes("topic-title") && exception.rules.includes("topic-intro") ? " + " : ""}{exception.rules.includes("topic-intro") ? "Opening" : ""} · Added {exception.createdAt}</span><br /><span>{exception.reason}</span><br /><button className={styles.secondaryButton} style={{ marginTop: 8, padding: "6px 9px" }} type="button" onClick={() => removeSeoException(exception.id)}>Remove</button></div>)}</div>}
+                </div></div>
 
                 <div className={styles.sideCard}><div className={styles.cardHeader}><div><h2>Trust & Review</h2><p>Health content accountability</p></div></div><div className={styles.cardBody}><div className={styles.field}><label>Author</label><input value={selected.author} onChange={(event) => update("author", event.target.value)} /></div><div className={styles.field}><label>Clinically reviewed by</label><input value={selected.reviewedBy || ""} onChange={(event) => update("reviewedBy", event.target.value)} placeholder="Only enter a doctor who actually reviewed it" /></div><div className={styles.field}><label>Review date</label><input type="date" value={selected.reviewedAt || ""} onChange={(event) => update("reviewedAt", event.target.value)} /></div><div className={styles.medicalNote}><strong>Medical content rule:</strong> Do not add a doctor's name as reviewer unless that doctor has actually reviewed and approved the article.</div></div></div>
               </div>
