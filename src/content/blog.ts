@@ -1,7 +1,7 @@
 import data from "./blog-data.json";
 
 export type BlogStatus = "draft" | "published";
-export type SeoExceptionRule = "anywhere" | "topic-title" | "topic-intro";
+export type SeoExceptionRule = "topic-title" | "topic-intro";
 
 export type SeoValidationException = {
   id: string;
@@ -55,7 +55,7 @@ export function getRelatedBlogPosts(post: BlogPost, limit = 2) {
       score += sharedTags;
       return { candidate, score };
     })
-    .sort((a, b) => b.score - a.score || (b.candidate.publishedAt || "").localeCompare(a.publishedAt || ""))
+    .sort((a, b) => b.score - a.score || (b.candidate.publishedAt || "").localeCompare(a.candidate.publishedAt || ""))
     .slice(0, limit)
     .map(({ candidate }) => candidate);
 }
