@@ -3,9 +3,15 @@ import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic, treatments } from "@/config/clinic";
 
 export const metadata = {
-  title: "Dental Treatments",
-  description: "Explore the dental treatment areas presented by Tanvi Dental Care & Implant Centre in Mangalagiri.",
+  title: "Dental Treatments in Mangalagiri",
+  description: "Explore dental treatment information from Tanvi Dental Care & Implant Centre in Mangalagiri. Treatment suitability is confirmed after clinical assessment.",
   alternates: { canonical: "/treatments" },
+  openGraph: {
+    title: "Dental Treatments in Mangalagiri | Tanvi Dental Care",
+    description: "Explore dental treatment information from Tanvi Dental Care & Implant Centre in Mangalagiri.",
+    url: "/treatments",
+    type: "website",
+  },
 };
 
 export default function TreatmentsPage() {
