@@ -7,6 +7,23 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "tanvidental.in" }],
+        destination: "https://www.tanvidental.in/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "tanvi-dental-care.vercel.app" }],
+        destination: "https://www.tanvidental.in/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {

@@ -1,27 +1,22 @@
 import type { MetadataRoute } from "next";
 import { treatments } from "@/config/clinic";
+import { siteConfig } from "@/config/site";
 import { blogPosts } from "@/content/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tanvi-dental-care.vercel.app";
-  const now = new Date();
+  const baseUrl = siteConfig.url;
 
   return [
-    { url: baseUrl, lastModified: now, changeFrequency: "monthly", priority: 1 },
-    { url: `${baseUrl}/treatments`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${baseUrl}/doctors`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: baseUrl },
+    { url: `${baseUrl}/treatments` },
+    { url: `${baseUrl}/doctors` },
+    { url: `${baseUrl}/blog` },
     ...treatments.map((treatment) => ({
       url: `${baseUrl}/treatments/${treatment.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.75,
     })),
     ...blogPosts.map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: new Date(`${post.updatedAt || post.publishedAt || new Date().toISOString().slice(0, 10)}T00:00:00+05:30`),
-      changeFrequency: "monthly" as const,
-      priority: 0.72,
+      lastModified: post.updatedAt || post.publishedAt,
     })),
   ];
 }

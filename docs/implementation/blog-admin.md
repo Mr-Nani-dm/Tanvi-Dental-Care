@@ -47,6 +47,10 @@ The browser never receives the GitHub token.
 
 When the repository is connected to Vercel through Git deployment, a content commit triggers the normal deployment pipeline. The deployment regenerates static article pages and SEO metadata from the latest content.
 
+## Canonical production domain
+
+The public SEO identity is fixed in `src/config/site.ts` as `https://www.tanvidental.in`. Canonicals, sitemap URLs, robots, Open Graph metadata and JSON-LD must use that production URL. Do not use a Vercel deployment hostname as a public SEO URL.
+
 ## Required environment variables
 
 Configure these in the production hosting environment:
@@ -56,7 +60,6 @@ Configure these in the production hosting environment:
 - `GITHUB_CONTENT_TOKEN`
 - `GITHUB_CONTENT_REPOSITORY` (optional; defaults to `Mr-Nani-dm/Tanvi-Dental-Care`)
 - `GITHUB_CONTENT_BRANCH` (optional; defaults to `main`)
-- `NEXT_PUBLIC_SITE_URL`
 
 ### GitHub token permissions
 

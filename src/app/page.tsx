@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import MobileNav from "@/components/MobileNav";
 import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic, faqs, treatments } from "@/config/clinic";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 function Button({ href, children, variant = "primary", icon }: { href: string; children: ReactNode; variant?: "primary" | "secondary"; icon?: string }) {
   return <a className={`btn btn-${variant}`} href={href}>{icon && <ClinicIcon name={icon} size={18}/>}<span>{children}</span></a>;

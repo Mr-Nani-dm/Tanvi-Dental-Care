@@ -38,3 +38,9 @@ These must be explicitly decided before framework-specific production code is in
 ## Next implementation step
 
 Select and document the frontend technology decision, then establish the application shell, design tokens, reusable components and approved MVP routes.
+
+
+## Production domain
+
+The canonical public website is **https://www.tanvidental.in**.
+All SEO-facing absolute URLs must use this domain. Vercel deployment URLs are hosting/preview infrastructure only and must never be used in canonicals, XML sitemaps, robots sitemap references, Open Graph URLs, or structured data.

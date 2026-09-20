@@ -5,9 +5,10 @@ import BlogBody from "@/components/BlogBody";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic } from "@/config/clinic";
+import { siteConfig } from "@/config/site";
 import { blogPosts, getBlogPost, getRelatedBlogPosts } from "@/content/blog";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tanvi-dental-care.vercel.app";
+const siteUrl = siteConfig.url;
 
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
