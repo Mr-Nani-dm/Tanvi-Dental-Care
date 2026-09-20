@@ -19,6 +19,7 @@ The repository was empty at initialization, so the first commit establishes the 
 - Accessibility is mandatory
 - Performance is a product requirement
 - SEO pages must provide genuine patient value
+- Patient content follows the [India-first local content and source policy](docs/seo/LOCAL_CONTENT_POLICY.md), with Andhra Pradesh official sources for state-specific rules
 - No invented services, credentials, reviews, pricing, statistics or medical claims
 - The supplied Tanvi logo must be used without redesign or distortion
 
