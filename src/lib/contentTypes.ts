@@ -1,0 +1,60 @@
+export type ContentFormat = "blog" | "gbp" | "instagram_static" | "instagram_carousel" | "reel";
+export type DailyAnswers = {
+  objective: "auto" | "local_discovery" | "patient_education" | "treatment_awareness" | "doctor_trust" | "preventive_care";
+  treatment: "auto" | "root-canal-treatment" | "dental-implants" | "wisdom-tooth-management" | "teeth-cleaning-and-scaling" | "general-dental-care";
+  special: string;
+};
+export type EvidenceType = "GSC_SIGNAL" | "SERP_OBSERVATION" | "SEASONAL_OPPORTUNITY" | "CONTENT_GAP" | "MANUAL_IDEA";
+export type DuplicateResult = { status: "NEW" | "RELATED" | "TOO_SIMILAR" | "DUPLICATE"; reason: string; matchedTitle?: string; score: number };
+export type TopicIdea = {
+  id: string;
+  title: string;
+  primaryKeyword: string;
+  intent: string;
+  treatmentSlug: string;
+  angle: string;
+  rationale: string;
+  psychology: string;
+  targetPage: string;
+  evidence: { type: EvidenceType; reason: string; sourceUrl?: string };
+  blogRecommended: boolean;
+  recommendedFormats: ContentFormat[];
+  duplicate: DuplicateResult;
+  token?: string;
+};
+export type VerifiedSource = { id: string; title: string; url: string; retrievedAt: string; excerpt: string; status: "VERIFIED" };
+export type BlogDraft = { title: string; slug: string; excerpt: string; body: string; seoTitle: string; metaDescription: string; primaryTopic: string; tags: string[]; treatmentSlug: string; cta: string };
+export type ContentDraft = {
+  blog: BlogDraft | null;
+  gbp: { text: string; targetUrl: string; cta: string } | null;
+  instagram: { format: "static" | "carousel"; caption: string; hashtags: string[]; slides: { title: string; text: string }[]; cta: string } | null;
+  reel: { hook: string; scenes: { visual: string; voiceover: string }[]; caption: string; thumbnailBrief: string; cta: string; durationSeconds: number } | null;
+  imageBrief: { kind: "educational" | "doctor"; description: string; alt: string; doctor: "naga-swathi" | "prathap-naidu" | null };
+};
+export type SafetyCheck = { key: "medical" | "claims" | "seo" | "duplicate" | "links" | "words" | "brand" | "frequency"; status: "PASS" | "NEEDS_REVIEW"; messages: string[] };
+export type AiReview = { medical: boolean; claims: boolean; seo: boolean; duplication: boolean; tone: boolean; issues: string[] };
+export type SafetyResult = {
+  status: "PENDING" | "NEEDS_REVIEW" | "READY_FOR_HUMAN_REVIEW";
+  checks: SafetyCheck[];
+  aiReview: AiReview | null;
+  checkedAt: string | null;
+  wordCounts: Record<string, number>;
+};
+export type ContentPackage = ContentDraft & {
+  id: string;
+  topic: TopicIdea;
+  formats: ContentFormat[];
+  createdAt: string;
+  updatedAt: string;
+  status: "draft" | "needs_review" | "ready_for_review" | "handed_off";
+  sources: VerifiedSource[];
+  safety: SafetyResult;
+  image: { path: string; alt: string; provenance: "AI_GENERATED" | "APPROVED_DOCTOR_PHOTO"; model: string; createdAt: string; needsHumanReview: true } | null;
+  blogSlug?: string;
+  revision?: string;
+  proof?: string;
+  reviewToken?: string;
+};
+export type HistoryStore = { version: 1; packages: ContentPackage[] };
+export type ContentSetup = { textReady: boolean; imageReady: boolean; storageReady: boolean; branch: string; preview: boolean; missing: string[] };
+export type ContentSessionResponse = { authenticated: boolean; configured?: boolean; setup?: ContentSetup; history?: ContentPackage[]; error?: string };

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { isApprovedArticleImage } from "@/lib/articleImages";
 
 function safeHref(value: string) {
   const href = value.trim();
@@ -10,7 +11,7 @@ function safeHref(value: string) {
 
 function safeImageSrc(value: string) {
   const src = value.trim();
-  if (src.startsWith("/images/blog/") && !src.startsWith("//")) return src;
+  if (isApprovedArticleImage(src)) return src;
   return "";
 }
 

@@ -5,9 +5,11 @@ import { BLOG_ADMIN_COOKIE, adminConfigReady, verifyAdminSession, verifySameOrig
 import { publishBlockers } from "@/lib/blogPublishGate";
 import { estimateReadTime, slugify } from "@/lib/blogSeo";
 import { readRepoJson, writeRepoFile } from "@/lib/githubContent";
+import { isApprovedArticleImage } from "@/lib/articleImages";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 300;
 
 const DATA_PATH = "src/content/blog-data.json";
 const PRIVATE_HEADERS = { "Cache-Control": "no-store, max-age=0" };
@@ -27,7 +29,7 @@ function cleanText(value: unknown, max = 5000) {
 
 function cleanBlogImage(value: unknown) {
   const path = cleanText(value, 300);
-  return /^\/images\/blog\/[a-z0-9][a-z0-9-]*\.(?:webp|jpg|png)$/.test(path) ? path : "";
+  return isApprovedArticleImage(path) ? path : "";
 }
 
 function normalizeSeoExceptions(value: unknown, today: string): SeoValidationException[] {
@@ -65,18 +67,20 @@ function normalizePost(input: Partial<BlogPost>, action: "draft" | "publish", ex
   const validTreatment = treatmentSlug && treatments.some((treatment) => treatment.slug === treatmentSlug) ? treatmentSlug : undefined;
   const status: BlogStatus = action === "publish" ? "published" : "draft";
   const today = new Date().toISOString().slice(0, 10);
+  const todayInIndia = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
 
   if (!title || !slug || !body || !excerpt || !metaDescription) {
     throw new Error("Title, slug, short description, SEO description and article content are required.");
   }
 
   return {
+    ...(existing?.contentOsId ? { contentOsId: existing.contentOsId, contentOsCta: cleanText(input.contentOsCta, 200) || existing.contentOsCta } : {}),
     slug,
     title,
     excerpt,
     category: cleanText(input.category, 60) || "Dental Health",
     status,
-    publishedAt: status === "published" ? (existing?.publishedAt || cleanText(input.publishedAt, 10) || today) : existing?.publishedAt,
+    publishedAt: status === "published" ? (existing?.publishedAt || (existing?.contentOsId ? todayInIndia : cleanText(input.publishedAt, 10) || today)) : existing?.publishedAt,
     updatedAt: today,
     readTime: estimateReadTime(body),
     treatmentSlug: validTreatment,
@@ -132,11 +136,17 @@ export async function POST(request: NextRequest) {
     const existingIndex = posts.findIndex((post) => post.slug === originalSlug);
     const existing = existingIndex >= 0 ? posts[existingIndex] : undefined;
     const normalized = normalizePost(payload.post, payload.action, existing);
+    if (existing?.contentOsId && normalized.slug !== existing.slug) return privateJson({ error: "The Content OS handoff URL is fixed. Choose the URL in Content OS before creating the Blog Manager draft." }, 422);
 
     if (payload.action === "publish") {
       const blockers = publishBlockers(normalized);
       if (blockers.length) {
         return privateJson({ error: `Publishing blocked: ${blockers.join(" ")}`, blockers }, 422);
+      }
+      if (normalized.contentOsId) {
+        const { contentBlogPublishBlockers } = await import("@/lib/contentBlogGate");
+        const contentBlockers = await contentBlogPublishBlockers(normalized, posts);
+        if (contentBlockers.length) return privateJson({ error: `Content OS checks: ${contentBlockers.join(" ")}`, blockers: contentBlockers }, 422);
       }
     }
 

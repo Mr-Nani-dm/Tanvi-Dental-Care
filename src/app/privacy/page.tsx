@@ -30,17 +30,21 @@ export default function PrivacyPage() {
             <p>The public website does not currently provide an appointment form, patient portal or online payment form. It does not ask you to enter health information directly into a website form.</p>
 
             <h2>Calling, WhatsApp and external services</h2>
-            <p>The website provides links that let you call the clinic, open WhatsApp, view the clinic on Google Maps or visit its Instagram profile. These services open only when you select the relevant link. The external service then handles information under its own privacy terms.</p>
+            <p>The website provides links that let you call the clinic, open WhatsApp, open Google Maps or visit its Instagram profile. Selecting a link opens the relevant external service, which handles information under its own privacy terms. Google Maps also loads automatically in the location section, as explained below.</p>
             <p>A WhatsApp link may open a pre-filled general enquiry. Review the message before sending it and avoid including sensitive health or identification information unless the clinic has asked for it through an appropriate channel.</p>
 
             <h2>Technical information</h2>
             <p>The website hosting provider may process standard request and security information needed to deliver and protect the site. This can include an internet protocol address, browser or device information, requested page, request time and diagnostic or security logs.</p>
 
             <h2>Cookies and analytics</h2>
-            <p>The public pages do not currently include Google Analytics, advertising trackers or marketing cookies in the site code. The staff-only Blog Manager uses an essential, secure sign-in cookie after an authorised editor signs in. That cookie supports the admin session and expires after up to 12 hours.</p>
+            <p>The site does not currently add Google Analytics or advertising tracking code. Embedded Google Maps may use Google cookies or similar technologies, subject to your browser and Google account settings. The staff-only admin tools use an essential, secure sign-in cookie after an authorised editor signs in. That cookie supports the admin session and expires after up to 12 hours.</p>
 
             <h2>Embedded content and fonts</h2>
-            <p>The public pages use website-hosted images and system fonts. The location section links to Google Maps instead of loading an embedded map automatically, so visiting the page alone does not send a map request from the website.</p>
+            <p>The website loads DM Sans and Playfair Display from Google Fonts automatically. The homepage location section also loads an embedded Google Map automatically as you approach it. These requests send Google technical information such as your IP address, browser or device information and request details; the map may also receive the website origin. This happens without selecting an external link. Google processes this information under its <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>. Your browser settings can restrict third-party content or cookies, although the fonts or map may then be unavailable.</p>
+
+            <h2>Staff content tools</h2>
+            <p>Authorised staff can use Content OS to prepare clinic information. When these tools are used, clinic planning inputs, drafts and image instructions are sent to OpenAI for generation or review. Staff must not include patient-identifying details, private health records or confidential information.</p>
+            <p>Saved draft text and images are stored in the clinic website’s public GitHub repository. They can be publicly visible there before an article is published on the website. Staff should save only material suitable for public access and confirm that they have the necessary rights to use it.</p>
 
             <h2>Dental information</h2>
             <p>Website articles and treatment pages provide general education. They are not a diagnosis and are not a substitute for an examination by a qualified dentist.</p>

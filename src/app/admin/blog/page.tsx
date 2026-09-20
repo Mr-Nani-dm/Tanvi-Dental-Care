@@ -106,7 +106,14 @@ export default function BlogAdminPage() {
       setNotice({ type: "error", text: data.error || "Unable to load blog posts." });
       return setScreen("login");
     }
-    setPosts(data.posts || []);
+    const loadedPosts: BlogPost[] = data.posts || [];
+    setPosts(loadedPosts);
+    const requestedDraft = new URLSearchParams(window.location.search).get("draft");
+    const linkedDraft = requestedDraft ? loadedPosts.find((post) => post.slug === requestedDraft && post.status === "draft") : undefined;
+    if (linkedDraft) {
+      choosePost(linkedDraft);
+      setNotice({ type: "success", text: "Draft opened from Content OS. Review the article, confirm the medical content, and use the existing publishing checks when ready." });
+    }
     setScreen("ready");
   };
 
@@ -320,7 +327,7 @@ export default function BlogAdminPage() {
 
   return (
     <main className={styles.page}>
-      <header className={styles.topbar}><div className={styles.topbarInner}><div className={styles.brand}><span className={styles.brandMark}>T</span><div><strong>TANVI DENTAL</strong><span>Blog Manager</span></div></div><div className={styles.topActions}><a className={styles.ghostButton} href="/blog" target="_blank" rel="noopener noreferrer">View public blog</a><button className={styles.ghostButton} type="button" onClick={logout}>Sign out</button></div></div></header>
+      <header className={styles.topbar}><div className={styles.topbarInner}><div className={styles.brand}><span className={styles.brandMark}>T</span><div><strong>TANVI DENTAL</strong><span>Blog Manager</span></div></div><div className={styles.topActions}><a className={styles.ghostButton} href="/blog" target="_blank" rel="noopener noreferrer">View public blog</a><a className={styles.ghostButton} href="/admin/content">Content OS</a><button className={styles.ghostButton} type="button" onClick={logout}>Sign out</button></div></div></header>
 
       <div className={styles.shell}>
         <aside className={styles.sidebar}>
@@ -339,9 +346,9 @@ export default function BlogAdminPage() {
                   {notice && <div className={`${styles.notice} ${notice.type === "success" ? styles.success : styles.error}`}>{notice.text}</div>}
                   <div className={styles.medicalNote}><strong>Public storage notice:</strong> drafts, article text and uploaded images are committed to a public GitHub repository and may remain in its history. Do not enter patient details, health records or other confidential information.<label style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 10, fontWeight: 700 }}><input type="checkbox" checked={publicStorageConfirmed} onChange={(event) => setPublicStorageConfirmed(event.target.checked)} />I confirm this article contains no patient or confidential information and may be stored publicly.</label></div>
                   <div className={styles.field}><label>Article title *</label><input value={selected.title} onChange={(event) => titleChanged(event.target.value)} placeholder="Root Canal Treatment: What Patients Should Know" /></div>
-                  <div className={styles.field}><label>URL slug *</label><input value={selected.slug} onChange={(event) => { setSlugTouched(true); update("slug", slugify(event.target.value)); }} placeholder="root-canal-treatment-patient-guide" /><div className={styles.hint}>Public URL: /blog/{selected.slug || "your-post-url"}</div></div>
+                  <div className={styles.field}><label>URL slug *</label><input value={selected.slug} readOnly={!!selected.contentOsId} onChange={(event) => { setSlugTouched(true); update("slug", slugify(event.target.value)); }} placeholder="root-canal-treatment-patient-guide" /><div className={styles.hint}>Public URL: /blog/{selected.slug || "your-post-url"}{selected.contentOsId && <><br />Content OS article URLs are fixed after handoff. Choose the URL in Content OS before sending a draft here.</>}</div></div>
                   <div className={styles.twoCol}><div className={styles.field}><label>Category</label><select value={selected.category} onChange={(event) => update("category", event.target.value)}>{categories.map((category) => <option key={category}>{category}</option>)}</select></div><div className={styles.field}><label>Related treatment</label><select value={selected.treatmentSlug || ""} onChange={(event) => update("treatmentSlug", event.target.value)}><option value="">Select treatment</option>{treatments.map((treatment) => <option value={treatment.slug} key={treatment.slug}>{treatment.name}</option>)}</select></div></div>
-                  <div className={styles.field}><label>Short description *</label><textarea rows={3} value={selected.excerpt} onChange={(event) => update("excerpt", event.target.value)} placeholder="A short patient-friendly summary shown on the blog listing." /></div>
+                  {selected.contentOsId && <><div className={styles.medicalNote}><strong>Content OS draft:</strong> a qualified clinician must actually review this article. Enter the reviewer’s name and review date below. The content checks run again before publishing.</div><div className={styles.field}><label>Article call to action</label><input value={selected.contentOsCta || ""} onChange={(event) => update("contentOsCta", event.target.value)} placeholder="The single call to action used in the article" /><div className={styles.hint}>Keep this wording identical to the single call to action in the article body.</div></div></>}<div className={styles.field}><label>Short description *</label><textarea rows={3} value={selected.excerpt} onChange={(event) => update("excerpt", event.target.value)} placeholder="A short patient-friendly summary shown on the blog listing." /></div>
                   <div className={styles.imageBox}>{selected.featuredImage ? <img className={styles.imagePreview} src={selected.featuredImage} alt={selected.imageAlt || "Featured preview"} /> : <div className={styles.imagePreview} />}
                     <div className={styles.uploadRow}><strong>Featured image</strong><input className={styles.uploadInput} type="file" accept="image/png,image/jpeg,image/webp" disabled={uploading} onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file, false); }} />{uploading && <span>Optimising & uploading…</span>}</div>
                     <div className={styles.field} style={{ marginTop: 10 }}><label>Image alt text</label><input value={selected.imageAlt || ""} onChange={(event) => update("imageAlt", event.target.value)} placeholder="Describe what the image shows" /></div>

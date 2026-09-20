@@ -1,0 +1,5 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Tanvi Daily Content Planner", robots: { index: false, follow: false, noarchive: true } };
+
+export default function ContentLayout({ children }: { children: React.ReactNode }) { return children; }
