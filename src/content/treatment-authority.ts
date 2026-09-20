@@ -10,6 +10,7 @@ export type TreatmentAuthorityContent = {
   treatmentItems: string[];
   aftercareTitle: string;
   aftercareParagraphs: string[];
+  sources: { title: string; url: string }[];
   faq: { question: string; answer: string }[];
 };
 
@@ -43,6 +44,10 @@ export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent
     aftercareParagraphs: [
       "Some tenderness can occur after treatment. Your dentist will explain after-care and whether the tooth needs a filling, crown or another restoration.",
       "If pain or swelling becomes severe, worsens unexpectedly or you are concerned about recovery, contact the treating dentist for advice."
+    ],
+    sources: [
+      { title: "American Association of Endodontists: What is a root canal?", url: "https://www.aae.org/patients/root-canal-treatment/what-is-a-root-canal/" },
+      { title: "NHS: Root canal treatment", url: "https://www.nhs.uk/tests-and-treatments/root-canal-treatment/" }
     ],
     faq: [
       {
@@ -95,6 +100,10 @@ export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent
       "Dental implants require regular oral hygiene and professional review just like natural teeth and other dental restorations.",
       "The exact treatment sequence, healing period and restoration design depend on your individual examination and treatment plan."
     ],
+    sources: [
+      { title: "U.S. Food and Drug Administration: Dental implants — what you should know", url: "https://www.fda.gov/medical-devices/dental-devices/dental-implants-what-you-should-know" },
+      { title: "American Dental Association: Dental implants", url: "https://www.mouthhealthy.org/all-topics-a-z/implants" }
+    ],
     faq: [
       {
         question: "Is everyone suitable for a dental implant?",
@@ -145,6 +154,9 @@ export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent
     aftercareParagraphs: [
       "Increasing swelling, fever or worsening pain should be assessed promptly.",
       "Seek urgent medical attention if swelling around the mouth, face, eye or neck is associated with difficulty breathing or swallowing."
+    ],
+    sources: [
+      { title: "NHS: Wisdom tooth removal", url: "https://www.nhs.uk/tests-and-treatments/wisdom-tooth-removal/" }
     ],
     faq: [
       {
