@@ -25,7 +25,12 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Reject legacy SEO hostname
+        run: |
+          if grep -R "tanvi-dental-care.vercel.app" src .github --exclude-dir=node_modules; then
+            echo "Legacy Vercel hostname found in SEO-sensitive source."
+            exit 1
+          fi
+
       - name: Build
         run: npm run build
-        env:
-          NEXT_PUBLIC_SITE_URL: https://tanvi-dental-care.vercel.app
