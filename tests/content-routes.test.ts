@@ -721,3 +721,59 @@ test("review outage preserves generated draft without an approval signature", as
     });
   });
 });
+
+test("generation corrects failed word checks and independently reviews the replacement", async () => {
+  await withEnvironment(async () => {
+    const normal = blogDraftFixture();
+    const short = { ...normal, gbp: { ...normal.gbp!, text: normal.gbp!.cta } };
+    const github = new FakeGitHub();
+    mockProviderAndSources(github, { draftResponses: [short, normal] });
+    await withFakeGitHub(github, async () => {
+      const pkg = await successfulPackage(await generateRoute.POST(request("generate", { topic: signTopic(topicFixture()), formats: ["blog", "gbp"] })));
+      assert.equal(pkg.safety.status, "READY_FOR_HUMAN_REVIEW");
+      const ai = github.calls.filter(call => call.url === "https://api.openai.com/v1/responses");
+      assert.deepEqual(ai.map(call => call.body.text.format.name), ["tanvi_content_draft", "tanvi_independent_review", "tanvi_content_draft", "tanvi_independent_review"]);
+      const repair = JSON.parse(ai[2].body.input[0].content[0].text);
+      assert.match(repair.correction, /GBP|Google|words/i);
+      assert.equal(pkg.image, null);
+      assert.equal(verifyPackageReview(pkg), true);
+    });
+  });
+});
+
+test("automatic correction is bounded and cannot override independent rejection", async () => {
+  await withEnvironment(async () => {
+    const github = new FakeGitHub();
+    mockProviderAndSources(github, { reviewPass: false });
+    await withFakeGitHub(github, async () => {
+      const pkg = await successfulPackage(await generateRoute.POST(request("generate", { topic: signTopic(topicFixture()), formats: ["blog", "gbp"] })));
+      assert.equal(pkg.safety.status, "NEEDS_REVIEW");
+      assert.equal(github.calls.filter(call => call.body?.text?.format?.name === "tanvi_content_draft").length, 2);
+      const image = await imageRoute.POST(request("image", { package: pkg, publicStorageConfirmed: true, rightsConfirmed: true }));
+      assert.equal(image.status, 422);
+      assert.equal(github.calls.some(call => call.url.endsWith("/images/generations")), false);
+    });
+  });
+});
+
+test("failed correction preserves the previously reviewed draft", async () => {
+  await withEnvironment(async () => {
+    const github = new FakeGitHub();
+    mockProviderAndSources(github, { reviewPass: false });
+    const original = github.external!;
+    let writes = 0;
+    github.external = async (url, init) => {
+      const body = init?.body ? JSON.parse(String(init.body)) : {};
+      if (body.text?.format?.name === "tanvi_content_draft" && ++writes > 1) return Response.json({ error: { message: "private provider error" } }, { status: 503 });
+      return original(url, init);
+    };
+    await withFakeGitHub(github, async () => {
+      const response = await generateRoute.POST(request("generate", { topic: signTopic(topicFixture()), formats: ["blog", "gbp"] }));
+      const result = await response.json();
+      assert.equal(response.status, 200);
+      assert.equal(result.package.safety.status, "NEEDS_REVIEW");
+      assert.match(result.notice, /preserved/);
+      assert.doesNotMatch(JSON.stringify(result), /private provider error/);
+    });
+  });
+});
