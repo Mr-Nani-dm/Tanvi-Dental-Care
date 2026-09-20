@@ -1,4 +1,9 @@
+export const productionSiteUrl = "https://www.tanvidental.in" as const;
+export const productionHost = "www.tanvidental.in" as const;
+
 export const siteConfig = {
+  url: productionSiteUrl,
+  host: productionHost,
   name: "Tanvi Dental Care & Implant Centre",
   markets: {
     primary: "Mangalagiri",
