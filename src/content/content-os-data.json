@@ -1,4 +1,161 @@
 {
   "version": 1,
-  "packages": []
+  "packages": [
+    {
+      "id": "f4f32687-287a-47f1-8c4b-d17e718869f9",
+      "createdAt": "2026-09-20T17:39:44.015Z",
+      "updatedAt": "2026-09-20T17:41:34.512Z",
+      "topic": {
+        "id": "df072918-c6c4-4a27-a38c-ca6c31f2fdd6",
+        "title": "Dental Check-ups: What Happens at a Routine Visit and Why Early Assessment Helps",
+        "primaryKeyword": "routine dental check-up",
+        "intent": "Informational; supports patients who are unsure why to book a check-up without a current toothache.",
+        "treatmentSlug": "general-dental-care",
+        "angle": "Demystify the routine visit: discussing concerns, examining teeth and gums, and planning next steps only when needed, with a local Mangalagiri clinic reminder.",
+        "rationale": "Existing articles focus on tooth pain, root canal treatment, wisdom-tooth concerns and appointment anxiety. A simple preventive check-up message is a distinct gap and is best delivered as a short GBP update or static post.",
+        "psychology": "Prevention, trust and local familiarity",
+        "targetPage": "/treatments/dental-check-ups",
+        "evidence": {
+          "type": "CONTENT_GAP",
+          "reason": "Compared with the clinic's current articles and saved content. Search demand has not been measured."
+        },
+        "blogRecommended": false,
+        "recommendedFormats": [
+          "gbp",
+          "instagram_static"
+        ],
+        "duplicate": {
+          "status": "NEW",
+          "score": 0.051,
+          "matchedTitle": "Dental Anxiety in Mangalagiri: Planning a More Comfortable Visit",
+          "reason": "The existing item has a different topic or angle."
+        },
+        "token": "1789925942737.f94fd143a2a1a856c622903cb39ffc5e6b568f7c0fae7ec470592367d15cae4c"
+      },
+      "formats": [
+        "gbp",
+        "instagram_static"
+      ],
+      "sources": [
+        {
+          "id": "ida-dental-visits",
+          "title": "Indian Dental Association: visiting a dentist",
+          "url": "https://www.ida.org.in/Public/Details/WhyVisitDentist",
+          "retrievedAt": "2026-09-20T17:39:38.822Z",
+          "excerpt": "Your routine dental check-up reveals more than just the condition of your teeth and gums. It uncovers important clues about your overall health. Dentists",
+          "status": "VERIFIED"
+        },
+        {
+          "id": "iacde-patients",
+          "title": "Indian Association of Conservative Dentistry and Endodontics: patient information",
+          "url": "https://www.iacde.in/patient-info.html",
+          "retrievedAt": "2026-09-20T17:39:38.497Z",
+          "excerpt": "Any insult to the tooth in the form of dental caries or trauma crosses a limit within your tooth, ie if they have caused",
+          "status": "VERIFIED"
+        }
+      ],
+      "image": null,
+      "blog": null,
+      "gbp": {
+        "text": "A routine dental check-up can help you discuss concerns, examine teeth and gums, and understand next steps when needed. Visit Tanvi Dental Care & Implant Centre in Mangalagiri. Book a check-up today.",
+        "targetUrl": "/treatments/dental-check-ups",
+        "cta": "Book a check-up today."
+      },
+      "instagram": {
+        "format": "static",
+        "caption": "No toothache does not always mean there is nothing to discuss. A routine dental check-up is a chance to share any concerns, have your teeth and gums examined, and understand preventive care or next steps if needed. At Tanvi Dental Care & Implant Centre, Mangalagiri, the visit begins with a conversation about your oral health. Book a routine check-up today.",
+        "hashtags": [
+          "#MangalagiriDentist",
+          "#DentalCheckUp",
+          "#PreventiveDentalCare",
+          "#OralHealth",
+          "#TanviDentalCare"
+        ],
+        "slides": [],
+        "cta": "Book a routine check-up today."
+      },
+      "reel": null,
+      "imageBrief": {
+        "kind": "educational",
+        "description": "Simple original flat educational illustration with no people: a clean calendar marked “Check-up”, a smiling tooth icon, a small speech bubble with a question mark, and a magnifying glass examining a tooth-and-gum outline. Use calm teal, blue and warm neutral colours, clear ample space, and no logos or brand imitation.",
+        "alt": "Illustration showing a calendar, tooth, speech bubble and magnifying glass for a routine dental check-up.",
+        "doctor": null
+      },
+      "status": "needs_review",
+      "safety": {
+        "status": "NEEDS_REVIEW",
+        "checks": [
+          {
+            "key": "medical",
+            "status": "NEEDS_REVIEW",
+            "messages": [
+              "The separate AI review flagged medical safety.",
+              "Separate AI review: The statement that patients can “understand preventive care” during a routine check-up is not directly supported by the supplied verified evidence excerpt. Confirm it against relevant clinical evidence or remove it before publication.",
+              "Separate AI review: “At Tanvi Dental Care & Implant Centre, Mangalagiri, the visit begins with a conversation about your oral health” describes a specific clinic workflow that is not included in the supplied clinic facts. Verify this operational claim before use.",
+              "Separate AI review: A real clinician must review the clinical content before publication; this automated check does not provide clinical approval."
+            ]
+          },
+          {
+            "key": "claims",
+            "status": "NEEDS_REVIEW",
+            "messages": [
+              "The separate AI review flagged unsupported claims."
+            ]
+          },
+          {
+            "key": "seo",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "duplicate",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "links",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "words",
+            "status": "NEEDS_REVIEW",
+            "messages": [
+              "Instagram captions must contain 60–120 words, excluding separately listed hashtags."
+            ]
+          },
+          {
+            "key": "brand",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "frequency",
+            "status": "PASS",
+            "messages": []
+          }
+        ],
+        "aiReview": {
+          "medical": false,
+          "claims": false,
+          "seo": true,
+          "duplication": true,
+          "tone": true,
+          "issues": [
+            "The statement that patients can “understand preventive care” during a routine check-up is not directly supported by the supplied verified evidence excerpt. Confirm it against relevant clinical evidence or remove it before publication.",
+            "“At Tanvi Dental Care & Implant Centre, Mangalagiri, the visit begins with a conversation about your oral health” describes a specific clinic workflow that is not included in the supplied clinic facts. Verify this operational claim before use.",
+            "A real clinician must review the clinical content before publication; this automated check does not provide clinical approval."
+          ]
+        },
+        "checkedAt": "2026-09-20T17:41:34.509Z",
+        "wordCounts": {
+          "gbp": 31,
+          "instagram": 59
+        }
+      },
+      "proof": "1789926094512.a6383d22d2ca2dfee526ac8c1dec49111427c68a6318d07e0bec57da862bfb2d",
+      "reviewToken": "1789926094512.9a71f0ec7bbc4d36a9c90a4133b76269dff4fabd64d71f3d63f5e86a359b8ac8",
+      "revision": "ebc50f79-3159-440a-aeaf-b5916b97d151"
+    }
+  ]
 }
