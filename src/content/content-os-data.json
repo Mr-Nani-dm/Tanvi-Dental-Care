@@ -4,7 +4,7 @@
     {
       "id": "f4f32687-287a-47f1-8c4b-d17e718869f9",
       "createdAt": "2026-09-20T17:39:44.015Z",
-      "updatedAt": "2026-09-20T17:41:34.512Z",
+      "updatedAt": "2026-09-20T17:41:50.729Z",
       "topic": {
         "id": "df072918-c6c4-4a27-a38c-ca6c31f2fdd6",
         "title": "Dental Check-ups: What Happens at a Routine Visit and Why Early Assessment Helps",
@@ -147,15 +147,15 @@
             "A real clinician must review the clinical content before publication; this automated check does not provide clinical approval."
           ]
         },
-        "checkedAt": "2026-09-20T17:41:34.509Z",
+        "checkedAt": "2026-09-20T17:41:50.727Z",
         "wordCounts": {
           "gbp": 31,
           "instagram": 59
         }
       },
-      "proof": "1789926094512.a6383d22d2ca2dfee526ac8c1dec49111427c68a6318d07e0bec57da862bfb2d",
-      "reviewToken": "1789926094512.9a71f0ec7bbc4d36a9c90a4133b76269dff4fabd64d71f3d63f5e86a359b8ac8",
-      "revision": "ebc50f79-3159-440a-aeaf-b5916b97d151"
+      "proof": "1789926110729.c09314316c996cb9b237a507078536ead9c1a4d84bd8e1538d5f7707508358d0",
+      "reviewToken": "1789926110729.a39c3745921419b74464e5f7c5e48caebd71b588f41b9497e394478d16b11b35",
+      "revision": "2383b45e-aaeb-4e54-8d62-bb1c4a887973"
     }
   ]
 }
