@@ -1,3 +1,5 @@
+import { clinic } from "@/config/clinic";
+
 export const productionSiteUrl = "https://www.tanvidental.in" as const;
 export const productionHost = "www.tanvidental.in" as const;
 export const clinicEntityId = `${productionSiteUrl}/#clinic` as const;
@@ -41,5 +43,5 @@ export const verifiedContact = {
   whatsapp: "9160288388",
   email: null as string | null,
   address: "Mangalagiri, Andhra Pradesh",
-  hours: "9:00 AM - 9:00 PM (IST)",
+  hours: clinic.hours,
 } as const;
