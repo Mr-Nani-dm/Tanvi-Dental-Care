@@ -1,5 +1,6 @@
 export type TreatmentAuthorityContent = {
   updatedAt: string;
+  seoDescription: string;
   eyebrow: string;
   introTitle: string;
   introParagraphs: string[];
@@ -15,6 +16,7 @@ export type TreatmentAuthorityContent = {
 export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent> = {
   "root-canal-treatment": {
     updatedAt: "2026-09-20",
+    seoDescription: "Root canal treatment in Mangalagiri: learn when RCT may be considered, what assessment involves, treatment steps, after-care and how to contact Tanvi Dental Care.",
     eyebrow: "Root canal treatment in Mangalagiri",
     introTitle: "When root canal treatment may be considered.",
     introParagraphs: [
@@ -64,6 +66,7 @@ export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent
 
   "dental-implants": {
     updatedAt: "2026-09-20",
+    seoDescription: "Dental implants in Mangalagiri: understand implant assessment, treatment planning, restoration and long-term care at Tanvi Dental Care & Implant Centre.",
     eyebrow: "Dental implants in Mangalagiri",
     introTitle: "A fixed tooth-replacement option for selected patients.",
     introParagraphs: [
@@ -114,6 +117,7 @@ export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent
 
   "wisdom-tooth-management": {
     updatedAt: "2026-09-20",
+    seoDescription: "Wisdom tooth assessment in Mangalagiri: learn common symptoms, how dentists assess wisdom teeth, when removal may be considered and when urgent care is needed.",
     eyebrow: "Wisdom tooth assessment in Mangalagiri",
     introTitle: "Not every wisdom tooth needs removal.",
     introParagraphs: [
