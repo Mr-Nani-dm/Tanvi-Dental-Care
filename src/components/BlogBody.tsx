@@ -10,8 +10,7 @@ function safeHref(value: string) {
 
 function safeImageSrc(value: string) {
   const src = value.trim();
-  if (src.startsWith("/") && !src.startsWith("//")) return src;
-  if (/^https:\/\//i.test(src)) return src;
+  if (src.startsWith("/images/blog/") && !src.startsWith("//")) return src;
   return "";
 }
 

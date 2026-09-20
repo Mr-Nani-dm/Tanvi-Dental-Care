@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { adminConfigReady, BLOG_ADMIN_COOKIE, createAdminSession, verifyAdminPassword } from "@/lib/adminAuth";
+import { adminConfigReady, BLOG_ADMIN_COOKIE, createAdminSession, verifyAdminPassword, verifySameOrigin } from "@/lib/adminAuth";
 
 export const runtime = "nodejs";
 
@@ -25,6 +25,9 @@ function currentAttempt(key: string) {
 export async function POST(request: NextRequest) {
   if (!adminConfigReady()) {
     return NextResponse.json({ error: "Blog admin is not configured yet.", setupRequired: true }, { status: 503 });
+  }
+  if (!verifySameOrigin(request)) {
+    return NextResponse.json({ error: "Request origin is not allowed." }, { status: 403, headers: { "Cache-Control": "no-store" } });
   }
 
   const key = clientKey(request);

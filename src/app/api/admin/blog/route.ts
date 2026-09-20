@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { BlogPost, BlogStatus, SeoExceptionRule, SeoValidationException } from "@/content/blog";
 import { treatments } from "@/config/clinic";
-import { BLOG_ADMIN_COOKIE, adminConfigReady, verifyAdminSession } from "@/lib/adminAuth";
+import { BLOG_ADMIN_COOKIE, adminConfigReady, verifyAdminSession, verifySameOrigin } from "@/lib/adminAuth";
 import { publishBlockers } from "@/lib/blogPublishGate";
 import { estimateReadTime, slugify } from "@/lib/blogSeo";
 import { readRepoJson, writeRepoFile } from "@/lib/githubContent";
@@ -23,6 +23,11 @@ function authorized(request: NextRequest) {
 
 function cleanText(value: unknown, max = 5000) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+function cleanBlogImage(value: unknown) {
+  const path = cleanText(value, 300);
+  return /^\/images\/blog\/[a-z0-9][a-z0-9-]*\.(?:webp|jpg|png)$/.test(path) ? path : "";
 }
 
 function normalizeSeoExceptions(value: unknown, today: string): SeoValidationException[] {
@@ -75,8 +80,9 @@ function normalizePost(input: Partial<BlogPost>, action: "draft" | "publish", ex
     updatedAt: today,
     readTime: estimateReadTime(body),
     treatmentSlug: validTreatment,
-    featuredImage: cleanText(input.featuredImage, 300),
+    featuredImage: cleanBlogImage(input.featuredImage),
     imageAlt: cleanText(input.imageAlt, 180),
+    imageRightsConfirmed: input.imageRightsConfirmed === true,
     seoTitle: cleanText(input.seoTitle, 80) || title,
     metaDescription,
     primaryTopic: cleanText(input.primaryTopic, 100),
@@ -108,10 +114,18 @@ export async function POST(request: NextRequest) {
     return privateJson({ error: "Blog admin is not configured.", setupRequired: true }, 503);
   }
   if (!authorized(request)) return privateJson({ error: "Sign in required." }, 401);
+  if (!verifySameOrigin(request)) return privateJson({ error: "Request origin is not allowed." }, 403);
+  const contentLength = Number(request.headers.get("content-length") || "0");
+  if (contentLength > 100_000) return privateJson({ error: "Article request is too large." }, 413);
 
   try {
-    const payload = await request.json() as { post?: Partial<BlogPost>; originalSlug?: string; action?: "draft" | "publish" };
-    if (!payload.post || !payload.action) return privateJson({ error: "Invalid post payload." }, 400);
+    const payload = await request.json() as { post?: Partial<BlogPost>; originalSlug?: string; action?: "draft" | "publish"; publicStorageConfirmed?: boolean };
+    if (!payload.post || typeof payload.post !== "object" || Array.isArray(payload.post) || (payload.action !== "draft" && payload.action !== "publish")) {
+      return privateJson({ error: "Invalid post payload." }, 400);
+    }
+    if (payload.publicStorageConfirmed !== true) {
+      return privateJson({ error: "Confirm that this content may be stored in the public repository and contains no patient or confidential information." }, 422);
+    }
 
     const { value: posts, sha } = await readRepoJson<BlogPost[]>(DATA_PATH);
     const originalSlug = slugify(payload.originalSlug || payload.post.slug || "");

@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import type { NextRequest } from "next/server";
 
 export const BLOG_ADMIN_COOKIE = "tanvi_blog_admin";
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
@@ -50,4 +51,16 @@ export function verifyAdminPassword(password: string) {
   const suppliedDigest = createHmac("sha256", "tanvi-blog-login").update(password).digest("hex");
   const expectedDigest = createHmac("sha256", "tanvi-blog-login").update(expected).digest("hex");
   return safeEqual(suppliedDigest, expectedDigest);
+}
+
+export function verifySameOrigin(request: NextRequest) {
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host")?.split(",")[0]?.trim();
+  if (!origin || !host) return false;
+  try {
+    const parsed = new URL(origin);
+    return (parsed.protocol === "https:" || parsed.protocol === "http:") && parsed.host === host;
+  } catch {
+    return false;
+  }
 }

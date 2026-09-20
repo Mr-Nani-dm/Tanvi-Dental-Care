@@ -23,6 +23,7 @@ export type BlogPost = {
   treatmentSlug?: string;
   featuredImage?: string;
   imageAlt?: string;
+  imageRightsConfirmed?: boolean;
   seoTitle?: string;
   metaDescription: string;
   primaryTopic?: string;

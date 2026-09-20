@@ -1,4 +1,8 @@
 const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; media-src 'self'; frame-src 'none'",
+  },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -7,8 +11,15 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  poweredByHeader: false,
+
   async redirects() {
     return [
+      {
+        source: "/blog/painless-dentistry-best-dental-clinic-mangalagiri",
+        destination: "/blog/dental-anxiety-comfortable-visit-mangalagiri",
+        permanent: true,
+      },
       {
         source: "/:path*",
         has: [{ type: "host", value: "tanvidental.in" }],

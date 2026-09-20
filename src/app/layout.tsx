@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: "Tanvi Dental Care & Implant Centre",
-    images: [{ url: "/images/tanvi-doctor-realfinal.png", width: 700, height: 467, alt: "Tanvi Dental Care doctors" }],
+    images: [{ url: "/images/tanvi-logo-web.png", width: 100, height: 100, alt: "Tanvi Dental Care logo" }],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Tanvi Dental Care & Implant Centre | Mangalagiri",
     description: "Dental care and implant centre in Mangalagiri, Andhra Pradesh.",
-    images: ["/images/tanvi-doctor-realfinal.png"],
+    images: ["/images/tanvi-logo-web.png"],
   },
   icons: { icon: "/images/tanvi-logo-web.png" },
 };
@@ -43,7 +43,6 @@ const localBusinessSchema = {
   "@id": clinicEntityId,
   name: clinic.name,
   url: siteUrl,
-  image: `${siteUrl}/images/tanvi-doctor-realfinal.png`,
   logo: `${siteUrl}/images/tanvi-logo-web.png`,
   telephone: clinic.phoneHref.replace("tel:", ""),
   hasMap: clinic.googleMapsUrl,
@@ -69,7 +68,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         {children}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema).replace(/</g, "\\u003c") }} />
       </body>
     </html>
   );
