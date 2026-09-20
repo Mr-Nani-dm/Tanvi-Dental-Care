@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic } from "@/config/clinic";
+import { doctors } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Our Doctors",
-  description: "Meet the specialist dental team at Tanvi Dental Care & Implant Centre in Mangalagiri.",
+  title: "Dental Specialists in Mangalagiri",
+  description: "Meet Dr. Naga Swathi Pokala, Oral & Maxillofacial Surgeon, and Dr. Prathap Naidu, Endodontist, at Tanvi Dental Care & Implant Centre in Mangalagiri.",
   alternates: { canonical: "/doctors" },
+  openGraph: {
+    title: "Dental Specialists in Mangalagiri | Tanvi Dental Care",
+    description: "Meet the specialist dental team at Tanvi Dental Care & Implant Centre in Mangalagiri.",
+    url: "/doctors",
+    type: "website",
+  },
 };
-
-const doctors = [
-  { name: "Dr. Naga Swathi Pokala", qualification: "BDS, MDS", specialty: "Oral & Maxillofacial Surgeon", image: "/images/doctors/naga-swathi.webp", alt: "Dr. Naga Swathi Pokala" },
-  { name: "Dr. Prathap Naidu", qualification: "BDS, MDS", specialty: "Endodontist", image: "/images/doctors/prathap-naidu.webp", alt: "Dr. Prathap Naidu" },
-] as const;
 
 export default function DoctorsPage() {
   return (
@@ -32,8 +35,13 @@ export default function DoctorsPage() {
           <div className="doctor-grid">
             {doctors.map((doctor) => (
               <article className="doctor-card doctor-card-photo" key={doctor.name}>
-                <div className="doctor-photo-wrap"><img src={doctor.image} alt={doctor.alt} width="599" height="900" /></div>
-                <div className="doctor-details"><h2>{doctor.name}</h2><p>{doctor.qualification}</p><strong>{doctor.specialty}</strong></div>
+                <div className="doctor-photo-wrap"><img src={doctor.image} alt={doctor.name} width="599" height="900" /></div>
+                <div className="doctor-details">
+                  <h2>{doctor.name}</h2>
+                  <p>{doctor.qualifications}</p>
+                  <strong>{doctor.specialty}</strong>
+                  <Link className="view-all" href={`/doctors/${doctor.slug}`}>View profile <ClinicIcon name="arrow" size={15}/></Link>
+                </div>
               </article>
             ))}
           </div>

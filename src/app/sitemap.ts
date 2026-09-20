@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { treatments } from "@/config/clinic";
-import { siteConfig } from "@/config/site";
+import { doctors, siteConfig } from "@/config/site";
 import { blogPosts } from "@/content/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -10,6 +10,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl },
     { url: `${baseUrl}/treatments` },
     { url: `${baseUrl}/doctors` },
+    ...doctors.map((doctor) => ({
+      url: `${baseUrl}/doctors/${doctor.slug}`,
+    })),
     { url: `${baseUrl}/blog` },
     ...treatments.map((treatment) => ({
       url: `${baseUrl}/treatments/${treatment.slug}`,

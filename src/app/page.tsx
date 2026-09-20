@@ -7,6 +7,8 @@ import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic, faqs, treatments } from "@/config/clinic";
 
 export const metadata: Metadata = {
+  title: "Dentist in Mangalagiri",
+  description: "Tanvi Dental Care & Implant Centre in Mangalagiri. Meet an Oral & Maxillofacial Surgeon and Endodontist and explore patient-friendly dental treatment information.",
   alternates: { canonical: "/" },
 };
 
