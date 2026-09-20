@@ -37,11 +37,11 @@ A published post is stored in `src/content/blog-data.json`. The public applicati
 - Related treatment link on the article
 - Helpful article links on the matching treatment page
 
-Draft posts are not included in the public blog or sitemap.
+Draft posts are not included in the public blog or sitemap. They are still committed to the public GitHub repository and can remain visible in repository history. Never put patient information, health records, contact details received in confidence or other confidential material in a draft.
 
 ## Persistence model
 
-The admin APIs write blog content and images to this GitHub repository with a fine-grained GitHub token stored only in server-side environment variables. Image assets are stored under `public/images/blog/`.
+The admin APIs write blog content and images to this public GitHub repository with a fine-grained GitHub token stored only in server-side environment variables. Image assets are stored under `public/images/blog/`. The editor requires an explicit public-storage acknowledgement before either a draft or published post can be saved.
 
 The browser never receives the GitHub token.
 
@@ -79,16 +79,19 @@ Write for patients in Mangalagiri, Andhra Pradesh, India. Prioritise practical l
 
 ## Image handling
 
-The admin browser attempts to resize uploaded images and convert them to WebP before upload. The server accepts JPG, PNG and WebP files and rejects files above 3 MB.
+The admin browser attempts to decode, resize and convert uploaded images to WebP before upload, which also removes ordinary embedded metadata from the new browser-generated file. The server accepts JPG, PNG and WebP files, verifies that the file signature matches the declared type and rejects empty files or files above 3 MB. Editors must still inspect the source image because browser conversion and signature checks are not a substitute for a privacy or rights review.
+
+Every featured or inline image requires an explicit rights confirmation before upload and again as part of the publishing validation. Upload only images that are clinic-owned, properly licensed or otherwise authorised for this publication. Do not upload an identifiable patient unless the clinic holds valid permission covering the intended public use. Keep licence, source and consent records outside this public repository.
 
 ## Recommended operational flow
 
 1. Write the article.
-2. Add a featured image and accurate alt text.
+2. Add a featured image only after checking ownership, licence and any required subject permission; then add accurate alt text.
 3. Choose the related treatment.
 4. Complete the SEO fields until the readiness score is strong.
 5. Preview the content.
-6. Save as draft if clinical review is required.
-7. Add the reviewer only after real approval.
-8. Publish.
-9. Verify the public article after the connected deployment completes.
+6. Confirm that the article contains no patient or confidential information and may be stored in the public repository.
+7. Save as a public-repository draft if clinical review is required.
+8. Add the reviewer only after real approval.
+9. Publish.
+10. Verify the public article after the connected deployment completes.

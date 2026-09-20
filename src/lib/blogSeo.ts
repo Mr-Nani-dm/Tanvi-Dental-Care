@@ -69,7 +69,7 @@ function makeCheck({
 
 function technicalSeoChecks(post: Partial<BlogPost>): SeoCheck[] {
   const title=(post.seoTitle||post.title||"").trim(); const description=(post.metaDescription||"").trim(); const body=post.body||""; const topic=post.primaryTopic?.trim();
-  const image=Boolean(post.featuredImage); const alt=Boolean(post.imageAlt?.trim()); const headings=(body.match(/^##\s+/gm)||[]).length; const internalLinks=(body.match(/\]\(\//g)||[]).length;
+  const image=Boolean(post.featuredImage); const alt=Boolean(post.imageAlt?.trim()); const imageRights=post.imageRightsConfirmed===true; const headings=(body.match(/^##\s+/gm)||[]).length; const internalLinks=(body.match(/\]\(\//g)||[]).length;
   const treatment=treatments.find((item)=>item.slug===post.treatmentSlug); const linkGuidance=treatment?`Suggested destination: ${treatment.name} (/treatments/${treatment.slug}).`:"Select the most relevant treatment to strengthen the article's internal linking.";
   const titleTopicException = matchingException(post, "topic-title");
   const introTopicException = matchingException(post, "topic-intro");
@@ -77,7 +77,7 @@ function technicalSeoChecks(post: Partial<BlogPost>): SeoCheck[] {
     makeCheck({id:"seo-title",label:"SEO · Title",passed:title.length>=35&&title.length<=65,points:14,guidance:`Current: ${title.length} characters. Aim for roughly 35–65.`}),
     makeCheck({id:"seo-meta",label:"SEO · Meta description",passed:description.length>=110&&description.length<=165,points:14,guidance:`Current: ${description.length} characters. Aim for roughly 110–165.`}),
     makeCheck({id:"seo-url",label:"SEO · Clean URL",passed:Boolean(post.slug&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug)),points:8,guidance:"Use a short lowercase hyphenated URL."}),
-    makeCheck({id:"seo-image",label:"SEO · Featured image",passed:image,points:8,guidance:"Add a relevant featured image for the article and social sharing."}),
+    makeCheck({id:"seo-image",label:"Trust · Image rights",passed:!image||imageRights,points:8,guidance:"Images are optional. If one is used, confirm ownership, licence and any required subject permission."}),
     makeCheck({id:"seo-alt",label:"SEO · Image alt text",passed:!image||alt,points:8,guidance:"Describe what the image shows in plain language."}),
     makeCheck({id:"seo-topic",label:"SEO · Focus topic",passed:Boolean(topic),points:10,guidance:"Set one natural patient search topic rather than many keyword variants."}),
     makeCheck({id:"seo-topic-title",label:"SEO · Topic in title",passed:Boolean(topic&&includesTopic(title,topic)),points:10,guidance:"Use the focus topic naturally in the search title when it reads well.",exception:titleTopicException}),

@@ -18,16 +18,16 @@ const hardBlocked = [
   "this proves you have",
   "this means you have",
   "you certainly have",
-];
-
-const editorialWarnings = [
   "best dental clinic",
   "best dentist",
   "world class",
-  "advanced",
-  "affordable",
   "celebrity smile",
   "flawless smile",
+];
+
+const editorialWarnings = [
+  "advanced",
+  "affordable",
 ];
 
 function normalize(value: string) {
@@ -38,6 +38,17 @@ function wholeArticleText(post: Partial<BlogPost>) {
   return normalize([post.title, post.excerpt, post.seoTitle, post.metaDescription, post.body]
     .filter(Boolean)
     .join(" "));
+}
+
+function hasArticleImage(post: Partial<BlogPost>) {
+  return Boolean(post.featuredImage?.trim() || /!\[[^\]]*\]\([^)]+\)/.test(post.body || ""));
+}
+
+function invalidArticleImages(post: Partial<BlogPost>) {
+  const sources = [post.featuredImage || "", ...Array.from((post.body || "").matchAll(/!\[[^\]]*\]\(([^)]+)\)/g), (match) => match[1])]
+    .map((source) => source.trim())
+    .filter(Boolean);
+  return sources.filter((source) => !/^\/images\/blog\/[a-z0-9][a-z0-9-]*\.(?:webp|jpg|png)$/.test(source));
 }
 
 function isEditoriallyExempt(post: Partial<BlogPost>, phrase: string) {
@@ -74,7 +85,19 @@ export function publishValidation(post: Partial<BlogPost>): PublishValidation {
   }
 
   if (post.featuredImage && !post.imageAlt?.trim()) {
-    warnings.push("Featured image alt text is missing. Recommended for accessibility and SEO, but it does not block publishing.");
+    blockers.push("Accessibility check: add accurate alt text for the featured image.");
+  }
+
+  if (Array.from((post.body || "").matchAll(/!\[([^\]]*)\]\([^)]+\)/g), (match) => match[1]).some((alt) => !alt.trim())) {
+    blockers.push("Accessibility check: add accurate alt text for every inline image.");
+  }
+
+  if (hasArticleImage(post) && post.imageRightsConfirmed !== true) {
+    blockers.push("Image rights check: confirm that every article image is clinic-owned, properly licensed or otherwise authorised for this publication.");
+  }
+
+  if (invalidArticleImages(post).length) {
+    blockers.push("Image source check: article images must use files uploaded to the local blog image library.");
   }
 
   const hasReviewer = Boolean(post.reviewedBy?.trim());

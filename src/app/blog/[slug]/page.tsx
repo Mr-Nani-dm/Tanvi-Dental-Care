@@ -107,8 +107,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {related.length > 0 && <section className="related-blog-section"><div className="container"><div className="section-heading"><p className="section-mark">✦</p><h2>Continue Reading</h2></div><div className="blog-grid blog-grid-related">{related.map((item) => <article className="blog-card" key={item.slug}>{item.featuredImage && <Link className="blog-card-image" href={`/blog/${item.slug}`}><img src={item.featuredImage} alt={item.imageAlt || item.title} loading="lazy" /></Link>}<div className="blog-card-content"><div className="blog-card-meta"><span>{item.category}</span><span>{item.readTime}</span></div><h2><Link href={`/blog/${item.slug}`}>{item.title}</Link></h2><p>{item.excerpt}</p><Link className="blog-read-link" href={`/blog/${item.slug}`}>Read guide <ClinicIcon name="arrow" size={16}/></Link></div></article>)}</div></div></section>}
 
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema).replace(/</g, "\\u003c") }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
       </main>
       <SiteFooter />
     </>

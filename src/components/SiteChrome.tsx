@@ -52,7 +52,7 @@ export function SiteFooter() {
       <footer className="footer">
         <div className="container footer-inner">
           <div className="footer-brand"><Image src="/images/tanvi-logo-web.png" alt="Tanvi Dental Care logo" width={52} height={46}/><span><strong>TANVI</strong><small>DENTAL CARE &amp; IMPLANT CENTRE</small></span></div>
-          <p>{clinic.shortAddress} · <Link href="/#opening-hours">Opening hours</Link> · <a href={clinic.phoneHref}>{clinic.phone}</a></p>
+          <p>{clinic.shortAddress} · <Link href="/#opening-hours">Opening hours</Link> · <a href={clinic.phoneHref}>{clinic.phone}</a> · <Link href="/privacy">Privacy</Link></p>
           <div className="footer-socials">
             <a className="footer-google" href={clinic.googleMapsUrl} target="_blank" rel="noreferrer"><ClinicIcon name="google" size={16}/> Google</a>
             {clinic.social.instagram && <a className="footer-google" href={clinic.social.instagram} target="_blank" rel="noreferrer"><ClinicIcon name="instagram" size={16}/> Instagram</a>}

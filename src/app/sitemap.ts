@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl },
     { url: `${baseUrl}/treatments` },
     { url: `${baseUrl}/doctors` },
+    { url: `${baseUrl}/privacy` },
     ...doctors.map((doctor) => ({
       url: `${baseUrl}/doctors/${doctor.slug}`,
     })),

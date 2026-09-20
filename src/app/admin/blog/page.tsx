@@ -23,6 +23,7 @@ function emptyPost(): BlogPost {
     readTime: "1 min read",
     featuredImage: "",
     imageAlt: "",
+    imageRightsConfirmed: false,
     seoTitle: "",
     metaDescription: "",
     primaryTopic: "",
@@ -36,7 +37,6 @@ function emptyPost(): BlogPost {
 }
 
 async function optimiseImage(file: File) {
-  if (file.type === "image/webp" && file.size <= 2200000) return file;
   if (!("createImageBitmap" in window)) return file;
   try {
     const bitmap = await createImageBitmap(file);
@@ -89,6 +89,7 @@ export default function BlogAdminPage() {
   const [editorTab, setEditorTab] = useState<EditorTab>("write");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [publicStorageConfirmed, setPublicStorageConfirmed] = useState(false);
   const [notice, setNotice] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [exceptionPhrase, setExceptionPhrase] = useState("");
   const [exceptionReason, setExceptionReason] = useState("");
@@ -145,6 +146,7 @@ export default function BlogAdminPage() {
     setSlugTouched(false);
     setEditorTab("write");
     setNotice(null);
+    setPublicStorageConfirmed(false);
     resetExceptionForm();
   };
 
@@ -152,12 +154,14 @@ export default function BlogAdminPage() {
     setSelected({
       ...post,
       tags: [...post.tags],
+      imageRightsConfirmed: post.imageRightsConfirmed === true,
       seoExceptions: (post.seoExceptions || []).map((exception) => ({ ...exception, rules: [...exception.rules] })),
     });
     setOriginalSlug(post.slug);
     setSlugTouched(true);
     setEditorTab("write");
     setNotice(null);
+    setPublicStorageConfirmed(false);
     resetExceptionForm();
   };
 
@@ -225,6 +229,19 @@ export default function BlogAdminPage() {
 
   const upload = async (file: File, inline = false) => {
     if (!selected) return;
+    if (!publicStorageConfirmed) {
+      setNotice({ type: "error", text: "Confirm public repository storage before uploading." });
+      return;
+    }
+    if (selected.imageRightsConfirmed !== true) {
+      setNotice({ type: "error", text: "Confirm image ownership or publication rights before uploading." });
+      return;
+    }
+    const inlineAlt = inline ? window.prompt("Describe this image accurately for accessibility:", "")?.trim() : "";
+    if (inline && !inlineAlt) {
+      setNotice({ type: "error", text: "Add accurate alt text before uploading an inline image." });
+      return;
+    }
     setUploading(true);
     setNotice(null);
     try {
@@ -232,12 +249,13 @@ export default function BlogAdminPage() {
       const form = new FormData();
       form.append("file", prepared);
       form.append("name", selected.slug || selected.title || "blog-image");
+      form.append("publicStorageConfirmed", "true");
+      form.append("rightsConfirmed", "true");
       const response = await fetch("/api/admin/upload", { method: "POST", body: form });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || "Image upload failed.");
       if (inline) {
-        const alt = window.prompt("Describe this image for accessibility:", selected.imageAlt || "") || "Dental care image";
-        update("body", `${selected.body.trim()}\n\n![${alt}](${data.url})\n`);
+        update("body", `${selected.body.trim()}\n\n![${inlineAlt}](${data.url})\n`);
       } else {
         update("featuredImage", data.url);
       }
@@ -251,13 +269,17 @@ export default function BlogAdminPage() {
 
   const save = async (action: "draft" | "publish") => {
     if (!selected) return;
+    if (!publicStorageConfirmed) {
+      setNotice({ type: "error", text: "Confirm public repository storage before saving or publishing." });
+      return;
+    }
     setSaving(true);
     setNotice(null);
     try {
       const response = await fetch("/api/admin/blog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ post: selected, originalSlug, action }),
+        body: JSON.stringify({ post: selected, originalSlug, action, publicStorageConfirmed }),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || "Unable to save the post.");
@@ -270,7 +292,7 @@ export default function BlogAdminPage() {
         type: "success",
         text: action === "publish"
           ? "Published to GitHub. The connected deployment will rebuild the blog, sitemap, schema, treatment links and social metadata automatically."
-          : "Draft saved to GitHub. Drafts are excluded from the public blog and sitemap.",
+          : "Draft saved to the public GitHub repository. It is excluded from the public blog and sitemap but remains visible in repository history.",
       });
     } catch (error) {
       setNotice({ type: "error", text: error instanceof Error ? error.message : "Unable to save the post." });
@@ -298,7 +320,7 @@ export default function BlogAdminPage() {
 
   return (
     <main className={styles.page}>
-      <header className={styles.topbar}><div className={styles.topbarInner}><div className={styles.brand}><span className={styles.brandMark}>T</span><div><strong>TANVI DENTAL</strong><span>Blog Manager</span></div></div><div className={styles.topActions}><a className={styles.ghostButton} href="/blog" target="_blank">View public blog</a><button className={styles.ghostButton} type="button" onClick={logout}>Sign out</button></div></div></header>
+      <header className={styles.topbar}><div className={styles.topbarInner}><div className={styles.brand}><span className={styles.brandMark}>T</span><div><strong>TANVI DENTAL</strong><span>Blog Manager</span></div></div><div className={styles.topActions}><a className={styles.ghostButton} href="/blog" target="_blank" rel="noopener noreferrer">View public blog</a><button className={styles.ghostButton} type="button" onClick={logout}>Sign out</button></div></div></header>
 
       <div className={styles.shell}>
         <aside className={styles.sidebar}>
@@ -315,6 +337,7 @@ export default function BlogAdminPage() {
                 <div className={styles.cardHeader}><div><h2>{originalSlug ? "Edit Article" : "New Article"}</h2><p>{selected.status === "published" ? "Currently published" : "Draft content"}</p></div><div className={styles.editorTabs}><button className={`${styles.tab} ${editorTab === "write" ? styles.tabActive : ""}`} onClick={() => setEditorTab("write")}>Write</button><button className={`${styles.tab} ${editorTab === "preview" ? styles.tabActive : ""}`} onClick={() => setEditorTab("preview")}>Preview</button></div></div>
                 {editorTab === "write" ? <div className={styles.cardBody}>
                   {notice && <div className={`${styles.notice} ${notice.type === "success" ? styles.success : styles.error}`}>{notice.text}</div>}
+                  <div className={styles.medicalNote}><strong>Public storage notice:</strong> drafts, article text and uploaded images are committed to a public GitHub repository and may remain in its history. Do not enter patient details, health records or other confidential information.<label style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 10, fontWeight: 700 }}><input type="checkbox" checked={publicStorageConfirmed} onChange={(event) => setPublicStorageConfirmed(event.target.checked)} />I confirm this article contains no patient or confidential information and may be stored publicly.</label></div>
                   <div className={styles.field}><label>Article title *</label><input value={selected.title} onChange={(event) => titleChanged(event.target.value)} placeholder="Root Canal Treatment: What Patients Should Know" /></div>
                   <div className={styles.field}><label>URL slug *</label><input value={selected.slug} onChange={(event) => { setSlugTouched(true); update("slug", slugify(event.target.value)); }} placeholder="root-canal-treatment-patient-guide" /><div className={styles.hint}>Public URL: /blog/{selected.slug || "your-post-url"}</div></div>
                   <div className={styles.twoCol}><div className={styles.field}><label>Category</label><select value={selected.category} onChange={(event) => update("category", event.target.value)}>{categories.map((category) => <option key={category}>{category}</option>)}</select></div><div className={styles.field}><label>Related treatment</label><select value={selected.treatmentSlug || ""} onChange={(event) => update("treatmentSlug", event.target.value)}><option value="">Select treatment</option>{treatments.map((treatment) => <option value={treatment.slug} key={treatment.slug}>{treatment.name}</option>)}</select></div></div>
@@ -322,6 +345,7 @@ export default function BlogAdminPage() {
                   <div className={styles.imageBox}>{selected.featuredImage ? <img className={styles.imagePreview} src={selected.featuredImage} alt={selected.imageAlt || "Featured preview"} /> : <div className={styles.imagePreview} />}
                     <div className={styles.uploadRow}><strong>Featured image</strong><input className={styles.uploadInput} type="file" accept="image/png,image/jpeg,image/webp" disabled={uploading} onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file, false); }} />{uploading && <span>Optimising & uploading…</span>}</div>
                     <div className={styles.field} style={{ marginTop: 10 }}><label>Image alt text</label><input value={selected.imageAlt || ""} onChange={(event) => update("imageAlt", event.target.value)} placeholder="Describe what the image shows" /></div>
+                    <label style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 10, fontSize: 12, lineHeight: 1.5 }}><input type="checkbox" checked={selected.imageRightsConfirmed === true} onChange={(event) => update("imageRightsConfirmed", event.target.checked)} /><span><strong>Image rights confirmed.</strong> Every featured or inline image is clinic-owned, properly licensed or otherwise authorised for this publication. It contains no identifiable patient without valid publication permission.</span></label>
                   </div>
                   <div className={styles.field}><label>Article content *</label><div className={styles.toolbar}><button type="button" className={styles.toolbarButton} onClick={() => insertText("**", "**")}>Bold</button><button type="button" className={styles.toolbarButton} onClick={() => insertText("## ")}>H2</button><button type="button" className={styles.toolbarButton} onClick={() => insertText("### ")}>H3</button><button type="button" className={styles.toolbarButton} onClick={() => insertText("- ")}>List</button><button type="button" className={styles.toolbarButton} onClick={() => insertText("[", "](/treatments)")}>Link</button><label className={styles.toolbarButton}>+ Image<input hidden type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file, true); }} /></label></div><textarea ref={textareaRef} className={styles.bodyTextarea} value={selected.body} onChange={(event) => update("body", event.target.value)} /><div className={styles.hint}>Use H2/H3 headings, short paragraphs and lists. HTML is intentionally disabled; the editor uses a safe lightweight format.</div></div>
                 </div> : <div className={styles.cardBody}><div className={styles.preview}>{selected.featuredImage && <img className={styles.imagePreview} src={selected.featuredImage} alt={selected.imageAlt || ""} />}<h1>{selected.title || "Article title"}</h1><div className={styles.previewMeta}>{selected.category} · {selected.readTime}</div><p>{selected.excerpt}</p><PreviewBody body={selected.body} /></div></div>}
@@ -344,7 +368,7 @@ export default function BlogAdminPage() {
                 <div className={styles.sideCard}><div className={styles.cardHeader}><div><h2>Trust & Review</h2><p>Health content accountability</p></div></div><div className={styles.cardBody}><div className={styles.field}><label>Author</label><input value={selected.author} onChange={(event) => update("author", event.target.value)} /></div><div className={styles.field}><label>Clinically reviewed by</label><input value={selected.reviewedBy || ""} onChange={(event) => update("reviewedBy", event.target.value)} placeholder="Only enter a doctor who actually reviewed it" /></div><div className={styles.field}><label>Review date</label><input type="date" value={selected.reviewedAt || ""} onChange={(event) => update("reviewedAt", event.target.value)} /></div><div className={styles.medicalNote}><strong>Medical content rule:</strong> Do not add a doctor's name as reviewer unless that doctor has actually reviewed and approved the article.</div></div></div>
               </div>
             </div>
-            <div className={styles.actionBar}><button className={styles.secondaryButton} type="button" disabled={saving} onClick={() => void save("draft")}>{saving ? "Saving…" : "Save Draft"}</button><button className={styles.secondaryButton} type="button" onClick={() => setEditorTab("preview")}>Preview</button><button className={styles.primaryButton} type="button" disabled={saving} onClick={() => void save("publish")}>{saving ? "Publishing…" : "Publish"}</button></div>
+            <div className={styles.actionBar}><button className={styles.secondaryButton} type="button" disabled={saving} onClick={() => void save("draft")}>{saving ? "Saving…" : "Save Public Draft"}</button><button className={styles.secondaryButton} type="button" onClick={() => setEditorTab("preview")}>Preview</button><button className={styles.primaryButton} type="button" disabled={saving} onClick={() => void save("publish")}>{saving ? "Publishing…" : "Publish"}</button></div>
           </>}
         </section>
       </div>
