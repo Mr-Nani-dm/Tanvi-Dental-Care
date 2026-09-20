@@ -5,6 +5,7 @@ import { clinic } from "@/config/clinic";
 export const metadata: Metadata = {
   title: "Our Doctors",
   description: "Meet the specialist dental team at Tanvi Dental Care & Implant Centre in Mangalagiri.",
+  alternates: { canonical: "/doctors" },
 };
 
 const doctors = [
