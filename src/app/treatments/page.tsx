@@ -5,6 +5,7 @@ import { clinic, treatments } from "@/config/clinic";
 export const metadata = {
   title: "Dental Treatments",
   description: "Explore the dental treatment areas presented by Tanvi Dental Care & Implant Centre in Mangalagiri.",
+  alternates: { canonical: "/treatments" },
 };
 
 export default function TreatmentsPage() {
