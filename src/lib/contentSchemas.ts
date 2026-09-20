@@ -42,7 +42,8 @@ export const DRAFT_SCHEMA = object({
 });
 
 export const REVIEW_SCHEMA = object({
-  medical: { type: "boolean" }, claims: { type: "boolean" }, seo: { type: "boolean" }, duplication: { type: "boolean" }, tone: { type: "boolean" }, issues: array(text(600), 20),
+  medical: { type: "boolean" }, claims: { type: "boolean" }, seo: { type: "boolean" }, duplication: { type: "boolean" }, tone: { type: "boolean" }, issues: array(object({ category: { type: "string", enum: ["medical", "claims", "seo", "duplication", "tone"] }, message: text(600) }), 20),
+  claimChecks: array(object({ claim: text(600), sourceUrl: text(1000), evidenceQuote: text(1000), supported: { type: "boolean" } }), 80),
 });
 
 /** Model output is untrusted even when the API claims strict structured output. */
@@ -74,8 +75,8 @@ export function parseDraftOutput(value: unknown): ContentDraft {
 }
 export function parseReviewOutput(value: unknown): AiReview {
   if (!matches(value, REVIEW_SCHEMA)) throw new Error("AI returned an invalid review structure. Try validation again.");
-  const review = value as AiReview;
-  // A validator that reports issues cannot simultaneously approve all dimensions.
-  if (review.issues.length && Object.entries(review).every(([key, result]) => key === "issues" || result === true)) review.claims = false;
+  const raw = value as Omit<AiReview, "issues"> & { issues: NonNullable<AiReview["typedIssues"]> };
+  const review: AiReview = { ...raw, typedIssues: raw.issues, issues: raw.issues.map(issue => issue.message) };
+  for (const issue of raw.issues) review[issue.category] = false;
   return review;
 }

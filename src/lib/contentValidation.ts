@@ -285,7 +285,13 @@ export function validatePackage(pkg: ContentPackage, history: ContentPackage[], 
       const questions = faq.match(/^\s*(?:###\s+.+|(?:\*\*|\d+[.)]\s*)[^\n]*\?[^\n]*)$/gm) || [];
       if (questions.length > CONTENT_POLICY.blog.maxFaqs || questions.length === 0) add("seo", "Use at most three clearly marked FAQ questions under the FAQ heading.");
     }
-    const internal = [...new Set(extractLinks(blog.body).filter(isApprovedInternalUrl))];
+    const bodyLinks = extractLinks(blog.body);
+    if (pkg.safety?.aiReview?.claimChecks?.length && !bodyLinks.some(url => verified.has(url))) add("links", "Clinical articles need visible links to their supporting retrieved sources.");
+    for (const claim of pkg.safety?.aiReview?.claimChecks || []) {
+      if (claim.supported && !bodyLinks.includes(claim.sourceUrl)) add("links", "Link the supporting source for each clinical claim in the blog body.");
+    }
+    if (/^\s*```|^\s*\|.+\|\s*$/m.test(blog.body)) add("seo", "Use supported headings, paragraphs and lists instead of code fences or tables.");
+    const internal = [...new Set(bodyLinks.filter(isApprovedInternalUrl))];
     if (internal.length < CONTENT_POLICY.blog.minInternalLinks || internal.length > CONTENT_POLICY.blog.maxInternalLinks) add("links", "Include two to four distinct approved internal links in the blog body.");
     if (blog.seoTitle.length > CONTENT_POLICY.blog.maxSeoTitleCharacters || blog.metaDescription.length > CONTENT_POLICY.blog.maxMetaDescriptionCharacters) add("seo", "Keep SEO title within 65 characters and meta description within 160 characters.");
     if (!occursOnce(blog.body, blog.cta)) add("seo", "The blog's CTA must appear exactly once in its visible body.");
@@ -323,7 +329,9 @@ export function validatePackage(pkg: ContentPackage, history: ContentPackage[], 
     if (!review.seo) add("seo", "The separate AI review flagged content quality or SEO.");
     if (!review.duplication) add("duplicate", "The separate AI review flagged duplicate content.");
     if (!review.tone) add("brand", "The separate AI review flagged tone or local relevance.");
-    for (const issue of review.issues) add("medical", `Separate AI review: ${issue}`);
+    const categories = { medical: "medical", claims: "claims", seo: "seo", duplication: "duplicate", tone: "brand" } as const;
+    if (review.typedIssues) for (const issue of review.typedIssues) add(categories[issue.category], `Separate AI review: ${issue.message}`);
+    else for (const issue of review.issues) add("claims", `Legacy review needs a fresh categorized check: ${issue}`);
   }
   const checks: SafetyCheck[] = keys.map((key) => ({ key, status: messages[key].length ? "NEEDS_REVIEW" : "PASS", messages: [...new Set(messages[key])] }));
   return { status: checks.some((check) => check.status === "NEEDS_REVIEW") ? "NEEDS_REVIEW" : review ? "READY_FOR_HUMAN_REVIEW" : "PENDING", checks, aiReview: review, checkedAt: now.toISOString(), wordCounts };

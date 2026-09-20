@@ -15,6 +15,7 @@ import * as generateRoute from "@/app/api/admin/content/generate/route";
 import * as validateRoute from "@/app/api/admin/content/validate/route";
 import * as saveRoute from "@/app/api/admin/content/save/route";
 import * as imageRoute from "@/app/api/admin/content/image/route";
+import * as approveImageRoute from "@/app/api/admin/content/image/approve/route";
 import sharp from "sharp";
 import * as blogRoute from "@/app/api/admin/blog/route";
 import { doctors } from "@/config/site";
@@ -250,7 +251,7 @@ function mockProviderAndSources(github: FakeGitHub, options: { draft?: ContentDr
     const schema = body.text.format.name;
     const output = schema === "tanvi_topic_ideas" ? { topics: providerTopicFixture() }
       : schema === "tanvi_content_draft" ? options.draftResponses?.[Math.min(draftIndex++, options.draftResponses.length - 1)] || options.draft || blogDraftFixture()
-      : schema === "tanvi_independent_review" ? { medical: options.reviewPass !== false, claims: options.reviewPass !== false, seo: true, duplication: true, tone: true, issues: options.reviewPass === false ? ["The claim needs clinical review."] : [] }
+      : schema === "tanvi_independent_review" ? { medical: options.reviewPass !== false, claims: options.reviewPass !== false, seo: true, duplication: true, tone: true, issues: options.reviewPass === false ? [{ category: "medical", message: "The claim needs clinical review." }] : [], claimChecks: [] }
       : undefined;
     assert.ok(output, `Unexpected provider schema ${schema}`);
     assert.equal(body.model, schema === "tanvi_independent_review" ? "test-review-model" : "test-text-model");
@@ -258,7 +259,7 @@ function mockProviderAndSources(github: FakeGitHub, options: { draft?: ContentDr
   };
 }
 
-const routes = { topics: topicsRoute.POST, generate: generateRoute.POST, validate: validateRoute.POST, save: saveRoute.POST, image: imageRoute.POST };
+const routes = { topics: topicsRoute.POST, generate: generateRoute.POST, validate: validateRoute.POST, save: saveRoute.POST, image: imageRoute.POST, "image/approve": approveImageRoute.POST };
 
 async function successfulPackage(response: Response): Promise<ContentPackage> {
   const payload = await response.json();
@@ -542,7 +543,7 @@ test("independent AI rejection keeps content under review and blocks image gener
   });
 });
 
-test("image route requires an exact reviewed draft then optimizes and stores a WebP in the preview branch", async () => {
+test("image route stages private pixels and only stores the exact approved WebP in the preview branch", async () => {
   await withEnvironment(async () => {
     const github = new FakeGitHub();
     const fixtureImage = await sharp({ create: { width: 32, height: 32, channels: 3, background: { r: 20, g: 130, b: 135 } } }).png().withMetadata().toBuffer();
@@ -552,7 +553,19 @@ test("image route requires an exact reviewed draft then optimizes and stores a W
       assert.equal((await imageRoute.POST(request("image", { package: unreviewed, publicStorageConfirmed: true, rightsConfirmed: true }))).status, 422);
       const reviewed = signPackage(packageFixture(), true);
       assert.equal((await imageRoute.POST(request("image", { package: reviewed, publicStorageConfirmed: true }))).status, 422);
-      const generated = await successfulPackage(await imageRoute.POST(request("image", { package: reviewed, publicStorageConfirmed: true, rightsConfirmed: true })));
+      const stagedResponse = await imageRoute.POST(request("image", { package: reviewed, publicStorageConfirmed: true, rightsConfirmed: true }));
+      assert.equal(stagedResponse.status, 200);
+      const staged = await stagedResponse.json();
+      assert.equal(staged.package.image, null);
+      assert.equal(github.calls.some(call => call.method === "PUT" && call.url.includes("/contents/public/images/")), false, "Unreviewed pixels must not enter public GitHub");
+      const payload = { package: staged.package, stagedImage: staged.stagedImage, imageBase64: staged.imagePreview.split(",")[1], publicStorageConfirmed: true, rightsConfirmed: true, visualApproved: true };
+      assert.equal((await approveImageRoute.POST(request("image/approve", { ...payload, visualApproved: false }))).status, 422);
+      const tampered = await approveImageRoute.POST(request("image/approve", { ...payload, imageBase64: Buffer.from("tampered bytes").toString("base64") })); assert.equal(tampered.status, 409, JSON.stringify(await tampered.json()));
+      assert.equal((await approveImageRoute.POST(request("image/approve", { ...payload, stagedImage: staged.stagedImage + "x" }))).status, 409);
+      assert.equal((await approveImageRoute.POST(request("image/approve", { ...payload, package: signPackage({ ...reviewed, id: "different-package" }, true) }))).status, 409);
+      const generated = await successfulPackage(await approveImageRoute.POST(request("image/approve", payload)));
+      assert.ok(generated.image?.visualApprovedAt);
+      assert.match(generated.image!.sha256!, /^[a-f0-9]{64}$/);
       assert.equal(generated.image?.provenance, "AI_GENERATED");
       assert.equal(generated.image?.needsHumanReview, true);
       assert.match(generated.image!.path, /^\/images\/content\/\d{4}\/\d{2}\/[a-f0-9-]+\.webp$/);
@@ -672,4 +685,39 @@ test("legacy Blog Manager drafts retain their existing publication flow without 
       assert.equal(github.calls.some((call) => call.url.includes("content-os-data.json")), false);
     });
   }, { OPENAI_API_KEY: undefined, CONTENT_OS_TEXT_MODEL: undefined, CONTENT_OS_REVIEW_MODEL: undefined });
+});
+
+test("explicit treatment focus rejects unrelated model topics on both bounded attempts", async () => {
+  await withEnvironment(async () => {
+    const github = new FakeGitHub();
+    mockProviderAndSources(github);
+    await withFakeGitHub(github, async () => {
+      const response = await topicsRoute.POST(request("topics", { answers: { objective: "patient_education", treatment: "root-canal-treatment", special: "" } }));
+      assert.equal(response.status, 422);
+      const calls = github.calls.filter(call => call.url === "https://api.openai.com/v1/responses");
+      assert.equal(calls.length, 2);
+      assert.match(JSON.parse(calls[1].body.input[0].content[0].text).correction, /Strictly match treatment root-canal-treatment/);
+    });
+  });
+});
+
+test("review outage preserves generated draft without an approval signature", async () => {
+  await withEnvironment(async () => {
+    const github = new FakeGitHub();
+    mockProviderAndSources(github);
+    const external = github.external!;
+    github.external = async (url, init) => {
+      if (url.hostname === "api.openai.com" && JSON.parse(String(init?.body)).text?.format?.name === "tanvi_independent_review") return new Response("unavailable", { status: 503 });
+      return external(url, init);
+    };
+    await withFakeGitHub(github, async () => {
+      const pkg = await successfulPackage(await generateRoute.POST(request("generate", { topic: signTopic(topicFixture()), formats: ["blog", "gbp"] })));
+      assert.ok(pkg.blog?.body);
+      assert.equal(pkg.safety.status, "PENDING");
+      assert.equal(pkg.safety.aiReview, null);
+      assert.equal(verifyPackageReview(pkg), false);
+      assert.equal(verifyPackageProvenance(pkg), true);
+      assert.match(pkg.safety.checks.flatMap(check => check.messages).join(" "), /draft is preserved/);
+    });
+  });
 });

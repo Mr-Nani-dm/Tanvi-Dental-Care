@@ -37,6 +37,8 @@ export default function BlogBody({ body }: { body: string }) {
   const blocks: ReactNode[] = [];
   let paragraph: string[] = [];
   let bullets: string[] = [];
+  let numbered: string[] = [];
+  let listStart = 1;
 
   const flushParagraph = () => {
     if (!paragraph.length) return;
@@ -51,11 +53,18 @@ export default function BlogBody({ body }: { body: string }) {
     bullets = [];
   };
 
+  const flushNumbered = () => {
+    if (!numbered.length) return;
+    blocks.push(<ol start={listStart} key={`ol-${blocks.length}`}>{numbered.map((item, index) => <li key={`${item}-${index}`}>{inline(item)}</li>)}</ol>);
+    numbered = [];
+  };
+
   lines.forEach((raw) => {
     const line = raw.trim();
     if (!line) {
       flushParagraph();
       flushBullets();
+      flushNumbered();
       return;
     }
 
@@ -63,6 +72,7 @@ export default function BlogBody({ body }: { body: string }) {
     if (image) {
       flushParagraph();
       flushBullets();
+      flushNumbered();
       const src = safeImageSrc(image[2]);
       if (src) {
         blocks.push(
@@ -78,6 +88,7 @@ export default function BlogBody({ body }: { body: string }) {
     if (line.startsWith("### ")) {
       flushParagraph();
       flushBullets();
+      flushNumbered();
       blocks.push(<h3 key={`h3-${blocks.length}`}>{inline(line.slice(4))}</h3>);
       return;
     }
@@ -85,12 +96,23 @@ export default function BlogBody({ body }: { body: string }) {
     if (line.startsWith("## ")) {
       flushParagraph();
       flushBullets();
+      flushNumbered();
       blocks.push(<h2 key={`h2-${blocks.length}`}>{inline(line.slice(3))}</h2>);
+      return;
+    }
+
+    const ordered = line.match(/^(\d{1,6})[.)]\s+(.+)$/);
+    if (ordered) {
+      flushParagraph();
+      flushBullets();
+      if (!numbered.length) listStart = Number(ordered[1]);
+      numbered.push(ordered[2]);
       return;
     }
 
     if (line.startsWith("- ")) {
       flushParagraph();
+      flushNumbered();
       bullets.push(line.slice(2));
       return;
     }
@@ -98,16 +120,19 @@ export default function BlogBody({ body }: { body: string }) {
     if (line.startsWith("> ")) {
       flushParagraph();
       flushBullets();
+      flushNumbered();
       blocks.push(<blockquote key={`quote-${blocks.length}`}>{inline(line.slice(2))}</blockquote>);
       return;
     }
 
     flushBullets();
+    flushNumbered();
     paragraph.push(line);
   });
 
   flushParagraph();
   flushBullets();
+  flushNumbered();
 
   return <div className="blog-body">{blocks}</div>;
 }

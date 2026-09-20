@@ -32,7 +32,7 @@ export type ContentDraft = {
   imageBrief: { kind: "educational" | "doctor"; description: string; alt: string; doctor: "naga-swathi" | "prathap-naidu" | null };
 };
 export type SafetyCheck = { key: "medical" | "claims" | "seo" | "duplicate" | "links" | "words" | "brand" | "frequency"; status: "PASS" | "NEEDS_REVIEW"; messages: string[] };
-export type AiReview = { medical: boolean; claims: boolean; seo: boolean; duplication: boolean; tone: boolean; issues: string[] };
+export type AiReview = { medical: boolean; claims: boolean; seo: boolean; duplication: boolean; tone: boolean; issues: string[]; typedIssues?: { category: "medical" | "claims" | "seo" | "duplication" | "tone"; message: string }[]; claimChecks?: { claim: string; sourceUrl: string; evidenceQuote: string; supported: boolean }[] };
 export type SafetyResult = {
   status: "PENDING" | "NEEDS_REVIEW" | "READY_FOR_HUMAN_REVIEW";
   checks: SafetyCheck[];
@@ -49,7 +49,7 @@ export type ContentPackage = ContentDraft & {
   status: "draft" | "needs_review" | "ready_for_review" | "handed_off";
   sources: VerifiedSource[];
   safety: SafetyResult;
-  image: { path: string; alt: string; provenance: "AI_GENERATED" | "APPROVED_DOCTOR_PHOTO"; model: string; createdAt: string; needsHumanReview: true } | null;
+  image: { path: string; alt: string; provenance: "AI_GENERATED" | "APPROVED_DOCTOR_PHOTO"; model: string; createdAt: string; needsHumanReview: true; visualApprovedAt?: string; sha256?: string } | null;
   blogSlug?: string;
   revision?: string;
   proof?: string;

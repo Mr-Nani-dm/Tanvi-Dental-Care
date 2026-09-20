@@ -29,7 +29,7 @@ Module._resolveFilename = function (request, parent, ...options) {
   return resolveFilename.call(this, request.startsWith("@/") ? path.join(repository, "src", request.slice(2)) : request, parent, ...options);
 };
 
-require.extensions[".ts"] = function (module, filename) {
+require.extensions[".tsx"] = require.extensions[".ts"] = function (module, filename) {
   const source = fs.readFileSync(filename, "utf8");
   const compiled = ts.transpileModule(source, {
     fileName: filename,
@@ -38,6 +38,7 @@ require.extensions[".ts"] = function (module, filename) {
       module: ts.ModuleKind.CommonJS,
       esModuleInterop: true,
       resolveJsonModule: true,
+      jsx: ts.JsxEmit.ReactJSX,
     },
   });
   module._compile(compiled.outputText, filename);

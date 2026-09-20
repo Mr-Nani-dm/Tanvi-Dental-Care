@@ -42,18 +42,22 @@ async function readBounded(response: Response): Promise<string> {
 }
 
 /** Extract a short relevant paragraph, never scripts, links or page instructions. */
-export function sourceExcerpt(html: string, terms: readonly string[]): string {
+export function sourceExcerpt(html: string, terms: readonly string[], requiredTerms: readonly string[] = []): string {
   const clean = html.replace(/<(script|style|nav|header|footer|form|svg)\b[^>]*>[\s\S]*?<\/\1>/gi, " ");
   const candidates = Array.from(clean.matchAll(/<(?:p|li)\b[^>]*>([\s\S]*?)<\/(?:p|li)>/gi))
     .map((match) => plainText(match[1]))
     .filter((paragraph) => paragraph.length >= 65 && paragraph.length <= 4_000)
     .filter((paragraph) => !/cookie|copyright|privacy policy|membership|sign in|log in|ignore.{0,25}instruction/i.test(paragraph));
-  const ranked = candidates.map((paragraph) => ({
+  // Choose relevant complete sentences rather than truncating an unrelated lead-in.
+  const sentences = candidates.flatMap(paragraph => paragraph.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [])
+    .map(sentence => sentence.trim()).filter(sentence => sentence.split(/\s+/).length <= MAX_EXCERPT_WORDS && sentence.length >= 30);
+  const relevant = sentences.filter(sentence => !requiredTerms.length || requiredTerms.some(term => sentence.toLowerCase().includes(term)));
+  const ranked = relevant.map((paragraph) => ({
     paragraph,
     score: terms.reduce((score, term) => score + (paragraph.toLowerCase().includes(term.toLowerCase()) ? 1 : 0), 0),
   })).filter((candidate) => candidate.score > 0).sort((a, b) => b.score - a.score);
   if (!ranked.length) return "";
-  return ranked[0].paragraph.split(/\s+/).slice(0, MAX_EXCERPT_WORDS).join(" ");
+  return ranked[0].paragraph;
 }
 
 export async function retrieveSources(topic: TopicIdea): Promise<VerifiedSource[]> {
@@ -74,7 +78,11 @@ export async function retrieveSources(topic: TopicIdea): Promise<VerifiedSource[
     const html = await readBounded(response);
     if (/access denied|verify you are human|just a moment|page not found|404 not found/i.test(plainText(html).slice(0, 400))) return null;
     const terms = [...source.terms, ...`${topic.primaryKeyword} ${topic.angle}`.toLowerCase().split(/[^a-z]+/).filter((word) => word.length > 4)];
-    const excerpt = sourceExcerpt(html, terms);
+    const focusTerms: Record<string, string[]> = {
+      "root-canal-treatment": ["root canal", "endodont"], "dental-implants": ["implant"],
+      "wisdom-tooth-management": ["wisdom", "impacted"], "teeth-cleaning-and-scaling": ["scaling", "cleaning", "plaque", "tartar"],
+    };
+    const excerpt = sourceExcerpt(html, terms, focusTerms[topic.treatmentSlug] || []);
     if (!excerpt) return null;
     return { id: source.id, title: source.title, url: source.url, retrievedAt: new Date().toISOString(), excerpt, status: "VERIFIED" };
   }));

@@ -13,6 +13,7 @@ import { checkDuplicates } from "./duplicateChecker";
 import { contentBranch, writeRepoBinary } from "./githubContent";
 import { ContentError, readContentContext, reserveAiCall, saveContentPackage, handoffContentPackage } from "./contentStore";
 import { signTopic, verifyTopic, signPackage, verifyPackageProvenance, verifyPackageReview } from "./contentIntegrity";
+import { stageImage, verifyStagedImage } from "./contentImageStage";
 import { estimateReadTime } from "./blogSeo";
 import type { ContentPackage, ContentFormat, TopicIdea, SafetyResult, ContentDraft } from "./contentTypes";
 
@@ -26,16 +27,16 @@ export function requireContentAuth(request: NextRequest, write = true) {
   if (write && !verifySameOrigin(request)) throw new ContentError("Request origin is not allowed.", 403);
   if (!adminConfigReady()) throw new ContentError("Admin configuration is incomplete.", 503);
 }
-export async function readContentBody(request: NextRequest): Promise<Record<string, unknown>> {
+export async function readContentBody(request: NextRequest, maxBytes = 150_000): Promise<Record<string, unknown>> {
   if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) throw new ContentError("Send a JSON request.", 415);
-  if (Number(request.headers.get("content-length")) > 150_000) throw new ContentError("This draft request is too large.", 413);
+  if (Number(request.headers.get("content-length")) > maxBytes) throw new ContentError("This draft request is too large.", 413);
   const reader = request.body?.getReader();
   if (!reader) throw new ContentError("A request body is required.", 400);
   const chunks: Uint8Array[] = []; let length = 0;
   while (true) {
     const chunk = await reader.read(); if (chunk.done) break;
     length += chunk.value.length;
-    if (length > 150_000) { await reader.cancel(); throw new ContentError("This draft request is too large.", 413); }
+    if (length > maxBytes) { await reader.cancel(); throw new ContentError("This draft request is too large.", 413); }
     chunks.push(chunk.value);
   }
   let body: unknown;
@@ -100,8 +101,18 @@ function deterministic(pkg: ContentPackage, history: ContentPackage[], blogs: Bl
 }
 async function review(pkg: ContentPackage, history: ContentPackage[], blogs: BlogPost[]) {
   rejectPrivate(JSON.stringify({ blog: pkg.blog, gbp: pkg.gbp, instagram: pkg.instagram, reel: pkg.reel, imageBrief: pkg.imageBrief }));
-  await reserveAiCall("text");
-  pkg.safety = { ...pendingSafety(), aiReview: await reviewDraft({ package: pkg, history, blogs }) };
+  try {
+    await reserveAiCall("text");
+    pkg.safety = { ...pendingSafety(), aiReview: await reviewDraft({ package: pkg, history, blogs }) };
+  } catch {
+    // Preserve useful work without granting an approval or leaking provider errors.
+    pkg.safety = pendingSafety();
+    deterministic(pkg, history, blogs);
+    pkg.safety.status = "PENDING";
+    pkg.safety.checks.push({ key: "medical", status: "NEEDS_REVIEW", messages: ["Independent review could not complete. Your draft is preserved. Run checks again before continuing."] });
+    syncStatus(pkg);
+    return signPackage(pkg, false);
+  }
   deterministic(pkg, history, blogs);
   return signPackage(pkg, true);
 }
@@ -126,6 +137,12 @@ export async function contentSession(request: NextRequest) {
   }
 }
 
+export function matchesTreatmentFocus(idea: TopicIdea, focus: string): boolean {
+  if (focus === "auto") return true;
+  const publicSlug = focus === "general-dental-care" ? "dental-check-ups" : focus;
+  return idea.treatmentSlug === focus && (idea.targetPage === `/treatments/${publicSlug}` || idea.targetPage === `https://www.tanvidental.in/treatments/${publicSlug}`);
+}
+
 export async function planTopics(body: Record<string, unknown>) {
   requireTextSetup();
   const answers = validateDailyAnswers(body.answers);
@@ -136,9 +153,10 @@ export async function planTopics(body: Record<string, unknown>) {
   const selected: TopicIdea[] = [];
   for (let attempt = 0; attempt < 2 && selected.length < 3; attempt++) {
     await reserveAiCall("text");
-    const proposed = await generateTopicCandidates({ answers, blogs: context.blogs, history: context.history, availableFormats: formats });
+    const proposed = await generateTopicCandidates({ answers, blogs: context.blogs, history: context.history, availableFormats: formats, correction: attempt ? `Previous candidates did not provide three eligible distinct topics. Strictly match treatment ${answers.treatment} and its target page. Avoid these already selected titles: ${selected.map(item => item.title).join("; ")}` : undefined });
     for (const value of proposed) {
       const idea = validateTopicIdea(value);
+      if (!matchesTreatmentFocus(idea, answers.treatment)) continue;
       const text = [idea.title, idea.rationale, idea.angle, idea.primaryKeyword].join(" ");
       if ([...findClaimIssues(text), ...findMedicalIssues(text), ...findPrivateInputIssues(text), ...findJurisdictionIssues(text)].length) continue;
       const duplicate = checkDuplicates(idea, [...candidates(context.blogs, context.history), ...selected]);
@@ -247,9 +265,22 @@ export async function createContentImage(body: Record<string, unknown>) {
   if (generated.bytes.byteLength > 15_000_000) throw new ContentError("The generated image was too large. No image was saved.");
   const bytes = await sharp(generated.bytes, { limitInputPixels: 20_000_000 }).rotate().resize({ width: 1200, height: 1200, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
   if (bytes.byteLength > 3_000_000) throw new ContentError("The optimized image is too large. No image was saved.");
+  Object.assign(pkg, signPackage(pkg, true));
+  return { package: pkg, stagedImage: stageImage(bytes, pkg, generated.model), imagePreview: `data:image/webp;base64,${bytes.toString("base64")}` };
+}
+
+/** Generated pixels remain client-held until their exact bytes are approved. */
+export async function approveContentImage(body: Record<string, unknown>) {
+  publicPermission(body);
+  if (body.visualApproved !== true || body.rightsConfirmed !== true) throw new ContentError("Review the displayed image for accuracy, identity, rights and suitability before approval.");
+  const pkg = rawPackage(body);
+  const { history, blogs } = await readContentContext();
+  requireReviewed(pkg, history, blogs);
+  const { bytes, stage } = verifyStagedImage(body.stagedImage, body.imageBase64, pkg);
   const now = new Date().toISOString();
-  const path = `/images/content/${now.slice(0, 4)}/${now.slice(5, 7)}/${randomUUID()}.webp`;
-  await writeRepoBinary({ path: `public${path}`, bytes, message: "Save Content OS educational illustration for human review" });
-  pkg.image = { path, alt: pkg.imageBrief.alt, provenance: "AI_GENERATED", model: generated.model, createdAt: now, needsHumanReview: true };
-  return { package: signPackage(pkg, true), imagePreview: `data:image/webp;base64,${bytes.toString("base64")}` };
+  const created = new Date(stage.at).toISOString();
+  const path = `/images/content/${created.slice(0, 4)}/${created.slice(5, 7)}/${stage.id}.webp`;
+  await writeRepoBinary({ path: `public${path}`, bytes, message: "Save explicitly reviewed Content OS illustration" });
+  pkg.image = { path, alt: pkg.imageBrief.alt, provenance: "AI_GENERATED", model: stage.model, createdAt: created, needsHumanReview: true, visualApprovedAt: now, sha256: stage.hash };
+  return { package: signPackage(pkg, true) };
 }

@@ -5,6 +5,7 @@ import type { BlogPost, SeoExceptionRule } from "@/content/blog";
 import { treatments } from "@/config/clinic";
 import { seoChecks, seoScore, slugify } from "@/lib/blogSeo";
 import styles from "./BlogAdmin.module.css";
+import BlogBody from "@/components/BlogBody";
 
 type Screen = "loading" | "login" | "ready" | "setup";
 type Filter = "all" | "published" | "draft";
@@ -57,26 +58,6 @@ async function optimiseImage(file: File) {
   }
 }
 
-function PreviewBody({ body }: { body: string }) {
-  return (
-    <div className={styles.previewBody}>
-      {body.split(/\n\n+/).filter(Boolean).map((block, index) => {
-        const line = block.trim();
-        if (line.startsWith("## ")) return <h2 key={index}>{line.slice(3)}</h2>;
-        if (line.startsWith("### ")) return <h3 key={index}>{line.slice(4)}</h3>;
-        if (line.split("\n").every((item) => item.startsWith("- "))) {
-          return <ul key={index}>{line.split("\n").map((item) => <li key={item}>{item.slice(2)}</li>)}</ul>;
-        }
-        if (line.startsWith("![](")) return null;
-        if (line.match(/^!\[[^\]]*\]\([^)]+\)$/)) {
-          const match = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)!;
-          return <img key={index} src={match[2]} alt={match[1]} />;
-        }
-        return <p key={index}>{line.replace(/\*\*/g, "")}</p>;
-      })}
-    </div>
-  );
-}
 
 export default function BlogAdminPage() {
   const [screen, setScreen] = useState<Screen>("loading");
@@ -173,7 +154,12 @@ export default function BlogAdminPage() {
   };
 
   const update = <K extends keyof BlogPost>(key: K, value: BlogPost[K]) => {
-    setSelected((current) => current ? { ...current, [key]: value } : current);
+    setSelected((current) => {
+      if (!current) return current;
+      const imageList = (body: string) => JSON.stringify(Array.from(body.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g), match => match[1]));
+      const changedImages = key === "featuredImage" && value !== current.featuredImage || key === "body" && imageList(String(value)) !== imageList(current.body);
+      return { ...current, [key]: value, ...(changedImages ? { imageRightsConfirmed: false } : {}) };
+    });
   };
 
   const titleChanged = (value: string) => {
@@ -355,7 +341,7 @@ export default function BlogAdminPage() {
                     <label style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 10, fontSize: 12, lineHeight: 1.5 }}><input type="checkbox" checked={selected.imageRightsConfirmed === true} onChange={(event) => update("imageRightsConfirmed", event.target.checked)} /><span><strong>Image rights confirmed.</strong> Every featured or inline image is clinic-owned, properly licensed or otherwise authorised for this publication. It contains no identifiable patient without valid publication permission.</span></label>
                   </div>
                   <div className={styles.field}><label>Article content *</label><div className={styles.toolbar}><button type="button" className={styles.toolbarButton} onClick={() => insertText("**", "**")}>Bold</button><button type="button" className={styles.toolbarButton} onClick={() => insertText("## ")}>H2</button><button type="button" className={styles.toolbarButton} onClick={() => insertText("### ")}>H3</button><button type="button" className={styles.toolbarButton} onClick={() => insertText("- ")}>List</button><button type="button" className={styles.toolbarButton} onClick={() => insertText("[", "](/treatments)")}>Link</button><label className={styles.toolbarButton}>+ Image<input hidden type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file, true); }} /></label></div><textarea ref={textareaRef} className={styles.bodyTextarea} value={selected.body} onChange={(event) => update("body", event.target.value)} /><div className={styles.hint}>Use H2/H3 headings, short paragraphs and lists. HTML is intentionally disabled; the editor uses a safe lightweight format.</div></div>
-                </div> : <div className={styles.cardBody}><div className={styles.preview}>{selected.featuredImage && <img className={styles.imagePreview} src={selected.featuredImage} alt={selected.imageAlt || ""} />}<h1>{selected.title || "Article title"}</h1><div className={styles.previewMeta}>{selected.category} · {selected.readTime}</div><p>{selected.excerpt}</p><PreviewBody body={selected.body} /></div></div>}
+                </div> : <div className={styles.cardBody}><div className={styles.preview}>{selected.featuredImage && <img className={styles.imagePreview} src={selected.featuredImage} alt={selected.imageAlt || ""} />}<h1>{selected.title || "Article title"}</h1><div className={styles.previewMeta}>{selected.category} · {selected.readTime}</div><p>{selected.excerpt}</p><BlogBody body={selected.body} /></div></div>}
               </div>
 
               <div className={styles.sideStack}>
