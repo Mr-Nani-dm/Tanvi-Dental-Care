@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteConfig } from "@/config/site";
 import "./globals.css";
 import "./assets.css";
 import "./clinic.css";
@@ -8,7 +9,7 @@ import "./hero-image-fix.css";
 import "./responsive-audit.css";
 import "./blog.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tanvidental.in";
+const siteUrl = siteConfig.url;
 const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=Tanvi%20Dental%20Care%20%26%20Implant%20Centre%2C%20Mangalagiri%2C%20Andhra%20Pradesh&query_place_id=ChIJzRZdD-rxNToRhByJSASPSpw";
 
 export const metadata: Metadata = {
