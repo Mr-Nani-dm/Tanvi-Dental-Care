@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { clinicEntityId, siteConfig } from "@/config/site";
-import { clinic } from "@/config/clinic";
+import { clinic, clinicHours } from "@/config/clinic";
 import "./globals.css";
 import "./assets.css";
 import "./clinic.css";
@@ -55,12 +55,12 @@ const localBusinessSchema = {
     postalCode: "522503",
     addressCountry: "IN",
   },
-  openingHoursSpecification: [{
+  openingHoursSpecification: clinicHours.flatMap((group) => group.periods.map((period) => ({
     "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    opens: "09:00",
-    closes: "21:00",
-  }],
+    dayOfWeek: group.days,
+    opens: period.opens,
+    closes: period.closes,
+  }))),
   sameAs: [clinic.googleMapsUrl, clinic.social.instagram],
 };
 

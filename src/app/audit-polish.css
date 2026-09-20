@@ -1,2 +1,10 @@
 .section-actions{display:flex;justify-content:center;margin-top:22px}.sunday-note{margin:12px 0 0;color:#5f6d73;font-size:13px;line-height:1.6}.footer-socials{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.footer-socials .footer-google{white-space:nowrap}.catalogue-page .catalogue-card,.treatment-detail-page .catalogue-card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.catalogue-page .catalogue-card:hover,.treatment-detail-page .catalogue-card:hover{transform:translateY(-2px)}
 @media(max-width:680px){.section-actions{justify-content:flex-start}.footer-socials{width:100%;justify-content:flex-start}.sunday-note{font-size:12px}}
+.clinic-hours{margin:24px 0;scroll-margin-top:110px}
+.clinic-hours h3{margin:0 0 12px;font-size:20px;line-height:1.4}
+.clinic-hours h3 span{font-size:13px;font-weight:400}
+.clinic-hours dl{margin:0}
+.clinic-hours dl>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:8px 20px;padding:10px 0;border-bottom:1px solid #d7e1de;font-size:14px;line-height:1.6}
+.clinic-hours dt{font-weight:600}
+.clinic-hours dd{margin:0}
+@media(max-width:680px){.clinic-hours dl>div{grid-template-columns:1fr;gap:4px}}

@@ -10,7 +10,7 @@ export function SiteHeader() {
       <div className="topbar">
         <div className="container topbar-inner">
           <div className="topbar-left">
-            <span><ClinicIcon name="clock" size={15}/>{clinic.hours}</span><i/>
+            <span><ClinicIcon name="clock" size={15}/><Link href="/#opening-hours">Opening hours</Link></span><i/>
             <span><ClinicIcon name="pin" size={15}/>Mangalagiri, Andhra Pradesh</span>
           </div>
           <div className="socials">
@@ -52,7 +52,7 @@ export function SiteFooter() {
       <footer className="footer">
         <div className="container footer-inner">
           <div className="footer-brand"><Image src="/images/tanvi-logo-web.png" alt="Tanvi Dental Care logo" width={52} height={46}/><span><strong>TANVI</strong><small>DENTAL CARE &amp; IMPLANT CENTRE</small></span></div>
-          <p>{clinic.shortAddress} · {clinic.hours} · <a href={clinic.phoneHref}>{clinic.phone}</a></p>
+          <p>{clinic.shortAddress} · <Link href="/#opening-hours">Opening hours</Link> · <a href={clinic.phoneHref}>{clinic.phone}</a></p>
           <div className="footer-socials">
             <a className="footer-google" href={clinic.googleMapsUrl} target="_blank" rel="noreferrer"><ClinicIcon name="google" size={16}/> Google</a>
             {clinic.social.instagram && <a className="footer-google" href={clinic.social.instagram} target="_blank" rel="noreferrer"><ClinicIcon name="instagram" size={16}/> Instagram</a>}

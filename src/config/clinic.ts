@@ -1,11 +1,44 @@
+// Confirmed by the clinic owner on 20 September 2026. All times are local (IST).
+const openingHours = [
+  {
+    label: "Monday, Tuesday, Thursday, Friday & Saturday",
+    shortLabel: "Mon, Tue, Thu, Fri & Sat",
+    days: ["Monday", "Tuesday", "Thursday", "Friday", "Saturday"],
+    periods: [{ opens: "10:00", closes: "14:00" }, { opens: "17:00", closes: "21:00" }],
+  },
+  {
+    label: "Wednesday",
+    shortLabel: "Wednesday",
+    days: ["Wednesday"],
+    periods: [{ opens: "09:30", closes: "14:00" }, { opens: "17:00", closes: "21:00" }],
+  },
+  {
+    label: "Sunday",
+    shortLabel: "Sunday",
+    days: ["Sunday"],
+    periods: [{ opens: "10:00", closes: "13:30" }],
+  },
+] as const;
+
+function formatClinicTime(time: string) {
+  const [hour, minutes] = time.split(":");
+  const hourNumber = Number(hour);
+  return `${hourNumber % 12 || 12}${minutes === "00" ? "" : `:${minutes}`} ${hourNumber < 12 ? "AM" : "PM"}`;
+}
+
+export const clinicHours = openingHours.map((group) => ({
+  ...group,
+  displayHours: group.periods.map((period) => `${formatClinicTime(period.opens)}–${formatClinicTime(period.closes)}`).join("; "),
+}));
+
 export const clinic = {
   name: "Tanvi Dental Care & Implant Centre",
   phone: "9160288388",
   phoneHref: "tel:+919160288388",
   whatsappHref:
     "https://wa.me/919160288388?text=Hello%20Tanvi%20Dental%20Care%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.",
-  hours: "9:00 AM - 9:00 PM (IST)",
-  sundayHours: "9:00 AM - 9:00 PM (IST) - Call to confirm/book",
+  hours: `${clinicHours.map((group) => `${group.label}: ${group.displayHours}`).join(". ")}. All times IST.`,
+  sundayHours: clinicHours.find((group) => group.label === "Sunday")!.displayHours,
   address:
     "Upstairs, Apollo Pharmacy, opposite Axis Bank, near Old Bus Stand, Mangalagiri, Andhra Pradesh 522503, India",
   shortAddress: "Near Old Bus Stand, Mangalagiri, Andhra Pradesh 522503",
@@ -108,8 +141,7 @@ export const faqs = [
   },
   {
     question: "What are the clinic timings?",
-    answer:
-      "The clinic lists hours of 9:00 AM to 9:00 PM IST. Sunday bookings should be confirmed by calling 9160288388 before visiting.",
+    answer: clinic.hours,
   },
   {
     question: "Where is Tanvi Dental Care & Implant Centre located?",
