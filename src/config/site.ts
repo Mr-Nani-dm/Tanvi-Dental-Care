@@ -1,5 +1,6 @@
 export const productionSiteUrl = "https://www.tanvidental.in" as const;
 export const productionHost = "www.tanvidental.in" as const;
+export const clinicEntityId = `${productionSiteUrl}/#clinic` as const;
 
 export const siteConfig = {
   url: productionSiteUrl,

@@ -13,8 +13,8 @@ export const clinic = {
   googleMapsUrl:
     "https://www.google.com/maps/search/?api=1&query=Tanvi%20Dental%20Care%20%26%20Implant%20Centre%2C%20Mangalagiri%2C%20Andhra%20Pradesh&query_place_id=ChIJzRZdD-rxNToRhByJSASPSpw",
   googleRating: 5.0,
-  googleReviewCount: 26,
-  googleReviewSnapshotDate: "Website data snapshot",
+  googleReviewCount: 28,
+  googleReviewSnapshotDate: "20 September 2026",
   social: {
     facebook: null,
     instagram: "https://www.instagram.com/tanvidental/",

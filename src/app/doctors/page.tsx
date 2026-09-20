@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic } from "@/config/clinic";
 import { doctors } from "@/config/site";
@@ -35,7 +36,7 @@ export default function DoctorsPage() {
           <div className="doctor-grid">
             {doctors.map((doctor) => (
               <article className="doctor-card doctor-card-photo" key={doctor.name}>
-                <div className="doctor-photo-wrap"><img src={doctor.image} alt={doctor.name} width="599" height="900" /></div>
+                <div className="doctor-photo-wrap"><Image src={doctor.image} alt={doctor.name} width={599} height={900} sizes="(max-width: 680px) 100vw, (max-width: 820px) 680px, 40vw" /></div>
                 <div className="doctor-details">
                   <h2>{doctor.name}</h2>
                   <p>{doctor.qualifications}</p>
