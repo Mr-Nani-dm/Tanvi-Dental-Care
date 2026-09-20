@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic, treatments } from "@/config/clinic";
-import { doctors, siteConfig } from "@/config/site";
+import { clinicEntityId, doctors, siteConfig } from "@/config/site";
 import { getTreatmentBlogPosts } from "@/content/blog";
 import { getTreatmentAuthorityContent } from "@/content/treatment-authority";
+
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return treatments.map((treatment) => ({ slug: treatment.slug }));
@@ -14,7 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const treatment = treatments.find((item) => item.slug === slug);
-  if (!treatment) return { title: "Treatment" };
+  if (!treatment) notFound();
 
   const authority = getTreatmentAuthorityContent(treatment.slug);
   const description = authority?.seoDescription || `${treatment.name} information from Tanvi Dental Care & Implant Centre in Mangalagiri. Suitability is confirmed after clinical assessment.`;
@@ -36,9 +39,7 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
   const { slug } = await params;
   const treatment = treatments.find((item) => item.slug === slug);
 
-  if (!treatment) {
-    return <main className="not-found-page"><div className="container"><h1>Treatment not found</h1><Link className="btn btn-primary" href="/treatments">View all treatments</Link></div></main>;
-  }
+  if (!treatment) notFound();
 
   const authority = getTreatmentAuthorityContent(treatment.slug);
   const patientGuides = getTreatmentBlogPosts(treatment.slug, 3);
@@ -47,16 +48,6 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
   );
 
   const treatmentUrl = `${siteConfig.url}/treatments/${treatment.slug}`;
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
-      { "@type": "ListItem", position: 2, name: "Treatments", item: `${siteConfig.url}/treatments` },
-      { "@type": "ListItem", position: 3, name: treatment.name, item: treatmentUrl },
-    ],
-  };
 
   const faqSchema = authority ? {
     "@context": "https://schema.org",
@@ -71,13 +62,38 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
     })),
   } : null;
 
+  const pageSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${treatmentUrl}#webpage`,
+        url: treatmentUrl,
+        name: `${treatment.name} in Mangalagiri`,
+        description: authority?.seoDescription || treatment.description,
+        about: { "@id": clinicEntityId },
+        breadcrumb: { "@id": `${treatmentUrl}#breadcrumb` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${treatmentUrl}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+          { "@type": "ListItem", position: 2, name: "Treatments", item: `${siteConfig.url}/treatments` },
+          { "@type": "ListItem", position: 3, name: treatment.name, item: treatmentUrl },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
       <SiteHeader />
       <main className="treatment-detail-page">
         <section className="catalogue-page-hero">
           <div className="container">
-            <p className="eyebrow">{authority?.eyebrow || "Treatment information"}</p>
+            <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/treatments">Treatments</Link><span>/</span><span aria-current="page">{treatment.name}</span></nav>
+            <p className="eyebrow">{authority?.eyebrow || "Dental treatment in Mangalagiri"}</p>
             <div className="treatment-detail-icon"><ClinicIcon name={treatment.icon} size={34}/></div>
             <h1>{treatment.name}</h1>
             <p>{treatment.description}</p>
@@ -213,9 +229,8 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
             </div>
           </div>
         </section>
-
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-        {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema).replace(/</g, "\\u003c") }} />
+        {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c") }} />}
       </main>
       <SiteFooter />
     </>

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic, treatments } from "@/config/clinic";
-import { doctors, siteConfig } from "@/config/site";
+import { clinicEntityId, doctors, siteConfig } from "@/config/site";
 
 export function generateStaticParams() {
   return doctors.map((doctor) => ({ slug: doctor.slug }));
@@ -51,9 +52,7 @@ export default async function DoctorProfilePage({ params }: { params: Promise<{ 
     image: `${siteConfig.url}${doctor.image}`,
     jobTitle: doctor.specialty,
     worksFor: {
-      "@type": "Dentist",
-      name: siteConfig.name,
-      url: siteConfig.url,
+      "@id": clinicEntityId,
     },
   };
 
@@ -87,7 +86,7 @@ export default async function DoctorProfilePage({ params }: { params: Promise<{ 
           <div className="container detail-grid">
             <article>
               <div className="doctor-photo-wrap">
-                <img src={doctor.image} alt={doctor.name} width="599" height="900" />
+                <Image src={doctor.image} alt={doctor.name} width={599} height={900} sizes="(max-width: 820px) 100vw, 40vw" />
               </div>
             </article>
             <article>

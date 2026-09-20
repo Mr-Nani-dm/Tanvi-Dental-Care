@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/config/site";
+import { clinicEntityId, siteConfig } from "@/config/site";
+import { clinic } from "@/config/clinic";
 import "./globals.css";
 import "./assets.css";
 import "./clinic.css";
@@ -10,7 +11,6 @@ import "./responsive-audit.css";
 import "./blog.css";
 
 const siteUrl = siteConfig.url;
-const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=Tanvi%20Dental%20Care%20%26%20Implant%20Centre%2C%20Mangalagiri%2C%20Andhra%20Pradesh&query_place_id=ChIJzRZdD-rxNToRhByJSASPSpw";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -40,11 +40,13 @@ export const metadata: Metadata = {
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "Dentist",
-  name: "Tanvi Dental Care & Implant Centre",
+  "@id": clinicEntityId,
+  name: clinic.name,
   url: siteUrl,
   image: `${siteUrl}/images/tanvi-doctor-realfinal.png`,
-  telephone: "+91-9160288388",
-  hasMap: googleMapsUrl,
+  logo: `${siteUrl}/images/tanvi-logo-web.png`,
+  telephone: clinic.phoneHref.replace("tel:", ""),
+  hasMap: clinic.googleMapsUrl,
   address: {
     "@type": "PostalAddress",
     streetAddress: "Upstairs, Apollo Pharmacy, opposite Axis Bank, near Old Bus Stand",
@@ -59,7 +61,7 @@ const localBusinessSchema = {
     opens: "09:00",
     closes: "21:00",
   }],
-  sameAs: ["https://www.instagram.com/tanvidental/"],
+  sameAs: [clinic.googleMapsUrl, clinic.social.instagram],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
