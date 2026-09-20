@@ -15,14 +15,20 @@ export const siteConfig = {
 
 export const doctors = [
   {
+    slug: "naga-swathi-pokala",
     name: "Dr. Naga Swathi Pokala",
     qualifications: "BDS, MDS",
     specialty: "Oral & Maxillofacial Surgeon",
+    image: "/images/doctors/naga-swathi.webp",
+    relatedTreatmentSlugs: ["wisdom-tooth-management", "tooth-extractions"],
   },
   {
+    slug: "prathap-naidu",
     name: "Dr. Prathap Naidu",
     qualifications: "BDS, MDS",
     specialty: "Endodontist",
+    image: "/images/doctors/prathap-naidu.webp",
+    relatedTreatmentSlugs: ["root-canal-treatment"],
   },
 ] as const;
 
