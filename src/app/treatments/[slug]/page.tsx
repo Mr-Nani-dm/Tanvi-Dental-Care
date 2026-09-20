@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import ClinicIcon from "@/components/ui/ClinicIcon";
 import { clinic, treatments } from "@/config/clinic";
+import { doctors } from "@/config/site";
 import { getTreatmentBlogPosts } from "@/content/blog";
 
 export function generateStaticParams() {
@@ -13,10 +14,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const treatment = treatments.find((item) => item.slug === slug);
   if (!treatment) return { title: "Treatment" };
+  const description = `${treatment.name} information from Tanvi Dental Care & Implant Centre in Mangalagiri. Suitability is confirmed after clinical assessment.`;
   return {
-    title: treatment.name,
-    description: `${treatment.name} information from Tanvi Dental Care & Implant Centre in Mangalagiri. Suitability is confirmed after clinical assessment.`,
+    title: `${treatment.name} in Mangalagiri`,
+    description,
     alternates: { canonical: `/treatments/${treatment.slug}` },
+    openGraph: {
+      title: `${treatment.name} in Mangalagiri | Tanvi Dental Care`,
+      description,
+      url: `/treatments/${treatment.slug}`,
+      type: "website",
+    },
   };
 }
 
@@ -29,6 +37,7 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
   }
 
   const patientGuides = getTreatmentBlogPosts(treatment.slug, 3);
+  const relatedDoctors = doctors.filter((doctor) => doctor.relatedTreatmentSlugs.some((relatedSlug) => relatedSlug === treatment.slug));
 
   return (
     <>
@@ -58,6 +67,11 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
               <h2>Have questions?</h2>
               <p>Call or WhatsApp the clinic to request an appointment and confirm availability.</p>
               <a className="btn btn-primary" href={clinic.phoneHref}><ClinicIcon name="phone" size={18}/>Call the clinic</a>
+              {relatedDoctors.map((doctor) => (
+                <Link className="view-all" href={`/doctors/${doctor.slug}`} key={doctor.slug}>
+                  Meet {doctor.name} <ClinicIcon name="arrow" size={15}/>
+                </Link>
+              ))}
             </aside>
           </div>
         </section>
