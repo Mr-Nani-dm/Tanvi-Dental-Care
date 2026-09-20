@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { treatments } from "@/config/clinic";
+import { siteConfig } from "@/config/site";
 import { blogPosts } from "@/content/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tanvidental.in";
+  const baseUrl = siteConfig.url;
 
   return [
     { url: baseUrl },
