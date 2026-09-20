@@ -46,8 +46,8 @@ export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent
       "If pain or swelling becomes severe, worsens unexpectedly or you are concerned about recovery, contact the treating dentist for advice."
     ],
     sources: [
-      { title: "American Association of Endodontists: What is a root canal?", url: "https://www.aae.org/patients/root-canal-treatment/what-is-a-root-canal/" },
-      { title: "NHS: Root canal treatment", url: "https://www.nhs.uk/tests-and-treatments/root-canal-treatment/" }
+      { title: "Indian Association of Conservative Dentistry and Endodontics: Root canal patient information", url: "https://www.iacde.in/patient-info.html" },
+      { title: "Indian Dental Association: Visiting a dentist and managing dental anxiety", url: "https://www.ida.org.in/Public/Details/WhyVisitDentist" }
     ],
     faq: [
       {
@@ -101,8 +101,8 @@ export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent
       "The exact treatment sequence, healing period and restoration design depend on your individual examination and treatment plan."
     ],
     sources: [
-      { title: "U.S. Food and Drug Administration: Dental implants — what you should know", url: "https://www.fda.gov/medical-devices/dental-devices/dental-implants-what-you-should-know" },
-      { title: "American Dental Association: Dental implants", url: "https://www.mouthhealthy.org/all-topics-a-z/implants" }
+      { title: "Indian Dental Association: Missing teeth, implants and long-term care", url: "https://www.ida.org.in/Public/Details/DTMissingTeeth" },
+      { title: "Indian Dental Association: Dental implant suitability", url: "https://www.ida.org.in/Public/Details/DTProstheticDentistry" }
     ],
     faq: [
       {
@@ -156,7 +156,7 @@ export const treatmentAuthorityContent: Record<string, TreatmentAuthorityContent
       "Seek urgent medical attention if swelling around the mouth, face, eye or neck is associated with difficulty breathing or swallowing."
     ],
     sources: [
-      { title: "NHS: Wisdom tooth removal", url: "https://www.nhs.uk/tests-and-treatments/wisdom-tooth-removal/" }
+      { title: "Indian Dental Association: Impacted teeth and wisdom-tooth symptoms", url: "https://www.ida.org.in/Public/Details/Impaction" }
     ],
     faq: [
       {

@@ -73,6 +73,10 @@ Do not grant administration, secrets, actions, organization or account permissio
 
 The admin UI supports an optional `Clinically reviewed by` field. Only enter a doctor's name after that doctor has actually reviewed and approved the article. Leaving the reviewer blank is preferred over making an unsupported review claim.
 
+## Local relevance and sources
+
+Write for patients in Mangalagiri, Andhra Pradesh, India. Prioritise practical local questions, verified clinic details and Indian patient-information sources. Read the [local content and source policy](../seo/LOCAL_CONTENT_POLICY.md) before publishing or revising patient content. Claims about rules, registration, approvals or patient rights must be checked against current Indian and applicable Andhra Pradesh official sources.
+
 ## Image handling
 
 The admin browser attempts to resize uploaded images and convert them to WebP before upload. The server accepts JPG, PNG and WebP files and rejects files above 3 MB.

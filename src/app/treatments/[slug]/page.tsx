@@ -188,7 +188,7 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
             <section className="detail-content">
               <div className="container">
                 <h2>Further reading</h2>
-                <p>Patient information from dental professional organisations and public health services.</p>
+                <p>Patient information from Indian dental professional organisations.</p>
                 <ul>
                   {authority.sources.map((source) => (
                     <li key={source.url}><a href={source.url}>{source.title}</a></li>
