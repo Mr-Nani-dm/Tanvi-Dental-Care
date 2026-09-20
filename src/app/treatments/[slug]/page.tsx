@@ -16,7 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const treatment = treatments.find((item) => item.slug === slug);
   if (!treatment) return { title: "Treatment" };
 
-  const description = `${treatment.name} information from Tanvi Dental Care & Implant Centre in Mangalagiri. Suitability is confirmed after clinical assessment.`;
+  const authority = getTreatmentAuthorityContent(treatment.slug);
+  const description = authority?.seoDescription || `${treatment.name} information from Tanvi Dental Care & Implant Centre in Mangalagiri. Suitability is confirmed after clinical assessment.`;
 
   return {
     title: `${treatment.name} in Mangalagiri`,
