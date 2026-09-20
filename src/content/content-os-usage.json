@@ -1,4 +1,10 @@
 {
   "version": 1,
-  "reservations": []
+  "reservations": [
+    {
+      "id": "7c4716f8-4e41-4ef8-a762-6d438106bd78",
+      "kind": "text",
+      "at": "2026-09-20T11:13:59.129Z"
+    }
+  ]
 }
