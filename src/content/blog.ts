@@ -12,6 +12,8 @@ export type SeoValidationException = {
 };
 
 export type BlogPost = {
+  contentOsId?: string;
+  contentOsCta?: string;
   slug: string;
   title: string;
   excerpt: string;

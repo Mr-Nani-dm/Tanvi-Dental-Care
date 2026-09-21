@@ -221,7 +221,7 @@
 .blog-body p,
 .blog-body li { color: #4e625f; font-size: 1.03rem; line-height: 1.82; }
 .blog-body p { margin: 0 0 16px; }
-.blog-body ul { margin: 12px 0 22px; padding-left: 1.25rem; }
+.blog-body ul, .blog-body ol { margin: 12px 0 22px; padding-left: 1.25rem; }
 .blog-body li + li { margin-top: 8px; }
 .blog-body a { color: #0e655e; font-weight: 700; text-underline-offset: 3px; }
 .blog-body blockquote { margin: 26px 0; padding: 18px 20px; border-left: 3px solid #b88b46; border-radius: 0 14px 14px 0; background: #fffaf1; color: #465d5a; line-height: 1.7; }

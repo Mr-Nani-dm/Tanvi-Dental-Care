@@ -1,4 +1,5 @@
 import type { BlogPost } from "@/content/blog";
+import { isApprovedArticleImage } from "./articleImages";
 
 export type PublishValidation = {
   blockers: string[];
@@ -48,7 +49,7 @@ function invalidArticleImages(post: Partial<BlogPost>) {
   const sources = [post.featuredImage || "", ...Array.from((post.body || "").matchAll(/!\[[^\]]*\]\(([^)]+)\)/g), (match) => match[1])]
     .map((source) => source.trim())
     .filter(Boolean);
-  return sources.filter((source) => !/^\/images\/blog\/[a-z0-9][a-z0-9-]*\.(?:webp|jpg|png)$/.test(source));
+  return sources.filter((source) => !isApprovedArticleImage(source));
 }
 
 function isEditoriallyExempt(post: Partial<BlogPost>, phrase: string) {

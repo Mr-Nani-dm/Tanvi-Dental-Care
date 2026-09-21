@@ -1,0 +1,390 @@
+{
+  "version": 1,
+  "packages": [
+    {
+      "id": "e7795b43-4683-4204-84c3-e88689711d91",
+      "createdAt": "2026-09-20T18:41:05.927Z",
+      "updatedAt": "2026-09-20T18:42:00.011Z",
+      "topic": {
+        "id": "33e22008-81b0-4941-8378-ca92855c3643",
+        "title": "Root Canal or Extraction? Why an Examination Comes First",
+        "primaryKeyword": "root canal or extraction",
+        "intent": "Informational",
+        "treatmentSlug": "root-canal-treatment",
+        "angle": "Use a short educational post to explain that the choice depends on the tooth, infection, surrounding tissues and restorability, so an examination is needed before deciding.",
+        "rationale": "Patients with tooth pain may assume there is only one solution. The existing tooth-pain article helps them decide when to seek care, but this social post can clarify why a dentist evaluates treatment options rather than making assumptions from symptoms alone.",
+        "psychology": "Reassurance and trust",
+        "targetPage": "/treatments/root-canal-treatment",
+        "evidence": {
+          "type": "CONTENT_GAP",
+          "reason": "Compared with the clinic's current articles and saved content. Search demand has not been measured."
+        },
+        "blogRecommended": false,
+        "recommendedFormats": [
+          "gbp",
+          "instagram_static"
+        ],
+        "duplicate": {
+          "status": "RELATED",
+          "score": 0.318,
+          "matchedTitle": "After a Root Canal: Why the Final Restoration Matters",
+          "reason": "Related content exists; use a distinct patient question and link to the relevant existing page."
+        },
+        "token": "1789929639794.1a8d1ee1c7cb589ad17b856734b8cf8e8619263f529e1ac49f6d74996239eae7"
+      },
+      "formats": [
+        "gbp",
+        "instagram_static"
+      ],
+      "sources": [
+        {
+          "id": "ida-dental-visits",
+          "title": "Indian Dental Association: visiting a dentist",
+          "url": "https://www.ida.org.in/Public/Details/WhyVisitDentist",
+          "retrievedAt": "2026-09-20T18:40:55.995Z",
+          "excerpt": "Injectable anaesthetic is used in procedures like filling cavities, crowning or treating periodontal (gum) disease and root canal treatment.",
+          "status": "VERIFIED"
+        },
+        {
+          "id": "iacde-patients",
+          "title": "Indian Association of Conservative Dentistry and Endodontics: patient information",
+          "url": "https://www.iacde.in/patient-info.html",
+          "retrievedAt": "2026-09-20T18:40:55.827Z",
+          "excerpt": "Your endodontist will advice you a root canal in that case.",
+          "status": "VERIFIED"
+        }
+      ],
+      "image": null,
+      "blog": null,
+      "gbp": {
+        "text": "Root canal or extraction? The right option depends on an examination of the tooth and surrounding areas. If tooth pain is troubling you in Mangalagiri, book a dental assessment at Tanvi Dental Care & Implant Centre.",
+        "targetUrl": "/treatments/root-canal-treatment",
+        "cta": "Book a dental assessment"
+      },
+      "instagram": {
+        "format": "static",
+        "caption": "Root canal or extraction is not a decision to make from pain alone. During an examination, the dentist considers the tooth, the concern around it and whether restoration may be possible before discussing options. An extraction may be considered when clinically necessary, while root canal treatment may be discussed when preserving a natural tooth is appropriate. If you have tooth pain in Mangalagiri, book a dental assessment.",
+        "hashtags": [
+          "#MangalagiriDentist",
+          "#RootCanalTreatment",
+          "#DentalCare",
+          "#ToothPain"
+        ],
+        "slides": [],
+        "cta": "Book a dental assessment"
+      },
+      "reel": null,
+      "imageBrief": {
+        "kind": "educational",
+        "description": "A simple, original flat educational illustration on a warm off-white background: a single outlined tooth at the centre leading to two neutral signpost-style paths labelled “Examination first” and “Discuss options”. Add small icons for a dental mirror, tooth structure and a speech bubble. Use calm teal and soft blue accents. No people, faces, clinic logos, before-and-after imagery or treatment outcome claims.",
+        "alt": "Illustration showing that a dental examination comes before discussing root canal treatment or extraction options.",
+        "doctor": null
+      },
+      "status": "needs_review",
+      "safety": {
+        "status": "NEEDS_REVIEW",
+        "checks": [
+          {
+            "key": "medical",
+            "status": "NEEDS_REVIEW",
+            "messages": [
+              "The separate AI review flagged medical safety.",
+              "Separate AI review: The supplied evidence excerpts do not support the draft’s clinical criteria for choosing between root canal treatment and extraction. Obtain relevant clinical evidence before publication.",
+              "Separate AI review: Clinical claim lacks retrieved supporting evidence: The right option depends on an examination of the tooth and surrounding areas.",
+              "Separate AI review: Clinical claim lacks retrieved supporting evidence: Root canal or extraction is not a decision to make from pain alone.",
+              "Separate AI review: Clinical claim lacks retrieved supporting evidence: During an examination, the dentist considers the tooth, the concern around it and whether restoration may be possible before discussing options.",
+              "Separate AI review: Clinical claim lacks retrieved supporting evidence: An extraction may be considered when clinically necessary",
+              "Separate AI review: Clinical claim lacks retrieved supporting evidence: root canal treatment may be discussed when preserving a natural tooth is appropriate.",
+              "Separate AI review: Clinical claim lacks retrieved supporting evidence: a dental examination comes before discussing root canal treatment or extraction options."
+            ]
+          },
+          {
+            "key": "claims",
+            "status": "NEEDS_REVIEW",
+            "messages": [
+              "Before-and-after claims are outside this workflow."
+            ]
+          },
+          {
+            "key": "seo",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "duplicate",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "links",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "words",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "brand",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "frequency",
+            "status": "PASS",
+            "messages": []
+          }
+        ],
+        "aiReview": {
+          "medical": false,
+          "claims": true,
+          "seo": true,
+          "duplication": true,
+          "tone": true,
+          "issues": [
+            "The supplied evidence excerpts do not support the draft’s clinical criteria for choosing between root canal treatment and extraction. Obtain relevant clinical evidence before publication.",
+            "Clinical claim lacks retrieved supporting evidence: The right option depends on an examination of the tooth and surrounding areas.",
+            "Clinical claim lacks retrieved supporting evidence: Root canal or extraction is not a decision to make from pain alone.",
+            "Clinical claim lacks retrieved supporting evidence: During an examination, the dentist considers the tooth, the concern around it and whether restoration may be possible before discussing options.",
+            "Clinical claim lacks retrieved supporting evidence: An extraction may be considered when clinically necessary",
+            "Clinical claim lacks retrieved supporting evidence: root canal treatment may be discussed when preserving a natural tooth is appropriate.",
+            "Clinical claim lacks retrieved supporting evidence: a dental examination comes before discussing root canal treatment or extraction options."
+          ],
+          "claimChecks": [
+            {
+              "claim": "The right option depends on an examination of the tooth and surrounding areas.",
+              "sourceUrl": "",
+              "evidenceQuote": "",
+              "supported": false
+            },
+            {
+              "claim": "Root canal or extraction is not a decision to make from pain alone.",
+              "sourceUrl": "",
+              "evidenceQuote": "",
+              "supported": false
+            },
+            {
+              "claim": "During an examination, the dentist considers the tooth, the concern around it and whether restoration may be possible before discussing options.",
+              "sourceUrl": "",
+              "evidenceQuote": "",
+              "supported": false
+            },
+            {
+              "claim": "An extraction may be considered when clinically necessary",
+              "sourceUrl": "",
+              "evidenceQuote": "",
+              "supported": false
+            },
+            {
+              "claim": "root canal treatment may be discussed when preserving a natural tooth is appropriate.",
+              "sourceUrl": "",
+              "evidenceQuote": "",
+              "supported": false
+            },
+            {
+              "claim": "a dental examination comes before discussing root canal treatment or extraction options.",
+              "sourceUrl": "",
+              "evidenceQuote": "",
+              "supported": false
+            }
+          ],
+          "typedIssues": [
+            {
+              "category": "medical",
+              "message": "The supplied evidence excerpts do not support the draft’s clinical criteria for choosing between root canal treatment and extraction. Obtain relevant clinical evidence before publication."
+            },
+            {
+              "category": "medical",
+              "message": "Clinical claim lacks retrieved supporting evidence: The right option depends on an examination of the tooth and surrounding areas."
+            },
+            {
+              "category": "medical",
+              "message": "Clinical claim lacks retrieved supporting evidence: Root canal or extraction is not a decision to make from pain alone."
+            },
+            {
+              "category": "medical",
+              "message": "Clinical claim lacks retrieved supporting evidence: During an examination, the dentist considers the tooth, the concern around it and whether restoration may be possible before discussing options."
+            },
+            {
+              "category": "medical",
+              "message": "Clinical claim lacks retrieved supporting evidence: An extraction may be considered when clinically necessary"
+            },
+            {
+              "category": "medical",
+              "message": "Clinical claim lacks retrieved supporting evidence: root canal treatment may be discussed when preserving a natural tooth is appropriate."
+            },
+            {
+              "category": "medical",
+              "message": "Clinical claim lacks retrieved supporting evidence: a dental examination comes before discussing root canal treatment or extraction options."
+            }
+          ]
+        },
+        "checkedAt": "2026-09-20T18:42:00.009Z",
+        "wordCounts": {
+          "gbp": 35,
+          "instagram": 67
+        }
+      },
+      "proof": "1789929720011.f8fde0559aaa6568265d7f8eca877794064a52dac4e0e41e2c4e72a31720d95a",
+      "reviewToken": "1789929720011.2879249d231c27fb2981e63d4d03ccc15c1b3a369136377ceb2bc77da7f97958",
+      "revision": "329e5335-60da-4975-b419-c75ff1ac1996"
+    },
+    {
+      "id": "f4f32687-287a-47f1-8c4b-d17e718869f9",
+      "createdAt": "2026-09-20T17:39:44.015Z",
+      "updatedAt": "2026-09-20T17:41:50.729Z",
+      "topic": {
+        "id": "df072918-c6c4-4a27-a38c-ca6c31f2fdd6",
+        "title": "Dental Check-ups: What Happens at a Routine Visit and Why Early Assessment Helps",
+        "primaryKeyword": "routine dental check-up",
+        "intent": "Informational; supports patients who are unsure why to book a check-up without a current toothache.",
+        "treatmentSlug": "general-dental-care",
+        "angle": "Demystify the routine visit: discussing concerns, examining teeth and gums, and planning next steps only when needed, with a local Mangalagiri clinic reminder.",
+        "rationale": "Existing articles focus on tooth pain, root canal treatment, wisdom-tooth concerns and appointment anxiety. A simple preventive check-up message is a distinct gap and is best delivered as a short GBP update or static post.",
+        "psychology": "Prevention, trust and local familiarity",
+        "targetPage": "/treatments/dental-check-ups",
+        "evidence": {
+          "type": "CONTENT_GAP",
+          "reason": "Compared with the clinic's current articles and saved content. Search demand has not been measured."
+        },
+        "blogRecommended": false,
+        "recommendedFormats": [
+          "gbp",
+          "instagram_static"
+        ],
+        "duplicate": {
+          "status": "NEW",
+          "score": 0.051,
+          "matchedTitle": "Dental Anxiety in Mangalagiri: Planning a More Comfortable Visit",
+          "reason": "The existing item has a different topic or angle."
+        },
+        "token": "1789925942737.f94fd143a2a1a856c622903cb39ffc5e6b568f7c0fae7ec470592367d15cae4c"
+      },
+      "formats": [
+        "gbp",
+        "instagram_static"
+      ],
+      "sources": [
+        {
+          "id": "ida-dental-visits",
+          "title": "Indian Dental Association: visiting a dentist",
+          "url": "https://www.ida.org.in/Public/Details/WhyVisitDentist",
+          "retrievedAt": "2026-09-20T17:39:38.822Z",
+          "excerpt": "Your routine dental check-up reveals more than just the condition of your teeth and gums. It uncovers important clues about your overall health. Dentists",
+          "status": "VERIFIED"
+        },
+        {
+          "id": "iacde-patients",
+          "title": "Indian Association of Conservative Dentistry and Endodontics: patient information",
+          "url": "https://www.iacde.in/patient-info.html",
+          "retrievedAt": "2026-09-20T17:39:38.497Z",
+          "excerpt": "Any insult to the tooth in the form of dental caries or trauma crosses a limit within your tooth, ie if they have caused",
+          "status": "VERIFIED"
+        }
+      ],
+      "image": null,
+      "blog": null,
+      "gbp": {
+        "text": "A routine dental check-up can help you discuss concerns, examine teeth and gums, and understand next steps when needed. Visit Tanvi Dental Care & Implant Centre in Mangalagiri. Book a check-up today.",
+        "targetUrl": "/treatments/dental-check-ups",
+        "cta": "Book a check-up today."
+      },
+      "instagram": {
+        "format": "static",
+        "caption": "No toothache does not always mean there is nothing to discuss. A routine dental check-up is a chance to share any concerns, have your teeth and gums examined, and understand preventive care or next steps if needed. At Tanvi Dental Care & Implant Centre, Mangalagiri, the visit begins with a conversation about your oral health. Book a routine check-up today.",
+        "hashtags": [
+          "#MangalagiriDentist",
+          "#DentalCheckUp",
+          "#PreventiveDentalCare",
+          "#OralHealth",
+          "#TanviDentalCare"
+        ],
+        "slides": [],
+        "cta": "Book a routine check-up today."
+      },
+      "reel": null,
+      "imageBrief": {
+        "kind": "educational",
+        "description": "Simple original flat educational illustration with no people: a clean calendar marked “Check-up”, a smiling tooth icon, a small speech bubble with a question mark, and a magnifying glass examining a tooth-and-gum outline. Use calm teal, blue and warm neutral colours, clear ample space, and no logos or brand imitation.",
+        "alt": "Illustration showing a calendar, tooth, speech bubble and magnifying glass for a routine dental check-up.",
+        "doctor": null
+      },
+      "status": "needs_review",
+      "safety": {
+        "status": "NEEDS_REVIEW",
+        "checks": [
+          {
+            "key": "medical",
+            "status": "NEEDS_REVIEW",
+            "messages": [
+              "The separate AI review flagged medical safety.",
+              "Separate AI review: The statement that patients can “understand preventive care” during a routine check-up is not directly supported by the supplied verified evidence excerpt. Confirm it against relevant clinical evidence or remove it before publication.",
+              "Separate AI review: “At Tanvi Dental Care & Implant Centre, Mangalagiri, the visit begins with a conversation about your oral health” describes a specific clinic workflow that is not included in the supplied clinic facts. Verify this operational claim before use.",
+              "Separate AI review: A real clinician must review the clinical content before publication; this automated check does not provide clinical approval."
+            ]
+          },
+          {
+            "key": "claims",
+            "status": "NEEDS_REVIEW",
+            "messages": [
+              "The separate AI review flagged unsupported claims."
+            ]
+          },
+          {
+            "key": "seo",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "duplicate",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "links",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "words",
+            "status": "NEEDS_REVIEW",
+            "messages": [
+              "Instagram captions must contain 60–120 words, excluding separately listed hashtags."
+            ]
+          },
+          {
+            "key": "brand",
+            "status": "PASS",
+            "messages": []
+          },
+          {
+            "key": "frequency",
+            "status": "PASS",
+            "messages": []
+          }
+        ],
+        "aiReview": {
+          "medical": false,
+          "claims": false,
+          "seo": true,
+          "duplication": true,
+          "tone": true,
+          "issues": [
+            "The statement that patients can “understand preventive care” during a routine check-up is not directly supported by the supplied verified evidence excerpt. Confirm it against relevant clinical evidence or remove it before publication.",
+            "“At Tanvi Dental Care & Implant Centre, Mangalagiri, the visit begins with a conversation about your oral health” describes a specific clinic workflow that is not included in the supplied clinic facts. Verify this operational claim before use.",
+            "A real clinician must review the clinical content before publication; this automated check does not provide clinical approval."
+          ]
+        },
+        "checkedAt": "2026-09-20T17:41:50.727Z",
+        "wordCounts": {
+          "gbp": 31,
+          "instagram": 59
+        }
+      },
+      "proof": "1789926110729.c09314316c996cb9b237a507078536ead9c1a4d84bd8e1538d5f7707508358d0",
+      "reviewToken": "1789926110729.a39c3745921419b74464e5f7c5e48caebd71b588f41b9497e394478d16b11b35",
+      "revision": "2383b45e-aaeb-4e54-8d62-bb1c4a887973"
+    }
+  ]
+}
